@@ -22,7 +22,7 @@ const RecipeListCard: Component<{
   };
 
   return (
-    <div class="flex flex-row-reverse gap-5 border border-slate-700 p-4">
+    <div class="flex flex-row-reverse gap-5 rounded-md border border-slate-700 bg-slate-800 p-4">
       <div class="flex basis-3/5 flex-col justify-between">
         <h3 class="text-xl">{props.name}</h3>
         <p class="">{statusText()}</p>

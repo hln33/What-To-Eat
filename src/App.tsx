@@ -14,7 +14,7 @@ const App: Component = () => {
         </div>
 
         <div class="flex-none basis-1/2">
-          <RecipeList />
+          <RecipeList providedIngredients={new Set(["garlic"])} />
         </div>
       </main>
     </div>

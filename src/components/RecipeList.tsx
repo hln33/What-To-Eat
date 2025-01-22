@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import RecipeListCard from "./RecipeListCard";
 
-const RecipeList: Component = () => {
+const RecipeList: Component<{ providedIngredients: Set<string> }> = (props) => {
   return (
     <section class="">
       <h2 class="mb-5 text-4xl">Recipe List</h2>
@@ -9,18 +9,18 @@ const RecipeList: Component = () => {
       <div class="space-y-2">
         <RecipeListCard
           name="Fried Garlic"
-          requiredIngredients={new Set([])}
-          providedIngredients={new Set([])}
+          requiredIngredients={new Set(["garlic"])}
+          providedIngredients={props.providedIngredients}
         />
         <RecipeListCard
-          name="Fried Garlic"
-          requiredIngredients={new Set(["garlic", "olive oil"])}
-          providedIngredients={new Set(["garlic"])}
+          name="Fried Garlic and Onion"
+          requiredIngredients={new Set(["garlic", "onion"])}
+          providedIngredients={props.providedIngredients}
         />
         <RecipeListCard
           name="Fried Garlic"
           requiredIngredients={new Set(["onion, parsley"])}
-          providedIngredients={new Set([])}
+          providedIngredients={props.providedIngredients}
         />
       </div>
     </section>
