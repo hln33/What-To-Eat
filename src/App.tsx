@@ -1,16 +1,14 @@
 import { type Component } from "solid-js";
-
-import logo from "./logo.svg";
-import styles from "./App.module.css";
+import SelectEssentials from "./components/SelectEssentials";
 
 const App: Component = () => {
   return (
-    <div class="text-center">
-      <header class={styles.header}>
-        <h1>What to Eat?</h1>
+    <div class="min-h-screen bg-slate-900 p-52 text-center text-white">
+      <header class="py-28">
+        <h1 class="text-6xl">What to Eat?</h1>
       </header>
-      <main>
-        <h1>Essentials</h1>
+      <main class="flex flex-col">
+        <SelectEssentials />
       </main>
     </div>
   );
