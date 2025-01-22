@@ -12,7 +12,7 @@ const App: Component = () => {
         <h1 class="text-6xl">What to Eat?</h1>
       </header>
 
-      <main class="flex justify-around gap-16 border p-10">
+      <main class="flex justify-around gap-16 border border-slate-600 bg-slate-800 p-10">
         <div class="flex flex-none basis-1/3 flex-col">
           <SelectEssentials
             values={ingredients()}
