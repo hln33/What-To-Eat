@@ -25,7 +25,12 @@ const RecipeListCard: Component<{
     <div class="flex flex-row-reverse gap-5 rounded-md border border-slate-600 bg-slate-900 p-4">
       <div class="flex basis-3/5 flex-col justify-between">
         <h3 class="text-xl">{props.name}</h3>
-        <p class="">{statusText()}</p>
+        <p
+          role="note"
+          aria-live="polite"
+        >
+          {statusText()}
+        </p>
       </div>
       <Image class="size-1/2 flex-initial basis-2/5">
         <Image.Img
