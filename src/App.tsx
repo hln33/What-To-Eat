@@ -8,6 +8,9 @@ const App: Component = () => {
     new Set(["Garlic"]),
   );
   const [meatIngredients, setMeatIngredients] = createSignal(new Set([""]));
+  const [seafoodIngredients, setSeafoodIngredients] = createSignal(
+    new Set([""]),
+  );
 
   const allIngredients = () => essentialIngredients().union(meatIngredients());
 
@@ -52,8 +55,8 @@ const App: Component = () => {
 
           <SelectIngredients
             categoryName="Seafood"
-            value={meatIngredients()}
-            onChange={setMeatIngredients}
+            value={seafoodIngredients()}
+            onChange={setSeafoodIngredients}
             options={new Set(["Shrimp", "Salmon", "Prawns", "Crab"])}
           />
         </div>
