@@ -1,9 +1,11 @@
 import { Select } from "@kobalte/core/select";
 import { Component, For } from "solid-js";
 
-const SelectEssentials: Component<{
-  values: Set<string>;
+const SelectIngredients: Component<{
+  categoryName: string;
+  value: Set<string>;
   onChange: (newValues: Set<string>) => void;
+  options: Set<string>;
 }> = (props) => {
   const handleChange = (value: string[]) => {
     props.onChange(new Set(value));
@@ -15,23 +17,15 @@ const SelectEssentials: Component<{
         class="mb-4 block text-4xl"
         for="essentials"
       >
-        Essentials
+        {props.categoryName}
       </label>
 
       <Select<string>
         id="essentials"
         multiple
-        value={Array.from(props.values)}
+        value={Array.from(props.value)}
         onChange={handleChange}
-        options={[
-          "butter",
-          "milk",
-          "garlic",
-          "onion",
-          "olive oil",
-          "garlic powder",
-          "white rice",
-        ]}
+        options={Array.from(props.options)}
         itemComponent={(props) => (
           <Select.Item
             class="flex cursor-pointer justify-between gap-2 rounded-md p-2 ui-highlighted:bg-pink-500"
@@ -83,4 +77,4 @@ const SelectEssentials: Component<{
   );
 };
 
-export default SelectEssentials;
+export default SelectIngredients;

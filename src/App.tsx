@@ -1,10 +1,15 @@
 import { createSignal, type Component } from "solid-js";
 
-import SelectEssentials from "./components/SelectEssentials";
+import SelectIngredients from "./components/SelectIngredients";
 import RecipeList from "./components/RecipeList";
 
 const App: Component = () => {
-  const [ingredients, setIngredients] = createSignal(new Set(["garlic"]));
+  const [essentialIngredients, setEssentialIngredients] = createSignal(
+    new Set(["Garlic"]),
+  );
+  const [meatIngredients, setMeatIngredients] = createSignal(new Set([""]));
+
+  const allIngredients = () => essentialIngredients().union(meatIngredients());
 
   return (
     <div class="min-h-screen bg-slate-900 p-20 text-center text-white">
@@ -13,15 +18,41 @@ const App: Component = () => {
       </header>
 
       <main class="flex justify-around gap-16 border border-slate-600 bg-slate-800 p-10">
-        <div class="flex flex-none basis-1/3 flex-col">
-          <SelectEssentials
-            values={ingredients()}
-            onChange={(value) => setIngredients(value)}
+        <div class="flex flex-none basis-1/3 flex-col gap-10">
+          <SelectIngredients
+            categoryName="Essentials"
+            value={essentialIngredients()}
+            onChange={setEssentialIngredients}
+            options={
+              new Set([
+                "Butter",
+                "Milk",
+                "Garlic",
+                "Onion",
+                "Olive Oil",
+                "Garlic Powder",
+                "White Rice",
+              ])
+            }
+          />
+
+          <SelectIngredients
+            categoryName="Meats"
+            value={meatIngredients()}
+            onChange={setMeatIngredients}
+            options={
+              new Set([
+                "Pork Belly",
+                "Steak",
+                "Chicken Breast",
+                "Chicken Thigh",
+              ])
+            }
           />
         </div>
 
         <div class="flex-none basis-1/2">
-          <RecipeList providedIngredients={ingredients()} />
+          <RecipeList providedIngredients={allIngredients()} />
         </div>
       </main>
     </div>
