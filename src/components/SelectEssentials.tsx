@@ -1,8 +1,13 @@
 import { Select } from "@kobalte/core/select";
-import { Component, createSignal, For } from "solid-js";
+import { Component, For } from "solid-js";
 
-const SelectEssentials: Component = () => {
-  const [values, setValues] = createSignal<string[]>(["garlic", "onion"]);
+const SelectEssentials: Component<{
+  values: Set<string>;
+  onChange: (newValues: Set<string>) => void;
+}> = (props) => {
+  const handleChange = (value: string[]) => {
+    props.onChange(new Set(value));
+  };
 
   return (
     <div class="flex flex-col items-center">
@@ -16,8 +21,8 @@ const SelectEssentials: Component = () => {
       <Select<string>
         id="essentials"
         multiple
-        value={values()}
-        onChange={setValues}
+        value={Array.from(props.values)}
+        onChange={handleChange}
         options={[
           "butter",
           "milk",
