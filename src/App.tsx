@@ -12,7 +12,10 @@ const App: Component = () => {
     new Set([""]),
   );
 
-  const allIngredients = () => essentialIngredients().union(meatIngredients());
+  const allIngredients = () =>
+    [essentialIngredients(), meatIngredients(), seafoodIngredients()].reduce(
+      (acc, set) => acc.union(set),
+    );
 
   return (
     <div class="min-h-screen bg-slate-900 p-20 text-center text-white">
