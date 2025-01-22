@@ -15,13 +15,13 @@ const App: Component = () => {
       <main class="flex justify-around gap-16 border p-10">
         <div class="flex flex-none basis-1/3 flex-col">
           <SelectEssentials
-            values={new Set(ingredients())}
+            values={ingredients()}
             onChange={(value) => setIngredients(value)}
           />
         </div>
 
         <div class="flex-none basis-1/2">
-          <RecipeList providedIngredients={new Set(ingredients())} />
+          <RecipeList providedIngredients={ingredients()} />
         </div>
       </main>
     </div>
