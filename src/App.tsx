@@ -49,6 +49,13 @@ const App: Component = () => {
               ])
             }
           />
+
+          <SelectIngredients
+            categoryName="Seafood"
+            value={meatIngredients()}
+            onChange={setMeatIngredients}
+            options={new Set(["Shrimp", "Salmon", "Prawns", "Crab"])}
+          />
         </div>
 
         <div class="flex-none basis-1/2">
