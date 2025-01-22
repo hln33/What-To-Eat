@@ -40,7 +40,7 @@ const SelectEssentials: Component = () => {
         )}
       >
         <Select.Trigger
-          class="min-h-12 min-w-52 max-w-64 rounded-md border border-zinc-500 bg-zinc-900"
+          class="min-h-12 w-64 rounded-md border border-zinc-500 bg-zinc-900"
           as="div"
         >
           <Select.Value<string>>
