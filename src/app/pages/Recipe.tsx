@@ -2,7 +2,7 @@ import { type Component } from "solid-js";
 
 const RecipePage: Component = () => {
   return (
-    <div class="flex justify-center space-y-5">
+    <div class="flex justify-center">
       <div class="flex flex-col items-start gap-6">
         <h2 class="text-5xl">Scrambled Eggs</h2>
 
