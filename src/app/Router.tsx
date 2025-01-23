@@ -10,9 +10,11 @@ const Layout: ParentComponent = (props) => {
         <h1 class="text-6xl">What to Eat?</h1>
       </header>
 
-      <main class="border border-slate-600 bg-slate-800 p-12">
-        {props.children}
-      </main>
+      <div class="flex justify-center">
+        <main class="max-w-screen-2xl border border-slate-600 bg-slate-800 p-12">
+          {props.children}
+        </main>
+      </div>
     </div>
   );
 };
