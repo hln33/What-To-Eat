@@ -8,16 +8,19 @@ const RecipeList: Component<{ providedIngredients: Set<string> }> = (props) => {
 
       <div class="space-y-4">
         <RecipeListCard
+          id={1}
           name="Fried Garlic"
           requiredIngredients={new Set(["Garlic"])}
           providedIngredients={props.providedIngredients}
         />
         <RecipeListCard
+          id={2}
           name="Fried Garlic and Onion"
           requiredIngredients={new Set(["Garlic", "Onion"])}
           providedIngredients={props.providedIngredients}
         />
         <RecipeListCard
+          id={3}
           name="Fried Garlic and Parsley"
           requiredIngredients={new Set(["Onion, Parsley"])}
           providedIngredients={props.providedIngredients}

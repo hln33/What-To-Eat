@@ -1,10 +1,19 @@
 import { A, useParams } from "@solidjs/router";
 import { type Component } from "solid-js";
 
+const RECIPES = [
+  { id: 1, name: "scrambled eggs" },
+  { id: 2, name: "fried garlic" },
+  { id: 3, name: "boiled eggs" },
+];
+
 const RecipePage: Component = () => {
   const params = useParams();
   console.log(Object.keys(params));
   console.log(Object.values(params));
+
+  const recipe = RECIPES[Number(params.id as string) - 1];
+  console.log(recipe);
 
   return (
     <div class="flex justify-center">
@@ -18,7 +27,7 @@ const RecipePage: Component = () => {
 
         {/* display id for testing purposes */}
         <p>id:{params.id}</p>
-        <h2 class="text-5xl">Scrambled Eggs</h2>
+        <h2 class="text-5xl">{recipe.name}</h2>
 
         <section>
           <h3 class="text-left text-3xl">Ingredients</h3>

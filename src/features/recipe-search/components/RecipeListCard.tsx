@@ -3,6 +3,7 @@ import { Image } from "@kobalte/core/Image";
 import { A } from "@solidjs/router";
 
 const RecipeListCard: Component<{
+  id: number;
   name: string;
   requiredIngredients: Set<string>;
   providedIngredients: Set<string>;
@@ -24,7 +25,7 @@ const RecipeListCard: Component<{
 
   return (
     <A
-      href="/recipe/1"
+      href={`/recipe/${props.id}`}
       class="flex flex-row-reverse gap-5 rounded-md border border-slate-600 bg-slate-900 p-4"
     >
       <div class="flex basis-3/5 flex-col justify-between">
