@@ -1,6 +1,7 @@
 import { ParentComponent } from "solid-js";
 import { Route, Router } from "@solidjs/router";
-import Home from "./pages/Home";
+import HomePage from "./pages/Home";
+import RecipePage from "./pages/Recipe";
 
 const Layout: ParentComponent = (props) => {
   return (
@@ -18,9 +19,12 @@ const AppRouter = () => (
   <Router root={Layout}>
     <Route
       path="/"
-      component={Home}
+      component={HomePage}
     />
-    <Route path="/recipe" />
+    <Route
+      path="/recipe"
+      component={RecipePage}
+    />
   </Router>
 );
 

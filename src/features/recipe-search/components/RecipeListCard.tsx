@@ -1,5 +1,6 @@
 import { Component } from "solid-js";
 import { Image } from "@kobalte/core/Image";
+import { A } from "@solidjs/router";
 
 const RecipeListCard: Component<{
   name: string;
@@ -22,7 +23,10 @@ const RecipeListCard: Component<{
   };
 
   return (
-    <div class="flex flex-row-reverse gap-5 rounded-md border border-slate-600 bg-slate-900 p-4">
+    <A
+      href="/recipe"
+      class="flex flex-row-reverse gap-5 rounded-md border border-slate-600 bg-slate-900 p-4"
+    >
       <div class="flex basis-3/5 flex-col justify-between">
         <h3 class="text-xl">{props.name}</h3>
         <p
@@ -40,7 +44,7 @@ const RecipeListCard: Component<{
         />
         <Image.Fallback>CD</Image.Fallback>
       </Image>
-    </div>
+    </A>
   );
 };
 
