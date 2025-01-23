@@ -1,7 +1,7 @@
 import { createSignal, type Component } from "solid-js";
 
-import SelectIngredients from "../../components/SelectIngredients";
-import RecipeList from "../../components/RecipeList";
+import SelectIngredients from "../../features/recipe-search/components/SelectIngredients";
+import RecipeList from "../../features/recipe-search/components/RecipeList";
 
 const App: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
