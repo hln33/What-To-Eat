@@ -24,7 +24,7 @@ const RecipeListCard: Component<{
 
   return (
     <A
-      href="/recipe"
+      href="/recipe/1"
       class="flex flex-row-reverse gap-5 rounded-md border border-slate-600 bg-slate-900 p-4"
     >
       <div class="flex basis-3/5 flex-col justify-between">

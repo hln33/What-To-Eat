@@ -1,7 +1,11 @@
-import { A } from "@solidjs/router";
+import { A, useParams } from "@solidjs/router";
 import { type Component } from "solid-js";
 
 const RecipePage: Component = () => {
+  const params = useParams();
+  console.log(Object.keys(params));
+  console.log(Object.values(params));
+
   return (
     <div class="flex justify-center">
       <div class="flex flex-col items-start gap-6">
@@ -12,6 +16,8 @@ const RecipePage: Component = () => {
           Go Back
         </A>
 
+        {/* display id for testing purposes */}
+        <p>id:{params.id}</p>
         <h2 class="text-5xl">Scrambled Eggs</h2>
 
         <section>

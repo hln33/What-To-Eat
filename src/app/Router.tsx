@@ -26,7 +26,7 @@ const AppRouter = () => (
       component={HomePage}
     />
     <Route
-      path="/recipe"
+      path="/recipe/:id"
       component={RecipePage}
     />
   </Router>
