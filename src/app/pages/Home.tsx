@@ -3,7 +3,7 @@ import { createSignal, type Component } from "solid-js";
 import SelectIngredients from "../../features/recipe-search/components/SelectIngredients";
 import RecipeList from "../../features/recipe-search/components/RecipeList";
 
-const App: Component = () => {
+const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
     new Set(["Garlic"]),
   );
@@ -18,7 +18,7 @@ const App: Component = () => {
     );
 
   return (
-    <div class="flex justify-around gap-16 border border-slate-600 p-12">
+    <div class="flex justify-around gap-16">
       <div class="flex flex-none basis-1/3 flex-col gap-10">
         <SelectIngredients
           categoryName="Essentials"
@@ -61,4 +61,4 @@ const App: Component = () => {
   );
 };
 
-export default App;
+export default HomePage;
