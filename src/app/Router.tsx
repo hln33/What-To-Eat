@@ -1,6 +1,6 @@
 import { ParentComponent } from "solid-js";
 import { Route, Router } from "@solidjs/router";
-import Home from "./routes/Home";
+import Home from "./pages/Home";
 
 const Layout: ParentComponent = (props) => {
   return (
