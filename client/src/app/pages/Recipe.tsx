@@ -1,19 +1,33 @@
 import { A, useParams } from "@solidjs/router";
-import { type Component } from "solid-js";
+import {
+  createEffect,
+  createResource,
+  Index,
+  Show,
+  type Component,
+} from "solid-js";
 
-const RECIPES = [
-  { id: 1, name: "scrambled eggs" },
-  { id: 2, name: "fried garlic" },
-  { id: 3, name: "boiled eggs" },
-];
+// const RECIPES = [
+//   { id: 1, name: "scrambled eggs" },
+//   { id: 2, name: "fried garlic" },
+//   { id: 3, name: "boiled eggs" },
+// ];
+
+const fetchRecipe = async () => {
+  const res = await fetch("http://localhost:3001/recipes/1");
+  return res.json();
+};
 
 const RecipePage: Component = () => {
   const params = useParams();
-  console.log(Object.keys(params));
-  console.log(Object.values(params));
 
-  const recipe = RECIPES[Number(params.id as string) - 1];
-  console.log(recipe);
+  const [recipe] = createResource(fetchRecipe);
+  // const recipe = RECIPES[Number(params.id as string) - 1];
+  createEffect(() => {
+    if (recipe.error) {
+      console.error(recipe.error);
+    }
+  });
 
   return (
     <div class="flex justify-center">
@@ -27,44 +41,28 @@ const RecipePage: Component = () => {
 
         {/* display id for testing purposes */}
         <p>id:{params.id}</p>
-        <h2 class="text-5xl">{recipe.name}</h2>
 
-        <section>
-          <h3 class="text-left text-3xl">Ingredients</h3>
-          <ul class="list-inside list-disc text-left">
-            <li>3 Eggs</li>
-            <li>Olive Oil / Butter</li>
-          </ul>
-        </section>
+        <Show when={!recipe.loading}>
+          <h2 class="text-5xl">{recipe().name}</h2>
 
-        <section class="space-y-2">
-          <h3 class="text-left text-3xl">Instructions</h3>
-          <ul class="list-outside list-decimal space-y-2 text-left">
-            <li>
-              Crack the eggs into a medium bowl. Whisk until smooth and
-              combined, with no streaks of egg white remaining.
-            </li>
-            <li>
-              Brush a small nonstick skillet with olive oil, or melt a little
-              butter in a small nonstick skillet. Bring to medium heat.
-            </li>
-            <li>
-              Pour in the eggs, and let them cook for a few seconds without
-              stirring. Pull a rubber spatula across the bottom of the pan to
-              form large, soft curds of scrambled eggs.
-            </li>
-            <li>
-              Continue cooking over medium-low heat, folding and stirring the
-              eggs every few seconds. Scrape the spatula along the bottom and
-              sides of the pan often to form more curds and to prevent any part
-              of the eggs from drying out.
-            </li>
-            <li>
-              Remove the pan from the heat when the eggs are mostly set, but a
-              little liquid egg remains. Season to taste with salt and pepper.
-            </li>
-          </ul>
-        </section>
+          <section>
+            <h3 class="text-left text-3xl">Ingredients</h3>
+            <ul class="list-inside list-disc text-left">
+              <Index each={recipe().ingredients}>
+                {(item, _index) => <li>{item()}</li>}
+              </Index>
+            </ul>
+          </section>
+
+          <section class="space-y-2">
+            <h3 class="text-left text-3xl">Instructions</h3>
+            <ul class="list-outside list-decimal space-y-2 text-left">
+              <Index each={recipe().instructions}>
+                {(item, _index) => <li>{item()}</li>}
+              </Index>
+            </ul>
+          </section>
+        </Show>
       </div>
     </div>
   );

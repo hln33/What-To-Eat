@@ -1,8 +1,14 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import recipes from './recipes.ts';
+import recipes from './routes/recipes.ts';
 
 const app = new Hono();
+
+// CORS middleware
+app.use(async (c, next) => {
+  c.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  await next();
+});
 
 app.get('/', (c) => {
   return c.text('Hello Hono!');
