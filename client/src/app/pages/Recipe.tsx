@@ -41,7 +41,7 @@ const RecipePage: Component = () => {
 
         <Show when={recipe()}>
           {(recipe) => (
-            <section>
+            <section class="space-y-6">
               <h2 class="text-5xl">{recipe().name}</h2>
 
               <section>
