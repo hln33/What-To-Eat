@@ -41,14 +41,14 @@ const RecipePage: Component = () => {
 
         <Show when={recipe()}>
           {(recipe) => (
-            <>
+            <section>
               <h2 class="text-5xl">{recipe().name}</h2>
 
               <section>
                 <h3 class="text-left text-3xl">Ingredients</h3>
                 <ul class="list-inside list-disc text-left">
                   <Index each={recipe().ingredients}>
-                    {(item, _index) => <li>{item()}</li>}
+                    {(ingredient, _index) => <li>{ingredient()}</li>}
                   </Index>
                 </ul>
               </section>
@@ -57,11 +57,11 @@ const RecipePage: Component = () => {
                 <h3 class="text-left text-3xl">Instructions</h3>
                 <ul class="list-outside list-decimal space-y-2 text-left">
                   <Index each={recipe().instructions}>
-                    {(item, _index) => <li>{item()}</li>}
+                    {(instruction, _index) => <li>{instruction()}</li>}
                   </Index>
                 </ul>
               </section>
-            </>
+            </section>
           )}
         </Show>
       </div>
