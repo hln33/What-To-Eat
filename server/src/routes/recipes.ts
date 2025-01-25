@@ -5,7 +5,7 @@ const recipes = new Hono();
 recipes.get('/', (c) => {
   return c.text('eggs');
 });
-recipes.get('/:id', (c) => {
+const getRecipeByIdRoute = recipes.get('/:id', (c) => {
   const id = c.req.param('id');
 
   return c.json({
@@ -20,5 +20,7 @@ recipes.get('/:id', (c) => {
     ],
   });
 });
+
+export type RecipeType = typeof getRecipeByIdRoute;
 
 export default recipes;

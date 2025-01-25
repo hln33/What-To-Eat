@@ -6,15 +6,13 @@ import {
   Show,
   type Component,
 } from "solid-js";
+import { hc } from "hono/client";
+import { RecipeType } from "../../../../server/src/routes/recipes";
 
-// const RECIPES = [
-//   { id: 1, name: "scrambled eggs" },
-//   { id: 2, name: "fried garlic" },
-//   { id: 3, name: "boiled eggs" },
-// ];
+const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
 
 const fetchRecipe = async () => {
-  const res = await fetch("http://localhost:3001/recipes/1");
+  const res = await recipeEndpoint[":id"].$get({ param: { id: "1" } });
   return res.json();
 };
 
@@ -22,7 +20,6 @@ const RecipePage: Component = () => {
   const params = useParams();
 
   const [recipe] = createResource(fetchRecipe);
-  // const recipe = RECIPES[Number(params.id as string) - 1];
   createEffect(() => {
     if (recipe.error) {
       console.error(recipe.error);
@@ -42,26 +39,30 @@ const RecipePage: Component = () => {
         {/* display id for testing purposes */}
         <p>id:{params.id}</p>
 
-        <Show when={!recipe.loading}>
-          <h2 class="text-5xl">{recipe().name}</h2>
+        <Show when={recipe()}>
+          {(recipe) => (
+            <>
+              <h2 class="text-5xl">{recipe().name}</h2>
 
-          <section>
-            <h3 class="text-left text-3xl">Ingredients</h3>
-            <ul class="list-inside list-disc text-left">
-              <Index each={recipe().ingredients}>
-                {(item, _index) => <li>{item()}</li>}
-              </Index>
-            </ul>
-          </section>
+              <section>
+                <h3 class="text-left text-3xl">Ingredients</h3>
+                <ul class="list-inside list-disc text-left">
+                  <Index each={recipe().ingredients}>
+                    {(item, _index) => <li>{item()}</li>}
+                  </Index>
+                </ul>
+              </section>
 
-          <section class="space-y-2">
-            <h3 class="text-left text-3xl">Instructions</h3>
-            <ul class="list-outside list-decimal space-y-2 text-left">
-              <Index each={recipe().instructions}>
-                {(item, _index) => <li>{item()}</li>}
-              </Index>
-            </ul>
-          </section>
+              <section class="space-y-2">
+                <h3 class="text-left text-3xl">Instructions</h3>
+                <ul class="list-outside list-decimal space-y-2 text-left">
+                  <Index each={recipe().instructions}>
+                    {(item, _index) => <li>{item()}</li>}
+                  </Index>
+                </ul>
+              </section>
+            </>
+          )}
         </Show>
       </div>
     </div>
