@@ -11,15 +11,15 @@ import { RecipeType } from "../../../../server/src/routes/recipes";
 
 const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
 
-const fetchRecipe = async () => {
-  const res = await recipeEndpoint[":id"].$get({ param: { id: "1" } });
+const fetchRecipe = async (id: string) => {
+  const res = await recipeEndpoint[":id"].$get({ param: { id } });
   return res.json();
 };
 
 const RecipePage: Component = () => {
   const params = useParams();
 
-  const [recipe] = createResource(fetchRecipe);
+  const [recipe] = createResource(params.id, fetchRecipe);
   createEffect(() => {
     if (recipe.error) {
       console.error(recipe.error);
