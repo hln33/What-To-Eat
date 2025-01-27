@@ -5,7 +5,7 @@ import RecipeList from "../../features/recipe-search/components/RecipeList";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
-    new Set(["Garlic"]),
+    new Set(["Eggs", "Olive Oil"]),
   );
   const [meatIngredients, setMeatIngredients] = createSignal(new Set([""]));
   const [seafoodIngredients, setSeafoodIngredients] = createSignal(
@@ -28,6 +28,7 @@ const HomePage: Component = () => {
             new Set([
               "Butter",
               "Milk",
+              "Eggs",
               "Garlic",
               "Onion",
               "Olive Oil",

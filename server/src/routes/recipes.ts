@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 const _RECIPES = [
   {
     name: 'Scrambled Eggs',
-    ingredients: ['3 Eggs', 'Olive Oil / Butter'],
+    ingredients: ['Eggs', 'Olive Oil'],
     instructions: [
       'Crack the eggs into a medium bowl. Whisk until smooth andcombined, with no streaks of egg white remaining.',
       'Brush a small nonstick skillet with olive oil, or melt a little butter in a small nonstick skillet. Bring to medium heat.',
@@ -29,12 +29,12 @@ const _RECIPES = [
 
 const recipes = new Hono()
   .get('/', (c) => {
-    return c.text('eggs');
+    return c.json(_RECIPES);
   })
   .get('/:id', (c) => {
     const id = c.req.param('id');
 
-    return c.json(_RECIPES[Number(id) - 1]);
+    return c.json(_RECIPES[Number(id)]);
   });
 
 export type RecipeType = typeof recipes;
