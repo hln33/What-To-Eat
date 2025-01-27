@@ -36,7 +36,16 @@ const RecipePage: Component = () => {
         Go Back
       </A>
 
-      <Show when={recipe()}>
+      <Show
+        when={recipe()}
+        fallback={
+          <div class="space-y-6">
+            <div class="animate-skeleton-fade h-12 rounded-lg bg-slate-300" />
+            <div class="animate-skeleton-fade h-32 rounded-lg bg-slate-300" />
+            <div class="animate-skeleton-fade h-52 rounded-lg bg-slate-300" />
+          </div>
+        }
+      >
         {(recipe) => (
           <section class="space-y-12 text-left">
             <div class="space-y-5">
