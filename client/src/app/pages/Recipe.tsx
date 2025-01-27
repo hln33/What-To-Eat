@@ -6,12 +6,11 @@ import {
   Show,
   type Component,
 } from "solid-js";
+import { Separator } from "@kobalte/core/separator";
 import { hc } from "hono/client";
 import { RecipeType } from "../../../../server/src/routes/recipes";
-import { Separator } from "@kobalte/core/separator";
 
 const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
-
 const fetchRecipe = async (id: string) => {
   const res = await recipeEndpoint[":id"].$get({ param: { id } });
   return res.json();
