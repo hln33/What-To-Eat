@@ -1,0 +1,23 @@
+import { int, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { drizzle } from 'drizzle-orm/libsql';
+
+export const db = drizzle(process.env.DB_FILE_NAME!);
+
+export const recipes = sqliteTable('recipes', {
+  id: int().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
+});
+
+export const recipesToIngredients = sqliteTable(
+  'recipes_to_ingredients',
+  {
+    recipeId: int('recipe_id').notNull(),
+    ingredientId: int('ingredient_id').notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.recipeId, table.ingredientId] })]
+);
+
+export const ingredients = sqliteTable('ingredients', {
+  id: int().primaryKey({ autoIncrement: true }),
+  name: text().notNull().unique(),
+});
