@@ -1,5 +1,5 @@
-import { Select } from "@kobalte/core/select";
 import { Component, For } from "solid-js";
+import { Select } from "@kobalte/core/select";
 
 const SelectIngredients: Component<{
   categoryName: string;
@@ -12,9 +12,9 @@ const SelectIngredients: Component<{
   };
 
   return (
-    <div class="flex flex-col items-center">
+    <div class="flex w-56 flex-col items-start gap-3 text-white">
       <label
-        class="mb-4 block text-4xl"
+        class="block text-4xl"
         for="essentials"
       >
         {props.categoryName}
@@ -22,6 +22,7 @@ const SelectIngredients: Component<{
 
       <Select<string>
         id="essentials"
+        class="w-full"
         multiple
         value={Array.from(props.value)}
         onChange={handleChange}
@@ -39,7 +40,7 @@ const SelectIngredients: Component<{
         )}
       >
         <Select.Trigger
-          class="min-h-12 w-64 rounded-md border border-zinc-500 bg-zinc-900"
+          class="min-h-12 rounded-md border border-zinc-500 bg-zinc-900"
           as="div"
         >
           <Select.Value<string>>
@@ -68,7 +69,7 @@ const SelectIngredients: Component<{
           </Select.Value>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content class="rounded-md border border-zinc-500 bg-zinc-900 p-2 text-white">
+          <Select.Content class="z-50 rounded-md border border-zinc-500 bg-zinc-900 p-2 text-white">
             <Select.Listbox />
           </Select.Content>
         </Select.Portal>

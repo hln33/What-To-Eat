@@ -1,7 +1,10 @@
 import { createSignal, type Component } from "solid-js";
+import { Collapsible } from "@kobalte/core/collapsible";
+import { Dialog } from "@kobalte/core/dialog";
 
 import SelectIngredients from "../../features/recipe-search/components/SelectIngredients";
 import RecipeList from "../../features/recipe-search/components/RecipeList";
+import SelectIngredientsMenu from "../../features/recipe-search/components/SelectIngredientsMenu";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
@@ -18,40 +21,43 @@ const HomePage: Component = () => {
     );
 
   return (
-    <div class="flex justify-around gap-16">
-      <div class="flex flex-none basis-1/3 flex-col gap-10">
-        <SelectIngredients
-          categoryName="Essentials"
-          value={essentialIngredients()}
-          onChange={setEssentialIngredients}
-          options={
-            new Set([
-              "Butter",
-              "Milk",
-              "Eggs",
-              "Garlic",
-              "Onion",
-              "Olive Oil",
-              "Garlic Powder",
-              "White Rice",
-            ])
-          }
-        />
-
-        <SelectIngredients
-          categoryName="Meats"
-          value={meatIngredients()}
-          onChange={setMeatIngredients}
-          options={
-            new Set(["Pork Belly", "Steak", "Chicken Breast", "Chicken Thigh"])
-          }
-        />
-
-        <SelectIngredients
-          categoryName="Seafood"
-          value={seafoodIngredients()}
-          onChange={setSeafoodIngredients}
-          options={new Set(["Shrimp", "Salmon", "Prawns", "Crab"])}
+    <div class="flex flex-col justify-around gap-16 md:flex-row">
+      <div class="flex flex-none basis-1/3 flex-col gap-5">
+        <SelectIngredientsMenu
+          categories={[
+            {
+              name: "Essentials",
+              ingredients: essentialIngredients(),
+              onIngredientsChange: setEssentialIngredients,
+              options: new Set([
+                "Butter",
+                "Milk",
+                "Eggs",
+                "Garlic",
+                "Onion",
+                "Olive Oil",
+                "Garlic Powder",
+                "White Rice",
+              ]),
+            },
+            {
+              name: "Meats",
+              ingredients: meatIngredients(),
+              onIngredientsChange: setMeatIngredients,
+              options: new Set([
+                "Pork Belly",
+                "Steak",
+                "Chicken Breast",
+                "Chicken Thigh",
+              ]),
+            },
+            {
+              name: "Seafood",
+              ingredients: seafoodIngredients(),
+              onIngredientsChange: setSeafoodIngredients,
+              options: new Set(["Shrimp", "Salmon", "Prawns", "Crab"]),
+            },
+          ]}
         />
       </div>
 
