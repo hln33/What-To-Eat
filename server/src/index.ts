@@ -9,7 +9,7 @@ import {
   ingredients as ingredientsTable,
   db,
 } from './db/schema.ts';
-import { createRecipe } from './models/recipe.ts';
+import { createRecipe, getRecipe } from './models/recipe.ts';
 
 // const seedDatabase = async () => {
 //   await createRecipe('boiled eggs', ['eggs']);
@@ -27,6 +27,8 @@ import { createRecipe } from './models/recipe.ts';
 //   console.log(recipesToIngredients);
 // };
 // seedDatabase();
+
+console.log(await getRecipe(2));
 
 const app = new Hono();
 
