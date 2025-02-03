@@ -1,53 +1,66 @@
-import { createSignal, Index, type Component } from "solid-js";
+import { createSignal, Setter, type Component } from "solid-js";
 import RecipeList from "../../features/recipe-search/components/RecipeList";
 import SelectIngredientsMenu from "../../features/recipe-search/components/SelectIngredientsMenu";
-import SelectIngredientsMenuItem from "../../features/recipe-search/components/SelectIngredientsMenuItem";
+
+const setsEqual = <T,>(a: Set<T>, b: Set<T>) =>
+  a.symmetricDifference(b).size === 0;
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
     new Set(["Eggs", "Olive Oil"]),
+    { equals: setsEqual },
   );
   const [meatIngredients, setMeatIngredients] = createSignal(new Set([""]), {
-    equals: (prev, next) => prev.symmetricDifference(next).size === 0,
+    equals: setsEqual,
   });
   const [seafoodIngredients, setSeafoodIngredients] = createSignal(
     new Set([""]),
+    { equals: setsEqual },
   );
 
-  const INGREDIENT_CATEGORIES = () => [
-    {
-      name: "Essentials",
-      ingredients: essentialIngredients(),
-      onIngredientsChange: setEssentialIngredients,
-      options: new Set([
-        "Butter",
-        "Milk",
-        "Eggs",
-        "Garlic",
-        "Onion",
-        "Olive Oil",
-        "Garlic Powder",
-        "White Rice",
-      ]),
-    },
-    {
-      name: "Meats",
-      ingredients: meatIngredients(),
-      onIngredientsChange: setMeatIngredients,
-      options: new Set([
-        "Pork Belly",
-        "Steak",
-        "Chicken Breast",
-        "Chicken Thigh",
-      ]),
-    },
-    {
-      name: "Seafood",
-      ingredients: seafoodIngredients(),
-      onIngredientsChange: setSeafoodIngredients,
-      options: new Set(["Shrimp", "Salmon", "Prawns", "Crab"]),
-    },
-  ];
+  const ingredientCategories = () => {
+    const createCategory = (
+      name: string,
+      ingredients: Set<string>,
+      onIngredientsChange: Setter<Set<string>>,
+      options: Set<string>,
+    ) => ({
+      name,
+      ingredients,
+      onIngredientsChange,
+      options,
+    });
+
+    return [
+      createCategory(
+        "Essentials",
+        essentialIngredients(),
+        setEssentialIngredients,
+        new Set([
+          "Butter",
+          "Milk",
+          "Eggs",
+          "Garlic",
+          "Onion",
+          "Olive Oil",
+          "Garlic Powder",
+          "White Rice",
+        ]),
+      ),
+      createCategory(
+        "Meats",
+        meatIngredients(),
+        setMeatIngredients,
+        new Set(["Pork Belly", "Steak", "Chicken Breast", "Chicken Thigh"]),
+      ),
+      createCategory(
+        "Seafood",
+        seafoodIngredients(),
+        setSeafoodIngredients,
+        new Set(["Shrimp", "Salmon", "Prawns", "Crab"]),
+      ),
+    ];
+  };
 
   const allIngredients = () =>
     [essentialIngredients(), meatIngredients(), seafoodIngredients()].reduce(
@@ -57,53 +70,7 @@ const HomePage: Component = () => {
   return (
     <div class="flex flex-col justify-around gap-16 md:flex-row">
       <div class="flex flex-none basis-1/3 flex-col gap-5">
-        <Index each={INGREDIENT_CATEGORIES()}>
-          {(category, _index) => (
-            <SelectIngredientsMenuItem
-              categoryName={category().name}
-              value={category().ingredients}
-              onChange={category().onIngredientsChange}
-              options={category().options}
-            />
-          )}
-        </Index>
-
-        <SelectIngredientsMenu
-          categories={[
-            {
-              name: "Essentials",
-              ingredients: essentialIngredients(),
-              onIngredientsChange: setEssentialIngredients,
-              options: new Set([
-                "Butter",
-                "Milk",
-                "Eggs",
-                "Garlic",
-                "Onion",
-                "Olive Oil",
-                "Garlic Powder",
-                "White Rice",
-              ]),
-            },
-            {
-              name: "Meats",
-              ingredients: meatIngredients(),
-              onIngredientsChange: setMeatIngredients,
-              options: new Set([
-                "Pork Belly",
-                "Steak",
-                "Chicken Breast",
-                "Chicken Thigh",
-              ]),
-            },
-            {
-              name: "Seafood",
-              ingredients: seafoodIngredients(),
-              onIngredientsChange: setSeafoodIngredients,
-              options: new Set(["Shrimp", "Salmon", "Prawns", "Crab"]),
-            },
-          ]}
-        />
+        <SelectIngredientsMenu categories={ingredientCategories()} />
       </div>
 
       <div class="flex-none basis-1/2">

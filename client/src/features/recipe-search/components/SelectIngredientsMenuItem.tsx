@@ -8,17 +8,7 @@ const SelectIngredientsMenuItem: Component<{
   options: Set<string>;
 }> = (props) => {
   const handleChange = (value: string[]) => {
-    const newValues = new Set(value);
-
-    // props.onChange(newValues);
-    // console.log(props.value);
-    // console.log(newValues);
-
-    if (props.value.symmetricDifference(newValues).size !== 0) {
-      // console.log(value);
-      // console.log(props.value.symmetricDifference(newValues));
-      props.onChange(newValues);
-    }
+    props.onChange(new Set(value));
   };
 
   return (
