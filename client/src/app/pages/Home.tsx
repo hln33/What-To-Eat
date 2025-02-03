@@ -1,9 +1,7 @@
 import { createSignal, Setter, type Component } from "solid-js";
 import RecipeList from "../../features/recipe-search/components/RecipeList";
 import SelectIngredientsMenu from "../../features/recipe-search/components/SelectIngredientsMenu";
-
-const setsEqual = <T,>(a: Set<T>, b: Set<T>) =>
-  a.symmetricDifference(b).size === 0;
+import { setsEqual } from "../../utils/set";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
