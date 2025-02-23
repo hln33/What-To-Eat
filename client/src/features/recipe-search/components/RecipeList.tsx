@@ -16,7 +16,10 @@ const fetchAllRecipes = async () => {
   return res.json();
 };
 
-const RecipeList: Component<{ providedIngredients: Set<string> }> = (props) => {
+const RecipeList: Component<{
+  class?: string;
+  providedIngredients: Set<string>;
+}> = (props) => {
   const [recipes] = createResource(fetchAllRecipes);
   createEffect(() => {
     if (recipes.error) {
@@ -25,7 +28,7 @@ const RecipeList: Component<{ providedIngredients: Set<string> }> = (props) => {
   });
 
   return (
-    <section>
+    <section class={props.class}>
       <h2 class="mb-5 text-4xl">Recipe List</h2>
 
       <div class="space-y-4">
