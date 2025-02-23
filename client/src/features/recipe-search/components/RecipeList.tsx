@@ -8,7 +8,7 @@ import {
 import { hc } from "hono/client";
 import RecipeListCard from "./RecipeListCard";
 import { RecipeType } from "../../../../../server/src/routes/recipes";
-import { Skeleton } from "@kobalte/core/skeleton";
+import Skeleton from "../../../components/Skeleton";
 
 const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
 const fetchAllRecipes = async () => {
@@ -31,10 +31,11 @@ const RecipeList: Component<{ providedIngredients: Set<string> }> = (props) => {
       <div class="space-y-4">
         <Suspense
           fallback={
-            <Skeleton
-              class="rounded bg-gray-400"
-              height={30}
-            />
+            <>
+              <Skeleton height={100} />
+              <Skeleton height={100} />
+              <Skeleton height={100} />
+            </>
           }
         >
           <For each={recipes()}>
