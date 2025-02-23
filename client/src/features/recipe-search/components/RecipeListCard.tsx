@@ -9,35 +9,36 @@ const RecipeListCard: Component<{
   providedIngredients: Set<string>;
 }> = (props) => {
   const statusText = () => {
-    const num_missing_ingredients = props.requiredIngredients.difference(
+    const numMissingIngredients = props.requiredIngredients.difference(
       props.providedIngredients,
     ).size;
 
-    if (num_missing_ingredients === 0) {
+    if (numMissingIngredients === 0) {
       return "You have all ingredients";
-    } else if (num_missing_ingredients === props.requiredIngredients.size) {
+    } else if (numMissingIngredients === props.requiredIngredients.size) {
       return "You are missing all ingredients";
     } else {
-      const is_plural = num_missing_ingredients > 1;
-      return `You are missing ${num_missing_ingredients} ingredient${is_plural ? "s" : ""}`;
+      const isPlural = numMissingIngredients > 1;
+      return `You are missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
     }
   };
 
   return (
     <A
       href={`/recipe/${props.id}`}
-      class="flex flex-row-reverse gap-5 rounded-md border border-slate-600 bg-slate-900 p-4"
+      class="flex flex-row-reverse gap-6 rounded-md border border-slate-600 bg-slate-900 p-3"
     >
-      <div class="flex basis-3/5 flex-col justify-between">
-        <h3 class="text-xl">{props.name}</h3>
+      <div class="flex basis-2/3 flex-col justify-between">
+        <h3 class="text-lg font-bold">{props.name}</h3>
         <p
+          class="text-sm"
           role="note"
           aria-live="polite"
         >
           {statusText()}
         </p>
       </div>
-      <Image class="size-1/2 flex-initial basis-2/5">
+      <Image class="basis-1/3">
         <Image.Img
           class="rounded-sm"
           src="https://www.seriouseats.com/thmb/5HVYf-rShl31VrW9ajM3uGMxWbM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2020__12__20201027-fried-garlic-microwave-vicky-wasik-14-f693c192393e406fa1737dbae8315e05.jpg"
