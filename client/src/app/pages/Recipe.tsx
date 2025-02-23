@@ -3,12 +3,13 @@ import {
   createEffect,
   createResource,
   Index,
-  Show,
+  Suspense,
   type Component,
 } from "solid-js";
 import { Separator } from "@kobalte/core/separator";
 import { hc } from "hono/client";
 import { RecipeType } from "../../../../server/src/routes/recipes";
+import Skeleton from "../../components/Skeleton";
 
 const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
 const fetchRecipe = async (id: string) => {
@@ -27,51 +28,48 @@ const RecipePage: Component = () => {
   });
 
   return (
-    <div class="w-96 space-y-10">
+    <div class="space-y-10">
       <A
-        class="flex self-start text-left text-lg underline"
+        class="flex text-left text-lg underline"
         href="/"
       >
         Go Back
       </A>
 
-      <Show
-        when={recipe()}
+      <Suspense
         fallback={
           <div class="space-y-6">
-            <div class="animate-skeleton-fade h-12 rounded-lg bg-slate-300" />
-            <div class="animate-skeleton-fade h-32 rounded-lg bg-slate-300" />
-            <div class="animate-skeleton-fade h-52 rounded-lg bg-slate-300" />
+            <Skeleton height={40} />
+            <Skeleton height={128} />
+            <Skeleton height={208} />
           </div>
         }
       >
-        {(recipe) => (
-          <section class="space-y-12 text-left">
-            <div class="space-y-5">
-              <h2 class="text-5xl">{recipe().name}</h2>
-              <Separator />
-            </div>
+        <section class="space-y-12 text-left">
+          <div class="space-y-5">
+            <h2 class="text-5xl">{recipe()?.name}</h2>
+            <Separator />
+          </div>
 
-            <section class="space-y-3">
-              <h3 class="text-3xl">Ingredients</h3>
-              <ul class="list-inside list-disc">
-                <Index each={recipe().ingredients}>
-                  {(ingredient, _index) => <li>{ingredient()}</li>}
-                </Index>
-              </ul>
-            </section>
-
-            <section class="space-y-3">
-              <h3 class="text-3xl">Instructions</h3>
-              <ul class="list-outside list-decimal space-y-5">
-                <Index each={recipe().instructions}>
-                  {(instruction, _index) => <li>{instruction()}</li>}
-                </Index>
-              </ul>
-            </section>
+          <section class="space-y-3">
+            <h3 class="text-3xl">Ingredients</h3>
+            <ul class="list-inside list-disc">
+              <Index each={recipe()?.ingredients}>
+                {(ingredient, _index) => <li>{ingredient()}</li>}
+              </Index>
+            </ul>
           </section>
-        )}
-      </Show>
+
+          <section class="space-y-3">
+            <h3 class="text-3xl">Instructions</h3>
+            <ul class="list-outside list-decimal space-y-5">
+              <Index each={recipe()?.instructions}>
+                {(instruction, _index) => <li>{instruction()}</li>}
+              </Index>
+            </ul>
+          </section>
+        </section>
+      </Suspense>
     </div>
   );
 };
