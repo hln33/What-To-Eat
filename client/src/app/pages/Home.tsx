@@ -67,7 +67,7 @@ const HomePage: Component = () => {
 
   return (
     <div class="flex flex-col justify-around gap-16 md:flex-row">
-      <div class="flex flex-none basis-1/3 flex-col gap-5">
+      <div>
         <SelectIngredientsMenu categories={ingredientCategories()} />
       </div>
 

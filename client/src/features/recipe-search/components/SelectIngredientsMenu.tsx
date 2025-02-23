@@ -1,6 +1,7 @@
 import { Component, Index } from "solid-js";
 import { Dialog } from "@kobalte/core/dialog";
 import SelectIngredientsMenuItem from "./SelectIngredientsMenuItem";
+import Button from "../../../components/Button";
 
 type Category = {
   name: string;
@@ -14,7 +15,7 @@ const SelectIngredientsMenu: Component<{ categories: Category[] }> = (
 ) => {
   return (
     <Dialog>
-      <Dialog.Trigger>Ingredients</Dialog.Trigger>
+      <Dialog.Trigger as={Button}>Ingredients</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay class="fixed inset-0 z-50 bg-black/50">
           <div class="left-0 top-0 z-50 w-72 space-y-10 rounded-sm bg-slate-700 p-8">

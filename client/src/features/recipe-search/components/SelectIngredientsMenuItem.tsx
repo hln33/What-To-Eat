@@ -48,20 +48,18 @@ const SelectIngredientsMenuItem: Component<{
               <div class="flex flex-wrap gap-2 p-2">
                 <For each={state.selectedOptions()}>
                   {(option) => (
-                    <>
-                      <div
-                        class="flex items-center gap-2 rounded-md bg-gray-700 px-2 py-1"
-                        onPointerDown={(e) => e.stopPropagation()}
+                    <div
+                      class="flex items-center gap-2 rounded-md bg-gray-700 px-2 py-1"
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      {option}
+                      <button
+                        class="flex size-5 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-400"
+                        onClick={() => state.remove(option)}
                       >
-                        {option}
-                        <button
-                          class="flex size-5 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-400"
-                          onClick={() => state.remove(option)}
-                        >
-                          X
-                        </button>
-                      </div>
-                    </>
+                        X
+                      </button>
+                    </div>
                   )}
                 </For>
               </div>

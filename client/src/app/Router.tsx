@@ -7,7 +7,7 @@ const Layout: ParentComponent = (props) => {
   return (
     <div class="min-h-screen bg-slate-900 p-5 text-center text-white">
       <header class="py-12">
-        <h1 class="text-6xl">What to Eat?</h1>
+        {/* <h1 class="text-6xl">What to Eat?</h1> */}
       </header>
 
       <div class="flex justify-center">
