@@ -1,5 +1,7 @@
 import { Component, JSX, Show, splitProps } from "solid-js";
 import { TextField as Kobalte } from "@kobalte/core/text-field";
+import InputError from "./InputError";
+import RequiredInputAsterisk from "./RequiredInputAsterisk";
 
 type TextInputProps = {
   name: string;
@@ -32,7 +34,7 @@ const TextField: Component<TextInputProps> = (props) => {
     >
       <Show when={props.label}>
         <Kobalte.Label>
-          {props.label} {rootProps.required && "*"}
+          {props.label} {rootProps.required && <RequiredInputAsterisk />}
         </Kobalte.Label>
       </Show>
       <Kobalte.Input
@@ -40,7 +42,9 @@ const TextField: Component<TextInputProps> = (props) => {
         {...inputProps}
         type={props.type}
       />
-      <Kobalte.ErrorMessage>{props.error}</Kobalte.ErrorMessage>
+      <Kobalte.ErrorMessage>
+        <InputError errorMessage={props.error} />
+      </Kobalte.ErrorMessage>
     </Kobalte>
   );
 };

@@ -2,6 +2,7 @@ import {
   Component,
   createEffect,
   createResource,
+  ErrorBoundary,
   For,
   Suspense,
 } from "solid-js";
@@ -32,26 +33,28 @@ const RecipeList: Component<{
       <h2 class="mb-5 text-4xl">Recipe List</h2>
 
       <div class="space-y-4">
-        <Suspense
-          fallback={
-            <>
-              <Skeleton height={100} />
-              <Skeleton height={100} />
-              <Skeleton height={100} />
-            </>
-          }
-        >
-          <For each={recipes()}>
-            {(item, index) => (
-              <RecipeListCard
-                id={index()}
-                name={item.name}
-                requiredIngredients={new Set(item.ingredients)}
-                providedIngredients={props.providedIngredients}
-              />
-            )}
-          </For>
-        </Suspense>
+        <ErrorBoundary fallback={<div>Error loading recipes</div>}>
+          <Suspense
+            fallback={
+              <>
+                <Skeleton height={100} />
+                <Skeleton height={100} />
+                <Skeleton height={100} />
+              </>
+            }
+          >
+            <For each={recipes()}>
+              {(item, index) => (
+                <RecipeListCard
+                  id={index()}
+                  name={item.name}
+                  requiredIngredients={new Set(item.ingredients)}
+                  providedIngredients={props.providedIngredients}
+                />
+              )}
+            </For>
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </section>
   );
