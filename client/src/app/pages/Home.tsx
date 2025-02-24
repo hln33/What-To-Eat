@@ -2,6 +2,7 @@ import { createSignal, Setter, type Component } from "solid-js";
 import RecipeList from "../../features/recipe-search/components/RecipeList";
 import SelectIngredientsMenu from "../../features/recipe-search/components/SelectIngredientsMenu";
 import { setsEqual } from "../../utils/set";
+import NewRecipeForm from "../../features/new-recipe/NewRecipeForm";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
@@ -69,6 +70,7 @@ const HomePage: Component = () => {
     <div class="flex flex-col justify-around gap-16 md:flex-row">
       <SelectIngredientsMenu categories={ingredientCategories()} />
       <RecipeList providedIngredients={allIngredients()} />
+      <NewRecipeForm />
     </div>
   );
 };
