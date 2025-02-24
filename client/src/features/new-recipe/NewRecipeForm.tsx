@@ -15,7 +15,12 @@ type RecipeForm = {
 };
 
 const NewRecipeForm = () => {
-  const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>();
+  const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
+    initialValues: {
+      ingredients: [""],
+      steps: [""],
+    },
+  });
 
   const handleSubmit: SubmitHandler<RecipeForm> = () => {
     console.log("submitting");
@@ -23,7 +28,7 @@ const NewRecipeForm = () => {
 
   return (
     <Form
-      class="flex flex-col items-start gap-8"
+      class="space-y-8"
       onSubmit={handleSubmit}
     >
       <Field name="recipeName">
@@ -41,7 +46,7 @@ const NewRecipeForm = () => {
 
       <For each={["ingredients", "steps"] as const}>
         {(fieldName, _) => (
-          <div>
+          <div class="space-y-2">
             <FieldArray name={fieldName}>
               {(fieldArray) => (
                 <>
@@ -53,7 +58,7 @@ const NewRecipeForm = () => {
                   </label>
                   <For each={fieldArray.items}>
                     {(_, index) => (
-                      <div class="my-4 flex">
+                      <div class="mb-2 mt-1 flex">
                         <Field name={`ingredients.${index()}`}>
                           {(field, props) => (
                             <TextField
@@ -66,6 +71,7 @@ const NewRecipeForm = () => {
                           )}
                         </Field>
                         <Button
+                          class="size-12"
                           onClick={() =>
                             remove(form, fieldArray.name, { at: index() })
                           }
@@ -79,7 +85,7 @@ const NewRecipeForm = () => {
               )}
             </FieldArray>
             <Button
-              class="mt-2 block w-fit capitalize"
+              class="block w-fit px-4 capitalize"
               onClick={() => insert(form, fieldName, { value: "" })}
             >
               + {fieldName}
