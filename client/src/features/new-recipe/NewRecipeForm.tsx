@@ -30,7 +30,7 @@ const NewRecipeForm = () => {
   };
 
   return (
-    <div class="space-y-10">
+    <section class="space-y-10">
       <h2 class="text-3xl">New Recipe</h2>
 
       <Form
@@ -56,7 +56,7 @@ const NewRecipeForm = () => {
 
         <For each={["ingredients", "steps"] as const}>
           {(fieldName, _) => (
-            <div class="space-y-2">
+            <div>
               <FieldArray
                 name={fieldName}
                 validate={[required(`Please add ${fieldName}.`)]}
@@ -120,7 +120,7 @@ const NewRecipeForm = () => {
           Submit
         </Button>
       </Form>
-    </div>
+    </section>
   );
 };
 

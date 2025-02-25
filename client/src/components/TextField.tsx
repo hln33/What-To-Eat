@@ -38,7 +38,7 @@ const TextField: Component<TextInputProps> = (props) => {
         </Kobalte.Label>
       </Show>
       <Kobalte.Input
-        class="w-52 rounded-md px-2 py-3 text-black"
+        class="w-52 rounded-md px-2 py-3 text-black ui-invalid:border-2 ui-invalid:border-red-500 ui-invalid:text-red-500 ui-disabled:bg-slate-500"
         {...inputProps}
         type={props.type}
       />
