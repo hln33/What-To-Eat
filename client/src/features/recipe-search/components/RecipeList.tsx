@@ -6,14 +6,12 @@ import {
   For,
   Suspense,
 } from "solid-js";
-import { hc } from "hono/client";
 import RecipeListCard from "./RecipeListCard";
-import { RecipeType } from "../../../../../server/src/routes/recipes";
 import Skeleton from "../../../components/Skeleton";
+import { api } from "../../../api";
 
-const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
 const fetchAllRecipes = async () => {
-  const res = await recipeEndpoint.index.$get();
+  const res = await api.recipes.$get();
   return res.json();
 };
 

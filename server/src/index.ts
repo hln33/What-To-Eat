@@ -1,8 +1,7 @@
 import 'dotenv/config';
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import recipes from './routes/recipes.ts';
-import { drizzle } from 'drizzle-orm/libsql';
+import recipes from './routes/recipe.ts';
 import {
   recipes as recipesTable,
   recipesToIngredients as recipesToIngredientsTable,
@@ -32,20 +31,13 @@ const seedDatabase = async () => {
 };
 seedDatabase();
 
-console.log(await getRecipe(2));
-
-const app = new Hono();
-
-// CORS middleware
-app.use(async (c, next) => {
-  c.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  await next();
-});
-
-app.get('/', (c) => {
-  return c.text('Hello Hono!');
-});
-app.route('/recipes', recipes);
+const app = new Hono()
+  // CORS middleware
+  .use(async (c, next) => {
+    c.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    await next();
+  })
+  .route('/recipes', recipes);
 
 const port = 3001;
 console.log(`Server is running on http://localhost:${port}`);
@@ -53,3 +45,5 @@ serve({
   fetch: app.fetch,
   port,
 });
+
+export type AppType = typeof app;

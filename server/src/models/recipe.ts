@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import {
   db,
-  recipes,
+  recipes as recipesTable,
   ingredients as ingredientsTable,
   recipesToIngredients,
   steps as stepsTable,
@@ -17,10 +17,13 @@ export const createRecipe = async (
   name: string,
   ingredients: string[],
   steps: string[]
-): Promise<void> => {
-  const [newRecipe] = await db.insert(recipes).values({ name }).returning();
+): Promise<Recipe | null> => {
+  const [newRecipe] = await db
+    .insert(recipesTable)
+    .values({ name })
+    .returning();
 
-  ingredients.forEach(async (ingredientName) => {
+  for (const ingredientName of ingredients) {
     const existingIngredient = (
       await db
         .select()
@@ -43,42 +46,55 @@ export const createRecipe = async (
     await db
       .insert(recipesToIngredients)
       .values({ recipeId: newRecipe.id, ingredientId });
-  });
+  }
 
-  steps.forEach(async (step, index) => {
+  for (const [index, step] of steps.entries()) {
     await db.insert(stepsTable).values({
       stepNumber: index,
       instruction: step,
       recipeId: newRecipe.id,
     });
-  });
+  }
+
+  return await getRecipe(newRecipe.id);
 };
 
 export const getRecipe = async (id: number): Promise<Recipe | null> => {
-  const rows = await db
-    .select({
-      name: recipes.name,
-      ingredient: ingredientsTable.name,
-      instruction: stepsTable.instruction,
-    })
-    .from(recipes)
-    .where(eq(recipes.id, id))
-    .innerJoin(
-      recipesToIngredients,
-      eq(recipesToIngredients.recipeId, recipes.id)
-    )
-    .innerJoin(
-      ingredientsTable,
-      eq(ingredientsTable.id, recipesToIngredients.ingredientId)
-    )
-    .innerJoin(stepsTable, eq(stepsTable.recipeId, recipes.id));
-
-  if (rows.length === 0) {
+  const recipe = (
+    await db
+      .select({ name: recipesTable.name })
+      .from(recipesTable)
+      .where(eq(recipesTable.id, id))
+      .limit(1)
+  ).at(0);
+  if (recipe === undefined) {
     return null;
   }
+
+  const ingredients = await db
+    .select({ name: ingredientsTable.name })
+    .from(ingredientsTable)
+    .innerJoin(
+      recipesToIngredients,
+      eq(recipesToIngredients.ingredientId, ingredientsTable.id)
+    )
+    .where(eq(recipesToIngredients.recipeId, id));
+  if (ingredients.length === 0) {
+    return null;
+  }
+
+  const steps = await db
+    .select({ instruction: stepsTable.instruction })
+    .from(stepsTable)
+    .innerJoin(recipesTable, eq(recipesTable.id, stepsTable.recipeId))
+    .where(eq(stepsTable.recipeId, id));
+  if (steps.length === 0) {
+    return null;
+  }
+
   return {
-    name: rows[0].name,
-    ingredients: rows.map((row) => row.ingredient),
-    steps: rows.map((row) => row.instruction),
+    name: recipe.name,
+    ingredients: ingredients.map((ingredient) => ingredient.name),
+    steps: steps.map((step) => step.instruction),
   };
 };

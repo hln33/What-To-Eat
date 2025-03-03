@@ -10,6 +10,7 @@ import TextField from "../../components/TextField";
 import Button from "../../components/Button";
 import InputError from "../../components/InputError";
 import RequiredInputAsterisk from "../../components/RequiredInputAsterisk";
+import { api } from "../../api";
 
 type RecipeForm = {
   recipeName: string;
@@ -25,8 +26,9 @@ const NewRecipeForm = () => {
     },
   });
 
-  const handleSubmit: SubmitHandler<RecipeForm> = () => {
-    console.log("submitting");
+  const handleSubmit: SubmitHandler<RecipeForm> = async (values) => {
+    const res = await api.recipes.$post({ form: values });
+    console.log(await res.json());
   };
 
   return (

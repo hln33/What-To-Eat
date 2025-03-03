@@ -8,13 +8,11 @@ import {
   type Component,
 } from "solid-js";
 import { Separator } from "@kobalte/core/separator";
-import { hc } from "hono/client";
-import { RecipeType } from "../../../../server/src/routes/recipes";
 import Skeleton from "../../components/Skeleton";
+import { api } from "../../api";
 
-const recipeEndpoint = hc<RecipeType>("http://localhost:3001/recipes/");
 const fetchRecipe = async (id: string) => {
-  const res = await recipeEndpoint[":id"].$get({ param: { id } });
+  const res = await api.recipes[":id"].$get({ param: { id } });
 
   if (!res.ok) {
     throw new Error(`Recipe with id ${id} does not exist`);

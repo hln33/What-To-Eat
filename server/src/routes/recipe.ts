@@ -1,5 +1,7 @@
 import { Hono } from 'hono';
-import { getRecipe } from '../models/recipe.ts';
+import { createRecipe, getRecipe } from '../models/recipe.ts';
+import { zValidator } from '@hono/zod-validator';
+import { recpipeValidator } from '../../validators/index.ts';
 
 const _RECIPES = [
   {
@@ -40,6 +42,16 @@ const recipes = new Hono()
       return c.json({}, 404);
     }
     return c.json(recipe);
+  })
+  .post('/', zValidator('form', recpipeValidator), async (c) => {
+    const formData = c.req.valid('form');
+
+    const recipe = await createRecipe(
+      formData.recipeName,
+      formData.ingredients,
+      formData.steps
+    );
+    return c.json(recipe, 201);
   });
 
 export type RecipeType = typeof recipes;
