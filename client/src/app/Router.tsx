@@ -5,16 +5,14 @@ import RecipePage from "./pages/Recipe";
 
 const Layout: ParentComponent = (props) => {
   return (
-    <div class="min-h-screen bg-slate-900 p-5 text-center text-white">
+    <div class="min-h-screen bg-slate-900 text-center text-white">
       <header class="py-12">
-        {/* <h1 class="text-6xl">What to Eat?</h1> */}
+        <h1 class="text-6xl">What to Eat?</h1>
       </header>
 
-      <div class="flex justify-center">
-        <main class="w-96 max-w-screen-2xl border border-slate-600 bg-slate-800 p-12">
-          {props.children}
-        </main>
-      </div>
+      <main class="w-screen border border-slate-600 bg-slate-800 p-12 sm:m-5 sm:w-96 sm:max-w-screen-2xl">
+        {props.children}
+      </main>
     </div>
   );
 };
