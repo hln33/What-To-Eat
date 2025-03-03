@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { getRecipe } from '../models/recipe.ts';
 
 const _RECIPES = [
   {
@@ -31,10 +32,14 @@ const recipes = new Hono()
   .get('/', (c) => {
     return c.json(_RECIPES);
   })
-  .get('/:id', (c) => {
-    const id = c.req.param('id');
+  .get('/:id', async (c) => {
+    const id = Number(c.req.param('id'));
+    const recipe = await getRecipe(id);
 
-    return c.json(_RECIPES[Number(id)]);
+    if (recipe === null) {
+      return c.json({}, 404);
+    }
+    return c.json(recipe);
   });
 
 export type RecipeType = typeof recipes;

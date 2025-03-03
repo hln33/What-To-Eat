@@ -8,25 +8,29 @@ import {
   recipesToIngredients as recipesToIngredientsTable,
   ingredients as ingredientsTable,
   db,
+  steps as stepsTable,
 } from './db/schema.ts';
 import { createRecipe, getRecipe } from './models/recipe.ts';
 
-// const seedDatabase = async () => {
-//   await createRecipe('boiled eggs', ['eggs']);
-//   await createRecipe('scrambled eggs', ['eggs', 'olive oil']);
-//   await createRecipe('foo', ['bar']);
+const seedDatabase = async () => {
+  // await createRecipe('boiled eggs', ['eggs'], ['get water']);
+  // await createRecipe('scrambled eggs', ['eggs', 'olive oil']);
+  // await createRecipe('foo', ['bar']);
 
-//   const recipes = await db.select().from(recipesTable);
-//   const ingredients = await db.select().from(ingredientsTable);
-//   const recipesToIngredients = await db
-//     .select()
-//     .from(recipesToIngredientsTable);
-//   console.log('database seeded!');
-//   console.log(recipes);
-//   console.log(ingredients);
-//   console.log(recipesToIngredients);
-// };
-// seedDatabase();
+  const recipes = await db.select().from(recipesTable);
+  const ingredients = await db.select().from(ingredientsTable);
+  const recipesToIngredients = await db
+    .select()
+    .from(recipesToIngredientsTable);
+  const steps = await db.select().from(stepsTable);
+
+  console.log('database seeded!');
+  console.log(recipes);
+  console.log(ingredients);
+  console.log(recipesToIngredients);
+  console.log(steps);
+};
+seedDatabase();
 
 console.log(await getRecipe(2));
 

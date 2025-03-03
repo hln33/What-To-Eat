@@ -21,3 +21,12 @@ export const ingredients = sqliteTable('ingredients', {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull().unique(),
 });
+
+export const steps = sqliteTable('steps', {
+  id: int().primaryKey({ autoIncrement: true }),
+  stepNumber: int().notNull(),
+  instruction: text().notNull(),
+  recipeId: int('recipe_id')
+    .references(() => recipes.id)
+    .notNull(),
+});
