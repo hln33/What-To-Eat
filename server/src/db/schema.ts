@@ -11,8 +11,12 @@ export const recipes = sqliteTable('recipes', {
 export const recipesToIngredients = sqliteTable(
   'recipes_to_ingredients',
   {
-    recipeId: int('recipe_id').notNull(),
-    ingredientId: int('ingredient_id').notNull(),
+    recipeId: int('recipe_id')
+      .references(() => recipes.id)
+      .notNull(),
+    ingredientId: int('ingredient_id')
+      .references(() => ingredients.id)
+      .notNull(),
   },
   (table) => [primaryKey({ columns: [table.recipeId, table.ingredientId] })]
 );

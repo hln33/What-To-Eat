@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { createRecipe, getRecipe } from '../models/recipe.ts';
+import { createRecipe, getAllRecipes, getRecipe } from '../models/recipe.ts';
 import { zValidator } from '@hono/zod-validator';
 import { recpipeValidator } from '../../validators/index.ts';
 
@@ -31,8 +31,10 @@ const _RECIPES = [
 ];
 
 const recipes = new Hono()
-  .get('/', (c) => {
-    return c.json(_RECIPES);
+  .get('/', async (c) => {
+    const recipes = await getAllRecipes();
+
+    return c.json(recipes);
   })
   .get('/:id', async (c) => {
     const id = Number(c.req.param('id'));

@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
+import { logger } from 'hono/logger';
 import recipes from './routes/recipe.ts';
 import {
   recipes as recipesTable,
@@ -32,6 +33,7 @@ const seedDatabase = async () => {
 seedDatabase();
 
 const app = new Hono()
+  .use(logger())
   // CORS middleware
   .use(async (c, next) => {
     c.header('Access-Control-Allow-Origin', 'http://localhost:3000');

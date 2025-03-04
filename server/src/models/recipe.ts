@@ -98,3 +98,47 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
     instructions: steps.map((step) => step.instruction),
   };
 };
+
+export const getAllRecipes = async (): Promise<Recipe[]> => {
+  const recipeRows = await db
+    .select()
+    .from(recipesTable)
+    .innerJoin(
+      recipesToIngredients,
+      eq(recipesToIngredients.recipeId, recipesTable.id)
+    )
+    .innerJoin(
+      ingredientsTable,
+      eq(ingredientsTable.id, recipesToIngredients.ingredientId)
+    );
+
+  const recipes: { [key: number]: Recipe } = {};
+  for (const row of recipeRows) {
+    const recipeId = row.recipes.id;
+    const recipeName = row.recipes.name;
+
+    if (!recipes[recipeId]) {
+      recipes[recipeId] = {
+        name: recipeName,
+        ingredients: [],
+        instructions: [],
+      };
+    }
+    recipes[recipeId].ingredients.push(row.ingredients.name);
+
+    const steps = await db
+      .select({
+        order: stepsTable.stepNumber,
+        instruction: stepsTable.instruction,
+      })
+      .from(stepsTable)
+      .where(eq(stepsTable.recipeId, recipeId))
+      .innerJoin(recipesTable, eq(recipesTable.id, stepsTable.recipeId));
+
+    recipes[recipeId].instructions = steps
+      .toSorted((a, b) => a.order - b.order)
+      .map((step) => step.instruction);
+  }
+
+  return Object.values(recipes);
+};
