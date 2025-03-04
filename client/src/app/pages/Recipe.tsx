@@ -9,21 +9,12 @@ import {
 } from "solid-js";
 import { Separator } from "@kobalte/core/separator";
 import Skeleton from "../../components/Skeleton";
-import { api } from "../../api";
-
-const fetchRecipe = async (id: string) => {
-  const res = await api.recipes[":id"].$get({ param: { id } });
-
-  if (!res.ok) {
-    throw new Error(`Recipe with id ${id} does not exist`);
-  }
-  return res.json();
-};
+import { getRecipe } from "../../api";
 
 const RecipePage: Component = () => {
   const params = useParams();
 
-  const [recipe] = createResource(params.id, fetchRecipe);
+  const [recipe] = createResource(params.id, getRecipe);
   createEffect(() => {
     if (recipe.error) {
       console.error(recipe.error);
@@ -67,7 +58,7 @@ const RecipePage: Component = () => {
             <section class="space-y-3">
               <h3 class="text-3xl">Instructions</h3>
               <ul class="list-outside list-decimal space-y-5">
-                <Index each={recipe()?.steps}>
+                <Index each={recipe()?.instructions}>
                   {(instruction, _index) => <li>{instruction()}</li>}
                 </Index>
               </ul>

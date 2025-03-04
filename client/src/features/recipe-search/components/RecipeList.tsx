@@ -8,18 +8,13 @@ import {
 } from "solid-js";
 import RecipeListCard from "./RecipeListCard";
 import Skeleton from "../../../components/Skeleton";
-import { api } from "../../../api";
-
-const fetchAllRecipes = async () => {
-  const res = await api.recipes.$get();
-  return res.json();
-};
+import { getAllRecipes } from "../../../api";
 
 const RecipeList: Component<{
   class?: string;
   providedIngredients: Set<string>;
 }> = (props) => {
-  const [recipes] = createResource(fetchAllRecipes);
+  const [recipes] = createResource(getAllRecipes);
   createEffect(() => {
     if (recipes.error) {
       console.error(`Error fetching recipes: ${recipes.error}`);

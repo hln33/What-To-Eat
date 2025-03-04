@@ -10,7 +10,7 @@ import {
 type Recipe = {
   name: string;
   ingredients: string[];
-  steps: string[];
+  instructions: string[];
 };
 
 export const createRecipe = async (
@@ -95,6 +95,6 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
   return {
     name: recipe.name,
     ingredients: ingredients.map((ingredient) => ingredient.name),
-    steps: steps.map((step) => step.instruction),
+    instructions: steps.map((step) => step.instruction),
   };
 };

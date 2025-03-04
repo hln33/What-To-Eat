@@ -10,25 +10,25 @@ import TextField from "../../components/TextField";
 import Button from "../../components/Button";
 import InputError from "../../components/InputError";
 import RequiredInputAsterisk from "../../components/RequiredInputAsterisk";
-import { api } from "../../api";
+import { postNewRecipe } from "../../api";
 
 type RecipeForm = {
-  recipeName: string;
+  name: string;
   ingredients: string[];
-  steps: string[];
+  instructions: string[];
 };
 
 const NewRecipeForm = () => {
   const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
     initialValues: {
       ingredients: [""],
-      steps: [""],
+      instructions: [""],
     },
   });
 
   const handleSubmit: SubmitHandler<RecipeForm> = async (values) => {
-    const res = await api.recipes.$post({ form: values });
-    console.log(await res.json());
+    const res = await postNewRecipe(values);
+    console.log(res);
   };
 
   return (
@@ -40,7 +40,7 @@ const NewRecipeForm = () => {
         onSubmit={handleSubmit}
       >
         <Field
-          name="recipeName"
+          name="name"
           validate={[required("Please enter a name for the recipe.")]}
         >
           {(field, props) => (
@@ -56,7 +56,7 @@ const NewRecipeForm = () => {
           )}
         </Field>
 
-        <For each={["ingredients", "steps"] as const}>
+        <For each={["ingredients", "instructions"] as const}>
           {(fieldName, _) => (
             <div>
               <FieldArray

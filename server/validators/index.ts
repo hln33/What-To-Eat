@@ -5,7 +5,7 @@ export const recpipeValidator = z.object({
   ingredients: z
     .union([z.string(), z.string().array()])
     .transform((val) => (Array.isArray(val) ? val : [val])),
-  steps: z
+  instructions: z
     .union([z.string(), z.string().array()])
     .transform((val) => (Array.isArray(val) ? val : [val])),
 });

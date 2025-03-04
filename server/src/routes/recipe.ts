@@ -49,7 +49,7 @@ const recipes = new Hono()
     const recipe = await createRecipe(
       formData.recipeName,
       formData.ingredients,
-      formData.steps
+      formData.instructions
     );
     return c.json(recipe, 201);
   });
