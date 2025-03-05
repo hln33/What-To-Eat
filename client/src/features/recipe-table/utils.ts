@@ -6,11 +6,11 @@ export const getIngredientStatus = (
     requiredIngredients.difference(providedIngredients).size;
 
   if (numMissingIngredients === 0) {
-    return "You have all ingredients";
+    return "All ingredients";
   } else if (numMissingIngredients === requiredIngredients.size) {
-    return "You are missing all ingredients";
+    return "Missing all ingredients";
   } else {
     const isPlural = numMissingIngredients > 1;
-    return `You are missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
+    return `Missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
   }
 };
