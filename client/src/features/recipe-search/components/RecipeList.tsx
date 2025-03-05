@@ -9,6 +9,7 @@ import {
 import RecipeListCard from "./RecipeListCard";
 import Skeleton from "../../../components/Skeleton";
 import { getAllRecipes } from "../../../api";
+import RecipeTable from "../../recipe-table/RecipeTable";
 
 const RecipeList: Component<{
   class?: string;
@@ -46,6 +47,11 @@ const RecipeList: Component<{
                 />
               )}
             </For>
+
+            <RecipeTable
+              recipes={recipes() ?? []}
+              providedIngredients={props.providedIngredients}
+            />
           </Suspense>
         </ErrorBoundary>
       </div>

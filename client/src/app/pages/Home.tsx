@@ -6,7 +6,7 @@ import NewRecipeForm from "../../features/new-recipe/NewRecipeForm";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
-    new Set(["Eggs", "Olive Oil"]),
+    new Set(["eggs", "olive oil"]),
     { equals: setsEqual },
   );
   const [meatIngredients, setMeatIngredients] = createSignal(new Set([""]), {
