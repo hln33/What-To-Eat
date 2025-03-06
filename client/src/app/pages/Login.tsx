@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      Login Page
+      Please sign in
       <Form
         class="space-y-8"
         onsubmit={handleLogin}
