@@ -59,14 +59,14 @@ const RecipeTable: Component<{
 
   return (
     <div>
-      <table class="border-collapse border border-gray-500 text-left [&_td]:px-4 [&_th]:px-4">
+      <table class="border-collapse border border-gray-500 text-left">
         <thead>
           <For each={table().getHeaderGroups()}>
             {(headerGroup) => (
               <tr>
                 <For each={headerGroup.headers}>
                   {(header) => (
-                    <th class="border-b border-gray-400">
+                    <th class="border-b border-gray-400 p-4">
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
@@ -83,11 +83,11 @@ const RecipeTable: Component<{
             {(row) => (
               <tr
                 class="cursor-pointer hover:bg-zinc-500"
-                onClick={() => navigate(`/recipe/${row.id}`)}
+                onClick={() => navigate(`/recipe/${row.original.id}`)}
               >
                 <For each={row.getVisibleCells()}>
                   {(cell) => (
-                    <td class="border-b border-gray-400">
+                    <td class="border-b border-gray-400 px-4 py-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
