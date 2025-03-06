@@ -11,6 +11,7 @@ import Button from "../../components/Button";
 import InputError from "../../components/InputError";
 import RequiredInputAsterisk from "../../components/RequiredInputAsterisk";
 import { postNewRecipe } from "../../api";
+import { useNavigate } from "@solidjs/router";
 
 type RecipeForm = {
   name: string;
@@ -25,10 +26,14 @@ const NewRecipeForm = () => {
       instructions: [""],
     },
   });
+  const navigate = useNavigate();
 
   const handleSubmit: SubmitHandler<RecipeForm> = async (values) => {
-    const res = await postNewRecipe(values);
-    console.log(res);
+    const recipe = await postNewRecipe(values);
+    console.log(recipe);
+    if (recipe) {
+      navigate(`/recipe/${recipe.id}`);
+    }
   };
 
   return (

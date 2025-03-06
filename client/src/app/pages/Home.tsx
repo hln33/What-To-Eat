@@ -70,14 +70,14 @@ const HomePage: Component = () => {
   return (
     <div class="flex flex-col justify-around gap-16 md:flex-row">
       <SelectIngredientsMenu categories={ingredientCategories()} />
-      <RecipeList providedIngredients={allIngredients()} />
-
       <Dialog
         triggerTitle="New Recipe"
         dialogTitle="New Recipe"
       >
         <NewRecipeForm />
       </Dialog>
+
+      <RecipeList providedIngredients={allIngredients()} />
     </div>
   );
 };

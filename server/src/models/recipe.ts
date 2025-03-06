@@ -8,6 +8,7 @@ import {
 } from '../db/schema.ts';
 
 type Recipe = {
+  id: number;
   name: string;
   ingredients: string[];
   instructions: string[];
@@ -62,7 +63,7 @@ export const createRecipe = async (
 export const getRecipe = async (id: number): Promise<Recipe | null> => {
   const recipe = (
     await db
-      .select({ name: recipesTable.name })
+      .select({ id: recipesTable.id, name: recipesTable.name })
       .from(recipesTable)
       .where(eq(recipesTable.id, id))
       .limit(1)
@@ -93,6 +94,7 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
   }
 
   return {
+    id: recipe.id,
     name: recipe.name,
     ingredients: ingredients.map((ingredient) => ingredient.name),
     instructions: steps.map((step) => step.instruction),
@@ -119,6 +121,7 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
 
     if (!recipes[recipeId]) {
       recipes[recipeId] = {
+        id: recipeId,
         name: recipeName,
         ingredients: [],
         instructions: [],

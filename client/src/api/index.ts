@@ -23,7 +23,7 @@ export const postNewRecipe = async ({
   name,
   ingredients,
   instructions,
-}: Recipe): Promise<Recipe | null> => {
+}: Omit<Recipe, "id">): Promise<Recipe | null> => {
   const res = await api.recipes.$post({
     form: { recipeName: name, ingredients, instructions },
   });
