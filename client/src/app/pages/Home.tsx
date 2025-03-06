@@ -3,6 +3,7 @@ import RecipeList from "../../features/recipe-search/components/RecipeList";
 import SelectIngredientsMenu from "../../features/recipe-search/components/SelectIngredientsMenu";
 import { setsEqual } from "../../utils/set";
 import NewRecipeForm from "../../features/new-recipe/NewRecipeForm";
+import Dialog from "../../components/Dialog";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
@@ -36,27 +37,27 @@ const HomePage: Component = () => {
         essentialIngredients(),
         setEssentialIngredients,
         new Set([
-          "Butter",
-          "Milk",
-          "Eggs",
-          "Garlic",
-          "Onion",
-          "Olive Oil",
-          "Garlic Powder",
-          "White Rice",
+          "butter",
+          "milk",
+          "eggs",
+          "garlic",
+          "onion",
+          "olive oil",
+          "garlic powder",
+          "white rice",
         ]),
       ),
       createCategory(
         "Meats",
         meatIngredients(),
         setMeatIngredients,
-        new Set(["Pork Belly", "Steak", "Chicken Breast", "Chicken Thigh"]),
+        new Set(["pork belly", "steak", "chicken breast", "chicken thigh"]),
       ),
       createCategory(
         "Seafood",
         seafoodIngredients(),
         setSeafoodIngredients,
-        new Set(["Shrimp", "Salmon", "Prawns", "Crab"]),
+        new Set(["shrimp", "salmon", "prawns", "crab"]),
       ),
     ];
   };
@@ -70,7 +71,13 @@ const HomePage: Component = () => {
     <div class="flex flex-col justify-around gap-16 md:flex-row">
       <SelectIngredientsMenu categories={ingredientCategories()} />
       <RecipeList providedIngredients={allIngredients()} />
-      <NewRecipeForm />
+
+      <Dialog
+        triggerTitle="New Recipe"
+        dialogTitle="New Recipe"
+      >
+        <NewRecipeForm />
+      </Dialog>
     </div>
   );
 };

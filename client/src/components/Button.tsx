@@ -9,7 +9,7 @@ const Button: ParentComponent<JSX.ButtonHTMLAttributes<HTMLButtonElement>> = (
   return (
     <Kobalte
       {...HTMLAttributes}
-      class={`rounded bg-slate-600 p-2 text-xl hover:bg-slate-500 ${props.class}`}
+      class={`h-fit max-h-28 rounded bg-slate-600 px-5 py-2 text-xl hover:bg-slate-500 ${props.class}`}
     >
       {local.children}
     </Kobalte>
