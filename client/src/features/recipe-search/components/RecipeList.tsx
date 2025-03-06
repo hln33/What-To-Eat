@@ -31,13 +31,15 @@ const RecipeList: Component<{
           <Suspense
             fallback={
               <>
-                <Skeleton height={100} />
-                <Skeleton height={100} />
-                <Skeleton height={100} />
+                <Skeleton height={40} />
+                <Skeleton height={40} />
+                <Skeleton height={40} />
+                <Skeleton height={40} />
+                <Skeleton height={40} />
               </>
             }
           >
-            <For each={recipes()}>
+            {/* <For each={recipes()}>
               {(item, index) => (
                 <RecipeListCard
                   id={index()}
@@ -46,7 +48,7 @@ const RecipeList: Component<{
                   providedIngredients={props.providedIngredients}
                 />
               )}
-            </For>
+            </For> */}
 
             <RecipeTable
               recipes={recipes() ?? []}

@@ -1,4 +1,5 @@
 import { Component, createSignal, For } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import {
   createColumnHelper,
   createSolidTable,
@@ -7,25 +8,27 @@ import {
   getPaginationRowModel,
 } from "@tanstack/solid-table";
 import { Recipe } from "../../types";
-import { getIngredientStatus } from "./utils";
-import { A, useNavigate } from "@solidjs/router";
+import { getRecipesWithIngredientStatus } from "./utils";
 
 type TableData = Recipe & { status: string };
 
 const columnHelper = createColumnHelper<TableData>();
 const columns = [
   columnHelper.accessor("name", {
-    cell: (info) => <div class="w-32 text-red-400">{info.getValue()}</div>,
+    header: () => <div>Name</div>,
+    cell: (info) => <div class="text-red-400">{info.getValue()}</div>,
   }),
   columnHelper.accessor("ingredients", {
+    header: () => <div>Ingredients</div>,
     cell: (info) => (
-      <div class="w-32 text-green-300">
+      <div class="text-green-300">
         {info.getValue().reduce((acc, ingredient) => `${acc}, ${ingredient}`)}
       </div>
     ),
   }),
   columnHelper.accessor("status", {
-    cell: (info) => <div class="w-32 text-yellow-300">{info.getValue()}</div>,
+    header: () => <div>Status</div>,
+    cell: (info) => <div class="text-yellow-300">{info.getValue()}</div>,
   }),
 ];
 
@@ -36,22 +39,16 @@ const RecipeTable: Component<{
   const navigate = useNavigate();
   const [pagination, setPagination] = createSignal({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
 
-  const tableData = () =>
-    props.recipes.map((recipe) => {
-      const requiredIngredients = new Set(recipe.ingredients);
-      const status = getIngredientStatus(
-        requiredIngredients,
-        props.providedIngredients,
-      );
-      return { ...recipe, status };
-    });
   const table = () =>
     createSolidTable({
       columns,
-      data: tableData(),
+      data: getRecipesWithIngredientStatus(
+        props.recipes,
+        props.providedIngredients,
+      ),
       getCoreRowModel: getCoreRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
       onPaginationChange: setPagination,
@@ -61,15 +58,15 @@ const RecipeTable: Component<{
     });
 
   return (
-    <>
-      <table>
+    <div>
+      <table class="border-collapse border border-gray-500 text-left [&_td]:px-4 [&_th]:px-4">
         <thead>
           <For each={table().getHeaderGroups()}>
             {(headerGroup) => (
               <tr>
                 <For each={headerGroup.headers}>
                   {(header) => (
-                    <th>
+                    <th class="border-b border-gray-400">
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
@@ -85,12 +82,12 @@ const RecipeTable: Component<{
           <For each={table().getRowModel().rows}>
             {(row) => (
               <tr
-                class="cursor-pointer"
+                class="cursor-pointer hover:bg-zinc-500"
                 onClick={() => navigate(`/recipe/${row.id}`)}
               >
                 <For each={row.getVisibleCells()}>
                   {(cell) => (
-                    <td>
+                    <td class="border-b border-gray-400">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -103,22 +100,35 @@ const RecipeTable: Component<{
           </For>
         </tbody>
       </table>
+      <div class="border-x border-b border-gray-400 p-2">
+        <div>
+          <span class="font-medium">
+            {table().getState().pagination.pageIndex * 10 + 1}
+          </span>{" "}
+          to{" "}
+          <span class="font-medium">
+            {table().getState().pagination.pageSize +
+              table().getState().pagination.pageIndex * 10}
+          </span>{" "}
+          of <span class="font-medium">{table().getRowCount()}</span>
+        </div>
 
-      <div class="flex justify-between">
-        <button
-          onClick={() => table().previousPage()}
-          disabled={!table().getCanPreviousPage()}
-        >
-          {"<"}
-        </button>
-        <button
-          onClick={() => table().nextPage()}
-          disabled={!table().getCanNextPage()}
-        >
-          {">"}
-        </button>
+        <div class="flex justify-between">
+          <button
+            onClick={() => table().previousPage()}
+            disabled={!table().getCanPreviousPage()}
+          >
+            {"<"}
+          </button>
+          <button
+            onClick={() => table().nextPage()}
+            disabled={!table().getCanNextPage()}
+          >
+            {">"}
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

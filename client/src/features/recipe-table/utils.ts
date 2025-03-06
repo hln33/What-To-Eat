@@ -1,4 +1,6 @@
-export const getIngredientStatus = (
+import { Recipe } from "../../types";
+
+const getIngredientStatus = (
   requiredIngredients: Set<string>,
   providedIngredients: Set<string>,
 ) => {
@@ -13,4 +15,18 @@ export const getIngredientStatus = (
     const isPlural = numMissingIngredients > 1;
     return `Missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
   }
+};
+
+export const getRecipesWithIngredientStatus = (
+  recipes: Recipe[],
+  providedIngredients: Set<string>,
+) => {
+  return recipes.map((recipe) => {
+    const requiredIngredients = new Set(recipe.ingredients);
+    const status = getIngredientStatus(
+      requiredIngredients,
+      providedIngredients,
+    );
+    return { ...recipe, status };
+  });
 };
