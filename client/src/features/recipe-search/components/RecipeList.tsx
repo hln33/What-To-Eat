@@ -4,6 +4,7 @@ import {
   createResource,
   ErrorBoundary,
   For,
+  Show,
   Suspense,
 } from "solid-js";
 import RecipeListCard from "./RecipeListCard";
@@ -50,10 +51,15 @@ const RecipeList: Component<{
               )}
             </For> */}
 
-            <RecipeTable
-              recipes={recipes() ?? []}
-              providedIngredients={props.providedIngredients}
-            />
+            <Show
+              when={recipes()?.length ?? 0 > 0}
+              fallback={<div>No Recipes to Show</div>}
+            >
+              <RecipeTable
+                recipes={recipes() ?? []}
+                providedIngredients={props.providedIngredients}
+              />
+            </Show>
           </Suspense>
         </ErrorBoundary>
       </div>

@@ -32,7 +32,7 @@ export const createSession = async (
     expiresAt: getThirtyDaysFromToday(),
   };
 
-  const r = await db.insert(sessionTable).values(session);
+  await db.insert(sessionTable).values(session);
   return session;
 };
 
