@@ -38,7 +38,7 @@ const NewRecipeForm = () => {
 
   return (
     <Form
-      class="space-y-8"
+      class="w-80 space-y-8 p-4"
       onSubmit={handleSubmit}
     >
       <Field
@@ -92,7 +92,7 @@ const NewRecipeForm = () => {
                           )}
                         </Field>
                         <Button
-                          class="size-12"
+                          class="size-12 bg-slate-500"
                           onClick={() =>
                             remove(form, fieldArray.name, { at: index() })
                           }
@@ -107,7 +107,7 @@ const NewRecipeForm = () => {
               )}
             </FieldArray>
             <Button
-              class="block w-fit px-4 capitalize"
+              class="block w-fit bg-slate-500 px-4 capitalize"
               onClick={() => insert(form, fieldName, { value: "" })}
               disabled={form.submitting}
             >
@@ -118,7 +118,7 @@ const NewRecipeForm = () => {
       </For>
 
       <Button
-        class="w-full"
+        class="w-full bg-slate-500"
         type="submit"
       >
         Submit

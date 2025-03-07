@@ -9,12 +9,12 @@ const Dialog: ParentComponent<{ triggerTitle: string; dialogTitle: string }> = (
     <Kobalte>
       <Kobalte.Trigger as={Button}>{props.triggerTitle}</Kobalte.Trigger>
       <Kobalte.Portal>
-        <Kobalte.Overlay class="fixed inset-0 z-50 bg-black/50">
+        <Kobalte.Overlay class="fixed inset-0 z-50 bg-black/60">
           <div class="fixed inset-0 z-50 flex items-center justify-center">
-            <Kobalte.Content class="bg-slate-700 p-8 text-white">
+            <Kobalte.Content class="rounded-md bg-slate-700 p-8 text-white">
               <div class="mb-5 flex justify-between text-3xl">
                 <Kobalte.Title>{props.dialogTitle}</Kobalte.Title>
-                <Kobalte.CloseButton class="text-gray-400">
+                <Kobalte.CloseButton class="text-gray-200">
                   X
                 </Kobalte.CloseButton>
               </div>
