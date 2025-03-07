@@ -9,13 +9,13 @@ import {
   ingredients as ingredientsTable,
   db,
   steps as stepsTable,
+  userTable,
 } from './db/schema.ts';
-import { createRecipe, getRecipe } from './models/recipe.ts';
+import users from './routes/user.ts';
+import { cors } from 'hono/cors';
 
 const seedDatabase = async () => {
-  // await createRecipe('boiled eggs', ['eggs'], ['get water']);
-  // await createRecipe('scrambled eggs', ['eggs', 'olive oil']);
-  // await createRecipe('foo', ['bar']);
+  // await db.insert(userTable).values({ id: 1 });
 
   const recipes = await db.select().from(recipesTable);
   const ingredients = await db.select().from(ingredientsTable);
@@ -24,22 +24,28 @@ const seedDatabase = async () => {
     .from(recipesToIngredientsTable);
   const steps = await db.select().from(stepsTable);
 
+  const users = await db.select().from(userTable);
+
   console.log('database seeded!');
   console.log(recipes);
   console.log(ingredients);
   console.log(recipesToIngredients);
   console.log(steps);
+
+  console.log(users);
 };
 seedDatabase();
 
 const app = new Hono()
   .use(logger())
-  // CORS middleware
-  .use(async (c, next) => {
-    c.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    await next();
-  })
-  .route('/recipes', recipes);
+  .use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  )
+  .route('/recipes', recipes)
+  .route('/users', users);
 
 const port = 3001;
 console.log(`Server is running on http://localhost:${port}`);

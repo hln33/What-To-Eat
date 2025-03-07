@@ -25,6 +25,4 @@ const recipes = new Hono()
     return c.json(recipe, 201);
   });
 
-export type RecipeType = typeof recipes;
-
 export default recipes;
