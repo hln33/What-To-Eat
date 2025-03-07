@@ -43,3 +43,7 @@ export const registerUser = async (username: string, password: string) => {
   });
   console.log(res);
 };
+
+export const checkUserLoggedIn = () => {
+  // TODO
+};
