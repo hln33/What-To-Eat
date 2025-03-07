@@ -29,3 +29,10 @@ export const postNewRecipe = async ({
   });
   return res.json();
 };
+
+export const login = async () => {
+  const res = await api.users.login.$post(undefined, {
+    init: { credentials: "include" },
+  });
+  return res.text();
+};

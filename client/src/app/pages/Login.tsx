@@ -1,6 +1,7 @@
 import { createForm, required } from "@modular-forms/solid";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
+import { login } from "../../api";
 
 type LoginForm = {
   username: string;
@@ -12,6 +13,7 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     console.log("logging in!");
+    login();
   };
 
   return (
