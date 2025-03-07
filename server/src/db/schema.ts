@@ -38,7 +38,9 @@ export const steps = sqliteTable('steps', {
 
 /* USERS/SESSIONS */
 export const userTable = sqliteTable('user', {
-  id: int().primaryKey(),
+  id: int().primaryKey({ autoIncrement: true }),
+  username: text().unique().notNull(),
+  passwordHash: text('password_hash').notNull(),
 });
 
 export const sessionTable = sqliteTable('session', {

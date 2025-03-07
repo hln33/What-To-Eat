@@ -3,6 +3,7 @@ import { A, Route, Router } from "@solidjs/router";
 import HomePage from "./pages/Home";
 import RecipePage from "./pages/Recipe";
 import LoginPage from "./pages/Login";
+import { SignupPage } from "./pages/SignUp";
 
 const Layout: ParentComponent = (props) => {
   return (
@@ -20,7 +21,7 @@ const Layout: ParentComponent = (props) => {
         </nav>
       </header>
 
-      <main class="w-screen border border-slate-600 bg-slate-800 p-12 sm:m-5 sm:w-96 sm:max-w-screen-2xl">
+      <main class="m-5 border border-slate-600 bg-slate-800 p-12 sm:w-96 sm:max-w-screen-2xl">
         {props.children}
       </main>
     </div>
@@ -40,6 +41,10 @@ const AppRouter = () => (
     <Route
       path="/login"
       component={LoginPage}
+    />
+    <Route
+      path="/signup"
+      component={SignupPage}
     />
   </Router>
 );

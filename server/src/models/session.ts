@@ -1,9 +1,9 @@
 import * as argon2 from 'argon2';
 import { db, sessionTable, userTable } from '../db/schema.ts';
 import { type InferSelectModel, eq } from 'drizzle-orm';
+import type { User } from './user.ts';
 
-type User = InferSelectModel<typeof userTable>;
-type Session = InferSelectModel<typeof sessionTable>;
+export type Session = InferSelectModel<typeof sessionTable>;
 
 type SessionValidationResult =
   | { session: Session; user: User }
@@ -32,7 +32,7 @@ export const createSession = async (
     expiresAt: getThirtyDaysFromToday(),
   };
 
-  await db.insert(sessionTable).values(session);
+  const r = await db.insert(sessionTable).values(session);
   return session;
 };
 

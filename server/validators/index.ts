@@ -9,3 +9,8 @@ export const recpipeValidator = z.object({
     .union([z.string(), z.string().array()])
     .transform((val) => (Array.isArray(val) ? val : [val])),
 });
+
+export const newUserValidator = z.object({
+  username: z.string(),
+  password: z.string(),
+});

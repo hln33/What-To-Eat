@@ -30,9 +30,16 @@ export const postNewRecipe = async ({
   return res.json();
 };
 
-export const login = async () => {
+export const login = async (): Promise<boolean> => {
   const res = await api.users.login.$post(undefined, {
     init: { credentials: "include" },
   });
-  return res.text();
+  return res.ok;
+};
+
+export const registerUser = async (username: string, password: string) => {
+  const res = await api.users.register.$post({
+    form: { username, password },
+  });
+  console.log(res);
 };

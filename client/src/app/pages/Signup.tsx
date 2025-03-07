@@ -1,35 +1,34 @@
-import { A, useNavigate } from "@solidjs/router";
-import { createForm, required } from "@modular-forms/solid";
+import { A } from "@solidjs/router";
+import { createForm, required, SubmitHandler } from "@modular-forms/solid";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
-import { login } from "../../api";
+import { registerUser } from "../../api";
 
-type LoginForm = {
+type SignupForm = {
   username: string;
   password: string;
 };
 
-const LoginPage = () => {
-  const navigate = useNavigate();
-  const [form, { Form, Field }] = createForm<LoginForm>();
+export const SignupPage = () => {
+  const [form, { Form, Field }] = createForm<SignupForm>();
 
-  const handleLogin = async () => {
-    const isSuccess = await login();
-    if (isSuccess) {
-      navigate("/");
-    }
+  const handleSignup: SubmitHandler<SignupForm> = async ({
+    username,
+    password,
+  }) => {
+    await registerUser(username, password);
   };
 
   return (
     <div class="space-y-5">
-      <div class="text-lg">Sign in to \App Name\</div>
+      <div class="text-lg">Sign up to \App Name\</div>
       <Form
         class="space-y-5"
-        onsubmit={handleLogin}
+        onSubmit={handleSignup}
       >
         <Field
           name="username"
-          validate={[required("User name cannot be empty.")]}
+          validate={[required("Email cannot be empty.")]}
         >
           {(field, props) => (
             <TextField
@@ -62,18 +61,17 @@ const LoginPage = () => {
           class="w-full"
           type="submit"
         >
-          Login
+          Continue
         </Button>
       </Form>
 
       <A
         class="block text-sm"
-        href="/signUp"
+        href="/login"
       >
-        Create an account
+        Already have an account?{" "}
+        <span class="font-semibold underline">sign in</span>
       </A>
     </div>
   );
 };
-
-export default LoginPage;
