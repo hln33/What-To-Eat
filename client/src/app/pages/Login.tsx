@@ -1,5 +1,6 @@
 import { A, useNavigate } from "@solidjs/router";
 import { createForm, required } from "@modular-forms/solid";
+import { useUserContext } from "../../contexts/UserContext";
 import TextField from "../../components/TextField";
 import Button from "../../components/Button";
 import { login } from "../../api";
@@ -10,12 +11,14 @@ type LoginForm = {
 };
 
 const LoginPage = () => {
+  const user = useUserContext();
   const navigate = useNavigate();
   const [form, { Form, Field }] = createForm<LoginForm>();
 
   const handleLogin = async () => {
     const isSuccess = await login();
     if (isSuccess) {
+      user.setIsLoggedin(true);
       navigate("/");
     }
   };
@@ -23,9 +26,10 @@ const LoginPage = () => {
   return (
     <div class="space-y-5">
       <div class="text-lg">Sign in to \App Name\</div>
+      <div>{user.isLoggedin() ? "logged in" : "not logged in"}</div>
       <Form
         class="space-y-5"
-        onsubmit={handleLogin}
+        onsubmit={() => handleLogin()}
       >
         <Field
           name="username"
@@ -68,7 +72,7 @@ const LoginPage = () => {
 
       <A
         class="block text-sm"
-        href="/signUp"
+        href="/signup"
       >
         Create an account
       </A>
