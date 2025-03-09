@@ -58,7 +58,7 @@ export const SignupPage = () => {
         </Field>
 
         <Button
-          class="w-full"
+          full
           type="submit"
         >
           Continue

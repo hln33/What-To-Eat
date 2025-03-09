@@ -9,7 +9,7 @@ const Button: ParentComponent<
   return (
     <Kobalte
       {...HTMLAttributes}
-      class={`${local.full ? "w-full" : ""} h-fit max-h-28 rounded-2xl bg-slate-600 px-5 py-2 text-xl capitalize hover:bg-slate-500 ${props.class}`}
+      class={`${local.full ? "w-full" : ""} h-fit max-h-28 rounded-2xl bg-slate-600 px-5 py-2 text-xl capitalize hover:bg-slate-500`}
     >
       {local.children}
     </Kobalte>

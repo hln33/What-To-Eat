@@ -63,7 +63,7 @@ const LoginPage = () => {
         </Field>
 
         <Button
-          class="w-full"
+          full
           type="submit"
         >
           Login
