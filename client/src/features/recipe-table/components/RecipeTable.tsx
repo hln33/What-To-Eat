@@ -100,7 +100,10 @@ const RecipeTable: Component<{
           </For>
         </tbody>
       </table>
-      <RecipeTableFooter table={table()} />
+      <RecipeTableFooter
+        class="border-x border-b border-gray-400 p-2"
+        table={table()}
+      />
     </div>
   );
 };

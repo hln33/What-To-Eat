@@ -26,8 +26,6 @@ const LoginPage = () => {
 
   return (
     <div class="space-y-5">
-      <Combobox />
-
       <div class="text-lg">Sign in to \App Name\</div>
       <div>{user.isLoggedin() ? "logged in" : "not logged in"}</div>
       <Form

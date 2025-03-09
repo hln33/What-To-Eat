@@ -40,7 +40,7 @@ const Layout: ParentComponent = (props) => {
         </header>
 
         <div class="flex items-center justify-center">
-          <main class="m-5 w-screen border border-slate-600 bg-slate-800 px-12 py-8">
+          <main class="w-screen border border-slate-600 bg-slate-800 p-8">
             {props.children}
           </main>
         </div>

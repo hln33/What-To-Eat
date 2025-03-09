@@ -77,7 +77,10 @@ const HomePage: Component = () => {
         <NewRecipeForm />
       </Dialog>
 
-      <RecipeList providedIngredients={allIngredients()} />
+      <RecipeList
+        class=""
+        providedIngredients={allIngredients()}
+      />
     </div>
   );
 };
