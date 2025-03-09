@@ -7,10 +7,10 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
 } from "@tanstack/solid-table";
-import { Recipe } from "../../types";
-import { getRecipesWithIngredientStatus } from "./utils";
-
-type TableData = Recipe & { status: string };
+import { Recipe } from "../../../types";
+import { getRecipesWithIngredientStatus } from "../utils";
+import RecipeTableFooter from "./RecipeTableFooter";
+import { TableData } from "../types";
 
 const columnHelper = createColumnHelper<TableData>();
 const columns = [
@@ -100,34 +100,7 @@ const RecipeTable: Component<{
           </For>
         </tbody>
       </table>
-      <div class="border-x border-b border-gray-400 p-2">
-        <div>
-          <span class="font-medium">
-            {table().getState().pagination.pageIndex * 10 + 1}
-          </span>{" "}
-          to{" "}
-          <span class="font-medium">
-            {table().getState().pagination.pageSize +
-              table().getState().pagination.pageIndex * 10}
-          </span>{" "}
-          of <span class="font-medium">{table().getRowCount()}</span>
-        </div>
-
-        <div class="flex justify-between">
-          <button
-            onClick={() => table().previousPage()}
-            disabled={!table().getCanPreviousPage()}
-          >
-            {"<"}
-          </button>
-          <button
-            onClick={() => table().nextPage()}
-            disabled={!table().getCanNextPage()}
-          >
-            {">"}
-          </button>
-        </div>
-      </div>
+      <RecipeTableFooter table={table()} />
     </div>
   );
 };

@@ -10,7 +10,7 @@ import {
 import RecipeListCard from "./RecipeListCard";
 import Skeleton from "../../../components/Skeleton";
 import { getAllRecipes } from "../../../api";
-import RecipeTable from "../../recipe-table/RecipeTable";
+import RecipeTable from "../../recipe-table/components/RecipeTable";
 
 const RecipeList: Component<{
   class?: string;
