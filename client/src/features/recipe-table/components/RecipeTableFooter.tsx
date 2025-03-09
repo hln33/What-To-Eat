@@ -10,7 +10,10 @@ const RecipeTableFooter: Component<{ table: Table<TableData> }> = (props) => {
       <div>
         <span class="font-medium">{pagination().pageIndex * 10 + 1}</span> to{" "}
         <span class="font-medium">
-          {pagination().pageSize + pagination().pageIndex * 10}
+          {Math.min(
+            pagination().pageSize + pagination().pageIndex * 10,
+            props.table.getRowCount(),
+          )}
         </span>{" "}
         of <span class="font-medium">{props.table.getRowCount()}</span>
       </div>
