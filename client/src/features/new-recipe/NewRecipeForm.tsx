@@ -1,9 +1,11 @@
-import { For, Show } from "solid-js";
+import { createEffect, For, Show } from "solid-js";
 import {
   createForm,
+  custom,
   insert,
   remove,
   required,
+  setValue,
   SubmitHandler,
 } from "@modular-forms/solid";
 import TextField from "@/components/TextField";
@@ -23,13 +25,14 @@ type RecipeForm = {
 const NewRecipeForm = () => {
   const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
     initialValues: {
-      ingredients: [""],
       instructions: [""],
     },
   });
   const navigate = useNavigate();
 
   const handleSubmit: SubmitHandler<RecipeForm> = async (values) => {
+    console.log(values);
+
     const recipe = await postNewRecipe(values);
     console.log(recipe);
     if (recipe) {
@@ -60,66 +63,83 @@ const NewRecipeForm = () => {
           )}
         </Field>
 
-        <For each={["ingredients", "instructions"] as const}>
-          {(fieldName, _) => (
+        <Field
+          name="ingredients"
+          type="string[]"
+          validate={[
+            custom((values: string[] | undefined) => {
+              return (
+                values !== undefined && values.length !== 0 && values[0] !== ""
+              );
+            }, "Please enter ingredients."),
+          ]}
+        >
+          {(field, props) => (
+            <Combobox
+              {...props}
+              label="Ingredients"
+              placeholder="Search Ingredients"
+              options={["eggs", "cheese", "salt", "pepper"]}
+              value={field.value}
+              error={field.error}
+            />
+          )}
+        </Field>
+
+        <FieldArray
+          name="instructions"
+          validate={[required(`Please add Instructions.`)]}
+        >
+          {(fieldArray) => (
             <div>
-              <FieldArray
-                name={fieldName}
-                validate={[required(`Please add ${fieldName}.`)]}
+              <label
+                class="block text-left"
+                for={fieldArray.name}
               >
-                {(fieldArray) => (
-                  <>
-                    <label
-                      class="block text-left capitalize"
-                      for={fieldArray.name}
+                Instructions <RequiredInputAsterisk />
+              </label>
+              <For each={fieldArray.items}>
+                {(_, index) => (
+                  <div class="mb-2 mt-1 flex gap-4">
+                    <Field
+                      name={`${fieldArray.name}.${index()}`}
+                      validate={[required("Field cannot be empty.")]}
                     >
-                      {fieldName} <RequiredInputAsterisk />
-                    </label>
-                    <For each={fieldArray.items}>
-                      {(_, index) => (
-                        <div class="mb-2 mt-1 flex gap-4">
-                          <Field
-                            name={`${fieldArray.name}.${index()}`}
-                            validate={[required("Field cannot be empty.")]}
-                          >
-                            {(field, props) => (
-                              <TextField
-                                {...props}
-                                class="w-full"
-                                type="text"
-                                value={field.value}
-                                error={field.error}
-                                required
-                                disabled={form.submitting}
-                              />
-                            )}
-                          </Field>
-                          <Show when={index() !== 0}>
-                            <Button
-                              onClick={() =>
-                                remove(form, fieldArray.name, { at: index() })
-                              }
-                            >
-                              X
-                            </Button>
-                          </Show>
-                        </div>
+                      {(field, props) => (
+                        <TextField
+                          {...props}
+                          class="w-full"
+                          type="text"
+                          value={field.value}
+                          error={field.error}
+                          required
+                          disabled={form.submitting}
+                        />
                       )}
-                    </For>
-                    <InputError errorMessage={fieldArray.error} />
-                  </>
+                    </Field>
+                    <Show when={index() !== 0}>
+                      <Button
+                        onClick={() =>
+                          remove(form, fieldArray.name, { at: index() })
+                        }
+                      >
+                        X
+                      </Button>
+                    </Show>
+                  </div>
                 )}
-              </FieldArray>
-              <Button
-                full
-                onClick={() => insert(form, fieldName, { value: "" })}
-                disabled={form.submitting}
-              >
-                + {fieldName}
-              </Button>
+              </For>
+              <InputError errorMessage={fieldArray.error} />
             </div>
           )}
-        </For>
+        </FieldArray>
+        <Button
+          full
+          onClick={() => insert(form, "instructions", { value: "" })}
+          disabled={form.submitting}
+        >
+          + Instructions
+        </Button>
       </div>
 
       <Button

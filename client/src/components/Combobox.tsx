@@ -1,21 +1,33 @@
+import { Component, For, JSX, splitProps } from "solid-js";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
-import { createSignal, For } from "solid-js";
+import InputError from "./InputError";
 
-const ALL_OPTIONS = ["Apple", "Banana", "Blueberry", "Grapes", "Pineapple"];
-
-const Combobox = () => {
-  const [values, setValues] = createSignal(["Blueberry", "Grapes"]);
+const Combobox: Component<{
+  name: string;
+  label: string;
+  options: string[];
+  placeholder?: string;
+  value: string[] | undefined;
+  error: string;
+  ref: (element: HTMLSelectElement) => void;
+  onInput: JSX.EventHandler<HTMLSelectElement, InputEvent>;
+  onChange: JSX.EventHandler<HTMLSelectElement, Event>;
+  onBlur: JSX.EventHandler<HTMLSelectElement, FocusEvent>;
+}> = (props) => {
+  const [rootProps, selectProps] = splitProps(
+    props,
+    ["name", "placeholder", "options"],
+    ["placeholder", "ref", "onInput", "onChange", "onBlur"],
+  );
 
   return (
     <Kobalte<string>
+      {...rootProps}
       multiple
-      options={ALL_OPTIONS}
-      value={values()}
-      onChange={setValues}
-      placeholder="Search ingredients"
+      validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
-          class="flex justify-start gap-2 px-2 hover:bg-slate-500"
+          class="flex justify-start gap-2 rounded px-2 ui-highlighted:bg-slate-600"
           item={props.item}
         >
           <Kobalte.ItemLabel>{props.item.rawValue}</Kobalte.ItemLabel>
@@ -23,7 +35,9 @@ const Combobox = () => {
         </Kobalte.Item>
       )}
     >
-      <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-slate-900 focus-within:border-sky-600">
+      <Kobalte.Label class="mb-1 block">{props.label}</Kobalte.Label>
+      <Kobalte.HiddenSelect {...selectProps} />
+      <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-slate-900 focus-within:border-sky-600 ui-invalid:border-red-500">
         {(state) => (
           <div class="relative flex justify-between gap-2 p-3">
             <div class="flex flex-wrap gap-2">
@@ -41,9 +55,12 @@ const Combobox = () => {
           </div>
         )}
       </Kobalte.Control>
+      <Kobalte.ErrorMessage>
+        <InputError errorMessage={props.error} />
+      </Kobalte.ErrorMessage>
 
       <Kobalte.Portal>
-        <Kobalte.Content class="rounded-lg border border-gray-500 bg-slate-900 text-white">
+        <Kobalte.Content class="z-50 rounded-lg border border-gray-500 bg-slate-900 text-white">
           <Kobalte.Listbox class="p-2" />
         </Kobalte.Content>
       </Kobalte.Portal>
