@@ -27,7 +27,7 @@ const Combobox: Component<{
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
-          class="flex justify-start gap-2 rounded px-2 ui-highlighted:bg-slate-600"
+          class="flex justify-start gap-2 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
           item={props.item}
         >
           <Kobalte.ItemLabel>{props.item.rawValue}</Kobalte.ItemLabel>
@@ -37,19 +37,19 @@ const Combobox: Component<{
     >
       <Kobalte.Label class="mb-1 block">{props.label}</Kobalte.Label>
       <Kobalte.HiddenSelect {...selectProps} />
-      <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-slate-900 focus-within:border-sky-600 ui-invalid:border-red-500">
+      <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
         {(state) => (
           <div class="relative flex justify-between gap-2 p-3">
             <div class="flex flex-wrap gap-2">
               <For each={state.selectedOptions()}>
                 {(option) => (
-                  <div class="z-10 flex gap-3 rounded-lg bg-slate-950 px-3 py-1 ring-1 ring-slate-600">
+                  <div class="z-10 flex gap-3 rounded-lg bg-sky-800 px-3 py-1 ring-1 ring-slate-600">
                     {option}
                     <button onClick={() => state.remove(option)}>X</button>
                   </div>
                 )}
               </For>
-              <Kobalte.Input class="flex-auto bg-inherit outline-none" />
+              <Kobalte.Input class="flex-auto bg-inherit outline-none placeholder:text-slate-400" />
             </div>
             <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
           </div>
@@ -60,7 +60,7 @@ const Combobox: Component<{
       </Kobalte.ErrorMessage>
 
       <Kobalte.Portal>
-        <Kobalte.Content class="z-50 rounded-lg border border-gray-500 bg-slate-900 text-white">
+        <Kobalte.Content class="z-50 rounded-lg border border-slate-950 bg-white text-black">
           <Kobalte.Listbox class="p-2" />
         </Kobalte.Content>
       </Kobalte.Portal>

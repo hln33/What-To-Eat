@@ -26,7 +26,6 @@ const LoginPage = () => {
   return (
     <div class="space-y-5">
       <div class="text-lg">Sign in to \App Name\</div>
-      <div>{user.isLoggedin() ? "logged in" : "not logged in"}</div>
       <Form
         class="space-y-5"
         onsubmit={() => handleLogin()}
