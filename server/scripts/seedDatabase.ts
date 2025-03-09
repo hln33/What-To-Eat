@@ -1,4 +1,6 @@
 import 'dotenv/config';
+import * as fs from 'node:fs';
+import path from 'node:path';
 import {
   recipes as recipesTable,
   recipesToIngredients as recipesToIngredientsTable,
@@ -7,9 +9,17 @@ import {
   steps as stepsTable,
   userTable,
 } from '../src/db/schema.ts';
+import { createRecipe } from '../src/models/recipe.ts';
 
 const seedDatabase = async () => {
   // await db.insert(userTable).values({ id: 1 });
+
+  const pathToJSONFile = path.join(import.meta.dirname, 'recipeData.json');
+  for (const { name, ingredients, steps } of JSON.parse(
+    fs.readFileSync(pathToJSONFile, 'utf-8')
+  )) {
+    await createRecipe(name, ingredients, steps);
+  }
 
   const recipes = await db.select().from(recipesTable);
   const ingredients = await db.select().from(ingredientsTable);
