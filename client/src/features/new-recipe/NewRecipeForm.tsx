@@ -1,11 +1,10 @@
-import { createEffect, For, Show } from "solid-js";
+import { For, Show } from "solid-js";
 import {
   createForm,
   custom,
   insert,
   remove,
   required,
-  setValue,
   SubmitHandler,
 } from "@modular-forms/solid";
 import TextField from "@/components/TextField";
@@ -31,10 +30,7 @@ const NewRecipeForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit: SubmitHandler<RecipeForm> = async (values) => {
-    console.log(values);
-
     const recipe = await postNewRecipe(values);
-    console.log(recipe);
     if (recipe) {
       navigate(`/recipe/${recipe.id}`);
     }
@@ -88,7 +84,7 @@ const NewRecipeForm = () => {
 
         <FieldArray
           name="instructions"
-          validate={[required(`Please add Instructions.`)]}
+          validate={[required("Please add Instructions.")]}
         >
           {(fieldArray) => (
             <div>
