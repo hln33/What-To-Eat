@@ -59,7 +59,7 @@ const RecipeTable: Component<{
 
   return (
     <div>
-      <table class="border-collapse border border-gray-500 text-left">
+      <table class="border-collapse border border-gray-500 text-left capitalize">
         <thead>
           <For each={table().getHeaderGroups()}>
             {(headerGroup) => (
