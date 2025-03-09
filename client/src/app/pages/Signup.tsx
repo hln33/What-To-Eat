@@ -1,8 +1,8 @@
 import { A } from "@solidjs/router";
 import { createForm, required, SubmitHandler } from "@modular-forms/solid";
-import TextField from "../../components/TextField";
-import Button from "../../components/Button";
-import { registerUser } from "../../api";
+import TextField from "@/components/TextField";
+import Button from "@/components/Button";
+import { registerUser } from "@/api";
 
 type SignupForm = {
   username: string;

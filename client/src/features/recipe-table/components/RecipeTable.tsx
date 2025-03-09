@@ -7,10 +7,10 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
 } from "@tanstack/solid-table";
-import { Recipe } from "../../../types";
+import { Recipe } from "@/types";
 import { getRecipesWithIngredientStatus } from "../utils";
-import RecipeTableFooter from "./RecipeTableFooter";
 import { TableData } from "../types";
+import RecipeTableFooter from "./RecipeTableFooter";
 
 const columnHelper = createColumnHelper<TableData>();
 const columns = [

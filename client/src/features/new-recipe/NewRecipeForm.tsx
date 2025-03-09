@@ -6,11 +6,11 @@ import {
   required,
   SubmitHandler,
 } from "@modular-forms/solid";
-import TextField from "../../components/TextField";
-import Button from "../../components/Button";
-import InputError from "../../components/InputError";
-import RequiredInputAsterisk from "../../components/RequiredInputAsterisk";
-import { postNewRecipe } from "../../api";
+import TextField from "@/components/TextField";
+import Button from "@/components/Button";
+import InputError from "@/components/InputError";
+import RequiredInputAsterisk from "@/components/RequiredInputAsterisk";
+import { postNewRecipe } from "@/api";
 import { useNavigate } from "@solidjs/router";
 
 type RecipeForm = {

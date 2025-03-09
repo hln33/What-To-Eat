@@ -1,7 +1,7 @@
 import { Component, Index } from "solid-js";
 import { Dialog } from "@kobalte/core/dialog";
+import Button from "@/components/Button";
 import SelectIngredientsMenuItem from "./SelectIngredientsMenuItem";
-import Button from "../../../components/Button";
 
 type Category = {
   name: string;

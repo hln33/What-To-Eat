@@ -1,4 +1,3 @@
-import { A, useParams } from "@solidjs/router";
 import {
   createEffect,
   createResource,
@@ -7,9 +6,10 @@ import {
   Suspense,
   type Component,
 } from "solid-js";
+import { A, useParams } from "@solidjs/router";
 import { Separator } from "@kobalte/core/separator";
-import Skeleton from "../../components/Skeleton";
-import { getRecipe } from "../../api";
+import Skeleton from "@/components/Skeleton";
+import { getRecipe } from "@/api";
 
 const RecipePage: Component = () => {
   const params = useParams();

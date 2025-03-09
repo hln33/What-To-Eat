@@ -1,9 +1,9 @@
 import { A, useNavigate } from "@solidjs/router";
 import { createForm, required } from "@modular-forms/solid";
-import { useUserContext } from "../../contexts/UserContext";
-import TextField from "../../components/TextField";
-import Button from "../../components/Button";
-import { login } from "../../api";
+import { useUserContext } from "@/contexts/UserContext";
+import TextField from "@/components/TextField";
+import Button from "@/components/Button";
+import { login } from "@/api";
 
 type LoginForm = {
   username: string;

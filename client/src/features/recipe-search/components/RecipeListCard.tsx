@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
-import { Image } from "@kobalte/core/Image";
 import { A } from "@solidjs/router";
+import { Image } from "@kobalte/core/Image";
 
 const RecipeListCard: Component<{
   id: number;
