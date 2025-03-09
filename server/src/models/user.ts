@@ -19,11 +19,7 @@ export const createUser = async (
   }
 
   const newUser = res[0];
-  return {
-    id: newUser.id,
-    username: newUser.username,
-    passwordHash: newUser.passwordHash,
-  };
+  return newUser;
 };
 
 export const userExists = async (username: string): Promise<boolean> => {

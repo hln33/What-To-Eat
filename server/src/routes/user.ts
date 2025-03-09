@@ -6,7 +6,7 @@ import {
   type Session,
 } from '../models/session.ts';
 import { zValidator } from '@hono/zod-validator';
-import { newUserValidator } from '../../validators/index.ts';
+import { newUserValidator } from '../validators/index.js';
 import { createUser, userExists } from '../models/user.ts';
 
 const setSessionCookie = (c: Context, token: string, session: Session) =>

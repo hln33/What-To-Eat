@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { createRecipe, getAllRecipes, getRecipe } from '../models/recipe.ts';
 import { zValidator } from '@hono/zod-validator';
-import { recpipeValidator } from '../../validators/index.ts';
+import { recpipeValidator } from '../validators/index.js';
 
 const recipes = new Hono()
   .get('/', async (c) => {
