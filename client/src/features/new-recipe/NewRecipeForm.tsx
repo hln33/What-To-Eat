@@ -12,6 +12,7 @@ import InputError from "@/components/InputError";
 import RequiredInputAsterisk from "@/components/RequiredInputAsterisk";
 import { postNewRecipe } from "@/api";
 import { useNavigate } from "@solidjs/router";
+import Combobox from "@/components/Combobox";
 
 type RecipeForm = {
   name: string;

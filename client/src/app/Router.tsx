@@ -17,15 +17,30 @@ const Layout: ParentComponent = (props) => {
           >
             What to Eat?
           </A>
-          <nav class="space-x-5 *:border *:border-white *:p-2">
-            <A href="/">Home</A>
-            <A href="/login">Login</A>
-            <A href="/signup">Sign Up</A>
+          <nav class="space-x-5">
+            <A
+              class="border border-white p-2"
+              href="/"
+            >
+              Home
+            </A>
+            <A
+              class="border border-white p-2"
+              href="/login"
+            >
+              Login
+            </A>
+            <A
+              class="border border-white p-2"
+              href="/signup"
+            >
+              Sign Up
+            </A>
           </nav>
         </header>
 
         <div class="flex items-center justify-center">
-          <main class="m-5 border border-slate-600 bg-slate-800 px-12 py-8 sm:max-w-screen-2xl">
+          <main class="m-5 w-screen border border-slate-600 bg-slate-800 px-12 py-8">
             {props.children}
           </main>
         </div>
