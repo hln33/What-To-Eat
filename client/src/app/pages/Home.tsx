@@ -1,9 +1,11 @@
 import { createSignal, Setter, type Component } from "solid-js";
-import RecipeList from "../../features/recipe-search/components/RecipeList";
-import SelectIngredientsMenu from "../../features/recipe-search/components/SelectIngredientsMenu";
-import { setsEqual } from "../../utils/set";
-import NewRecipeForm from "../../features/new-recipe/NewRecipeForm";
-import Dialog from "../../components/Dialog";
+import { setsEqual } from "@/utils/set";
+import Dialog from "@/components/Dialog";
+import RecipeList from "@/features/recipe-search/components/RecipeList";
+import SelectIngredientsMenu from "@/features/recipe-search/components/SelectIngredientsMenu";
+import NewRecipeForm from "@/features/new-recipe/NewRecipeForm";
+
+import Icon from "~icons/logos/solidjs-icon";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(

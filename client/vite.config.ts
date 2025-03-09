@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 import tsconfigPaths from "vite-tsconfig-paths";
+import Icons from "unplugin-icons/vite";
 
 export default defineConfig({
-  plugins: [solidPlugin(), tsconfigPaths()],
+  plugins: [solidPlugin(), tsconfigPaths(), Icons({ compiler: "solid" })],
   server: {
     port: 3000,
   },
