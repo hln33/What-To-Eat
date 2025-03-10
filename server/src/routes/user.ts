@@ -8,8 +8,14 @@ import {
   invalidateSession,
   type Session,
 } from '../models/session.ts';
-import { newUserValidator } from '../validators/index.js';
-import { createUser, userExists } from '../models/user.ts';
+import { userValidator } from '../validators/index.js';
+import {
+  createUser,
+  getUser,
+  userExists,
+  verifyPassword,
+} from '../models/user.ts';
+import { HTTPException } from 'hono/http-exception';
 
 const SESSION_COOKIE_NAME = 'session';
 
@@ -23,12 +29,22 @@ const setSessionCookie = (c: Context, token: string, session: Session) =>
   });
 
 const users = new Hono()
-  .post('/login', async (c) => {
+  .post('/login', zValidator('form', userValidator), async (c) => {
+    const { username, password } = c.req.valid('form');
+    const user = await getUser(username);
+
+    if (user === null || !(await verifyPassword(username, password))) {
+      throw new HTTPException(401, {
+        message:
+          'Incorrect credentials. Either username or password was incorrect.',
+      });
+    }
+
     const token = generateSessionToken();
-    const session = await createSession(token, 1);
+    const session = await createSession(token, user.id);
     setSessionCookie(c, token, session);
 
-    return c.text('logged in');
+    return c.json({ message: 'Login successful.' });
   })
   .post('/logout', async (c) => {
     const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
@@ -44,7 +60,7 @@ const users = new Hono()
 
     return c.json({ message: 'Session invalidated.' });
   })
-  .post('/register', zValidator('form', newUserValidator), async (c) => {
+  .post('/register', zValidator('form', userValidator), async (c) => {
     const { username, password } = c.req.valid('form');
     if (await userExists(username)) {
       return c.json({ error: 'Username already taken' }, 409);

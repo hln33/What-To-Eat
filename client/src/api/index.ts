@@ -2,6 +2,8 @@ import { hc } from "hono/client";
 import { AppType } from "../../../server/src";
 import { Recipe } from "../types";
 
+type ResponseData<T> = { data: T; error: null } | { data: null; error: string };
+
 const API_URL = "http://localhost:3001";
 const api = hc<AppType>(API_URL);
 
@@ -30,11 +32,26 @@ export const postNewRecipe = async ({
   return res.json();
 };
 
-export const login = async (): Promise<boolean> => {
-  const res = await api.users.login.$post(undefined, {
-    init: { credentials: "include" },
-  });
-  return res.ok;
+export const login = async (loginCredentials: {
+  username: string;
+  password: string;
+}): Promise<ResponseData<string>> => {
+  try {
+    const res = await api.users.login.$post(
+      { form: loginCredentials },
+      {
+        init: { credentials: "include" },
+      },
+    );
+    if (!res.ok) {
+      return { data: null, error: await res.text() };
+    }
+
+    return { data: (await res.json()).message, error: null };
+  } catch (e) {
+    console.error(e);
+    return { data: null, error: "Unknown error." };
+  }
 };
 
 export const registerUser = async (

@@ -27,6 +27,33 @@ export const userExists = async (username: string): Promise<boolean> => {
     .select()
     .from(userTable)
     .where(eq(userTable.username, username));
-
   return res.length > 0;
+};
+
+export const getUser = async (username: string): Promise<User | null> => {
+  const res = await db
+    .select()
+    .from(userTable)
+    .where(eq(userTable.username, username));
+  if (res.length === 0) {
+    return null;
+  }
+
+  return res[0];
+};
+
+export const verifyPassword = async (
+  username: string,
+  password: string
+): Promise<boolean> => {
+  const res = await db
+    .select()
+    .from(userTable)
+    .where(eq(userTable.username, username));
+  if (res.length === 0) {
+    return false;
+  }
+
+  const user = res[0];
+  return await argon2.verify(user.passwordHash, password);
 };

@@ -89,5 +89,3 @@ export const checkSessionExists = async (token: string): Promise<boolean> => {
 
   return false;
 };
-
-generateSessionToken();
