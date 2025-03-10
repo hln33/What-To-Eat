@@ -80,6 +80,7 @@ const NewRecipeForm = () => {
               options={["eggs", "cheese", "salt", "pepper"]}
               value={field.value}
               error={field.error}
+              required
             />
           )}
         </Field>

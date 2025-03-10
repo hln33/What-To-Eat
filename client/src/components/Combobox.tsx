@@ -9,6 +9,7 @@ const Combobox: Component<{
   label: string;
   options: string[];
   placeholder?: string;
+  required?: boolean;
   value: string[] | undefined;
   error: string;
   ref: (element: HTMLSelectElement) => void;
@@ -19,7 +20,7 @@ const Combobox: Component<{
   const [rootProps, selectProps] = splitProps(
     props,
     ["name", "placeholder", "options"],
-    ["placeholder", "ref", "onInput", "onChange", "onBlur"],
+    ["placeholder", "ref", "onInput", "onChange", "onBlur", "required"],
   );
 
   return (
@@ -39,7 +40,11 @@ const Combobox: Component<{
         </Kobalte.Item>
       )}
     >
-      <Kobalte.Label class="mb-1 block">{props.label}</Kobalte.Label>
+      <Kobalte.Label
+        class={`mb-1 block ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
+      >
+        {props.label}
+      </Kobalte.Label>
       <Kobalte.HiddenSelect {...selectProps} />
       <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
         {(state) => (
