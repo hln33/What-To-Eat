@@ -8,7 +8,7 @@ const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
 
   const sessionExistanceQuery = createQuery(() => ({
-    queryKey: ["session"],
+    queryKey: ["sessionExists"],
     queryFn: checkUserSessionExists,
   }));
 

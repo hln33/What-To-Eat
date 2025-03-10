@@ -37,7 +37,7 @@ export const createSession = async (
   return session;
 };
 
-const validateSessionToken = async (
+export const validateSessionToken = async (
   token: string
 ): Promise<SessionValidationResult> => {
   const sessionId = await argon2.hash(token);
@@ -70,8 +70,15 @@ const validateSessionToken = async (
   return { user, session };
 };
 
-export const invalidateSession = async (sessionId: string): Promise<void> => {
-  await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
+export const invalidateSession = async (token: string): Promise<void> => {
+  const sessions = await db.select().from(sessionTable);
+
+  for (const session of sessions) {
+    const isMatch = await argon2.verify(session.id, token);
+    if (isMatch) {
+      await db.delete(sessionTable).where(eq(sessionTable.id, session.id));
+    }
+  }
 };
 
 const invalidateAllSessions = async (userId: number): Promise<void> => {

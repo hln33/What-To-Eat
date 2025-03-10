@@ -1,11 +1,13 @@
 import { Hono, type Context } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
+import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
 import {
   checkSessionExists,
   createSession,
   generateSessionToken,
   invalidateSession,
+  validateSessionToken,
   type Session,
 } from '../models/session.ts';
 import { userValidator } from '../validators/index.js';
@@ -15,7 +17,6 @@ import {
   userExists,
   verifyPassword,
 } from '../models/user.ts';
-import { HTTPException } from 'hono/http-exception';
 
 const SESSION_COOKIE_NAME = 'session';
 
@@ -49,14 +50,14 @@ const users = new Hono()
   .post('/logout', async (c) => {
     const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
     if (!sessionToken) {
-      return c.json({ error: 'No session cookie found.' }, 404);
+      throw new HTTPException(404, { message: 'No session token found.' });
     }
-    deleteCookie(c, SESSION_COOKIE_NAME);
 
+    deleteCookie(c, SESSION_COOKIE_NAME);
     if (!(await checkSessionExists(sessionToken))) {
       return c.json({ error: 'Session does not exist.' }, 403);
     }
-    invalidateSession(sessionToken);
+    await invalidateSession(sessionToken);
 
     return c.json({ message: 'Session invalidated.' });
   })
@@ -76,7 +77,12 @@ const users = new Hono()
   .get('/session/exists', async (c) => {
     const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
     if (!sessionToken) {
-      return c.json({ error: 'No session cookie found.' }, 404);
+      throw new HTTPException(404, { message: 'No session token found.' });
+    }
+
+    const { session } = await validateSessionToken(sessionToken);
+    if (!session) {
+      throw new HTTPException(401, { message: 'Invalid session.' });
     }
 
     return c.json({ message: 'Session exists.' });
