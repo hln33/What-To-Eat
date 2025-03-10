@@ -1,11 +1,7 @@
 import { Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
-import {
-  createForm,
-  FormError,
-  required,
-  SubmitHandler,
-} from "@modular-forms/solid";
+import { createMutation } from "@tanstack/solid-query";
+import { createForm, required, SubmitHandler } from "@modular-forms/solid";
 import { login } from "@/api";
 import { useUserContext } from "@/contexts/UserContext";
 import TextField from "@/components/TextField";
@@ -21,22 +17,25 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [form, { Form, Field }] = createForm<LoginForm>();
 
-  const handleLogin: SubmitHandler<LoginForm> = async (credentials) => {
-    const loginResult = await login(credentials);
-    if (loginResult.error) {
-      throw new FormError<LoginForm>(loginResult.error);
-    }
+  const loginUser = createMutation(() => ({
+    mutationFn: login,
+    onSuccess: () => {
+      user.setIsLoggedin(true);
+    },
+  }));
 
-    user.setIsLoggedin(true);
-    navigate("/");
+  const handleLogin: SubmitHandler<LoginForm> = async (credentials) => {
+    loginUser.mutate(credentials, {
+      onSuccess: () => navigate("/"),
+    });
   };
 
   return (
     <div class="space-y-5">
       <div class="text-lg">Sign in to \App Name\</div>
 
-      <Show when={form.response.status === "error"}>
-        <div class="text-red-500">{form.response.message}</div>
+      <Show when={loginUser.isError}>
+        <div class="text-red-500">{loginUser.error?.message}</div>
       </Show>
       <Form
         class="space-y-5"

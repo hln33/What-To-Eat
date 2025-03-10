@@ -63,7 +63,7 @@ const users = new Hono()
   .post('/register', zValidator('form', userValidator), async (c) => {
     const { username, password } = c.req.valid('form');
     if (await userExists(username)) {
-      return c.json({ error: 'Username already taken' }, 409);
+      throw new HTTPException(409, { message: 'Username already taken' });
     }
 
     const newUser = await createUser(username, password);
@@ -71,7 +71,7 @@ const users = new Hono()
     const session = await createSession(token, newUser.id);
     setSessionCookie(c, token, session);
 
-    return c.json({ message: 'Session created.' });
+    return c.json({ message: 'Registration successful.' });
   })
   .get('/session/exists', async (c) => {
     const sessionToken = getCookie(c, SESSION_COOKIE_NAME);

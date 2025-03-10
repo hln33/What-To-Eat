@@ -1,8 +1,10 @@
-import { A } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 import { createForm, required, SubmitHandler } from "@modular-forms/solid";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
 import { registerUser } from "@/api";
+import { Show } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
 
 type SignupForm = {
   username: string;
@@ -10,18 +12,26 @@ type SignupForm = {
 };
 
 export const SignupPage = () => {
+  const navigate = useNavigate();
   const [form, { Form, Field }] = createForm<SignupForm>();
 
-  const handleSignup: SubmitHandler<SignupForm> = async ({
-    username,
-    password,
-  }) => {
-    await registerUser(username, password);
+  const createUser = createMutation(() => ({
+    mutationFn: registerUser,
+  }));
+
+  const handleSignup: SubmitHandler<SignupForm> = async (credentials) => {
+    createUser.mutate(credentials, {
+      onSuccess: () => navigate("/"),
+    });
   };
 
   return (
     <div class="space-y-5">
       <div class="text-lg">Sign up to \App Name\</div>
+
+      <Show when={createUser.isError}>
+        <div class="text-red-500">{createUser.error?.message}</div>
+      </Show>
       <Form
         class="space-y-5"
         onSubmit={handleSignup}

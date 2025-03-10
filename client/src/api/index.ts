@@ -1,11 +1,19 @@
-import { hc } from "hono/client";
+import { ClientResponse, hc } from "hono/client";
 import { AppType } from "../../../server/src";
 import { Recipe } from "../types";
 
-type ResponseData<T> = { data: T; error: null } | { data: null; error: string };
-
 const API_URL = "http://localhost:3001";
 const api = hc<AppType>(API_URL);
+
+const callRPC = async <T>(rpc: Promise<ClientResponse<T>>): Promise<T> => {
+  const res = await rpc;
+  if (!res.ok) {
+    const errorMessage = await res.text();
+    throw new Error(errorMessage);
+  }
+
+  return res.json() as T;
+};
 
 export const getRecipe = async (id: string): Promise<Recipe> => {
   const res = await api.recipes[":id"].$get({ param: { id } });
@@ -35,33 +43,26 @@ export const postNewRecipe = async ({
 export const login = async (loginCredentials: {
   username: string;
   password: string;
-}): Promise<ResponseData<string>> => {
-  try {
-    const res = await api.users.login.$post(
+}): Promise<{ message: string }> => {
+  return await callRPC(
+    api.users.login.$post(
       { form: loginCredentials },
       {
         init: { credentials: "include" },
       },
-    );
-    if (!res.ok) {
-      return { data: null, error: await res.text() };
-    }
-
-    return { data: (await res.json()).message, error: null };
-  } catch (e) {
-    console.error(e);
-    return { data: null, error: "Unknown error." };
-  }
+    ),
+  );
 };
 
-export const registerUser = async (
-  username: string,
-  password: string,
-): Promise<boolean> => {
-  const res = await api.users.register.$post({
-    form: { username, password },
-  });
-  return res.ok;
+export const registerUser = async (credentials: {
+  username: string;
+  password: string;
+}): Promise<{ message: string }> => {
+  return await callRPC(
+    api.users.register.$post({
+      form: credentials,
+    }),
+  );
 };
 
 export const logout = async (): Promise<boolean> => {
