@@ -9,7 +9,7 @@ import {
 import { A, useParams } from "@solidjs/router";
 import { Separator } from "@kobalte/core/separator";
 import Skeleton from "@/components/Skeleton";
-import { getRecipe } from "@/api";
+import { getRecipe } from "@/features/recipes/api";
 
 const RecipePage: Component = () => {
   const params = useParams();

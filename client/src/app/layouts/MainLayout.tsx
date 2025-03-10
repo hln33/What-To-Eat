@@ -1,7 +1,7 @@
 import { createEffect, createResource, ParentComponent, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { useUserContext } from "@/contexts/UserContext";
-import { checkUserSessionExists, logout } from "@/api";
+import { checkUserSessionExists, logout } from "@/features/users/api";
 
 const MainLayout: ParentComponent = (props) => {
   const [sessionExists] = createResource(checkUserSessionExists);

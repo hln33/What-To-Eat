@@ -1,9 +1,9 @@
 import { createSignal, Setter, type Component } from "solid-js";
 import { setsEqual } from "@/utils/set";
 import Dialog from "@/components/Dialog";
-import RecipeList from "@/features/recipe-search/components/RecipeList";
-import SelectIngredientsMenu from "@/features/recipe-search/components/SelectIngredientsMenu";
-import NewRecipeForm from "@/features/new-recipe/NewRecipeForm";
+import SelectIngredientsMenu from "@/features/ingredients/components/SelectIngredientsMenu";
+import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
+import Recipes from "@/features/recipes/components/Recipes";
 
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
@@ -77,10 +77,7 @@ const HomePage: Component = () => {
         <NewRecipeForm />
       </Dialog>
 
-      <RecipeList
-        class=""
-        providedIngredients={allIngredients()}
-      />
+      <Recipes providedIngredients={allIngredients()} />
     </div>
   );
 };

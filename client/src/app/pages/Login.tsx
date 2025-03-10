@@ -2,10 +2,10 @@ import { Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
 import { createForm, required, SubmitHandler } from "@modular-forms/solid";
-import { login } from "@/api";
 import { useUserContext } from "@/contexts/UserContext";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
+import { login } from "@/features/users/api";
 
 type LoginForm = {
   username: string;

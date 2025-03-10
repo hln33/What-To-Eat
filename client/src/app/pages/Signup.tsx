@@ -1,10 +1,10 @@
+import { Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
+import { createMutation } from "@tanstack/solid-query";
 import { createForm, required, SubmitHandler } from "@modular-forms/solid";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
-import { registerUser } from "@/api";
-import { Show } from "solid-js";
-import { createMutation } from "@tanstack/solid-query";
+import { registerUser } from "@/features/users/api";
 
 type SignupForm = {
   username: string;

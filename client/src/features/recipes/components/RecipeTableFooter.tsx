@@ -1,10 +1,10 @@
 import { Component } from "solid-js";
 import { Table } from "@tanstack/solid-table";
-import { TableData } from "../types";
+import { RecipeTableData } from "../types";
 
 const RecipeTableFooter: Component<{
   class?: string;
-  table: Table<TableData>;
+  table: Table<RecipeTableData>;
 }> = (props) => {
   const pagination = () => props.table.getState().pagination;
 

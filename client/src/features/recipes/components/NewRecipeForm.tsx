@@ -10,12 +10,12 @@ import {
 } from "@modular-forms/solid";
 import TrashIcon from "~icons/fe/trash";
 import PlusIcon from "~icons/fe/plus";
-import { postNewRecipe } from "@/api";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
 import InputError from "@/components/InputError";
 import RequiredInputAsterisk from "@/components/RequiredInputAsterisk";
 import Combobox from "@/components/Combobox";
+import { postNewRecipe } from "../api";
 
 type RecipeForm = {
   name: string;
