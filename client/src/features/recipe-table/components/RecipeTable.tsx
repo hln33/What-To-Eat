@@ -58,7 +58,7 @@ const RecipeTable: Component<{
     });
 
   return (
-    <div>
+    <div class="flex flex-col">
       <table class="border-collapse border border-gray-500 text-left capitalize">
         <thead>
           <For each={table().getHeaderGroups()}>

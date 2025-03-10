@@ -5,8 +5,6 @@ import RecipeList from "@/features/recipe-search/components/RecipeList";
 import SelectIngredientsMenu from "@/features/recipe-search/components/SelectIngredientsMenu";
 import NewRecipeForm from "@/features/new-recipe/NewRecipeForm";
 
-import Icon from "~icons/logos/solidjs-icon";
-
 const HomePage: Component = () => {
   const [essentialIngredients, setEssentialIngredients] = createSignal(
     new Set(["eggs", "olive oil"]),

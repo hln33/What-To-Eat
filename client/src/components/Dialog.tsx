@@ -1,4 +1,5 @@
 import { ParentComponent } from "solid-js";
+import CloseIcon from "~icons/fe/close";
 import { Dialog as Kobalte } from "@kobalte/core/dialog";
 import Button from "./Button";
 
@@ -14,8 +15,8 @@ const Dialog: ParentComponent<{ triggerTitle: string; dialogTitle: string }> = (
             <Kobalte.Content class="rounded-md bg-slate-700 p-8 text-white">
               <div class="mb-5 flex justify-between text-3xl">
                 <Kobalte.Title>{props.dialogTitle}</Kobalte.Title>
-                <Kobalte.CloseButton class="text-gray-200">
-                  X
+                <Kobalte.CloseButton class="rounded-lg text-gray-200 hover:bg-slate-500">
+                  <CloseIcon />
                 </Kobalte.CloseButton>
               </div>
               {props.children}

@@ -1,4 +1,6 @@
 import { Component, For, JSX, splitProps } from "solid-js";
+import CheckIcon from "~icons/fe/check";
+import CloseIcon from "~icons/fe/close";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
 import InputError from "./InputError";
 
@@ -27,11 +29,13 @@ const Combobox: Component<{
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
-          class="flex justify-start gap-2 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
+          class="flex items-center justify-start gap-1 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
           item={props.item}
         >
           <Kobalte.ItemLabel>{props.item.rawValue}</Kobalte.ItemLabel>
-          <Kobalte.ItemIndicator>Y</Kobalte.ItemIndicator>
+          <Kobalte.ItemIndicator>
+            <CheckIcon />
+          </Kobalte.ItemIndicator>
         </Kobalte.Item>
       )}
     >
@@ -43,9 +47,14 @@ const Combobox: Component<{
             <div class="flex flex-wrap gap-2">
               <For each={state.selectedOptions()}>
                 {(option) => (
-                  <div class="z-10 flex gap-3 rounded-lg bg-sky-800 px-3 py-1 ring-1 ring-slate-600">
-                    {option}
-                    <button onClick={() => state.remove(option)}>X</button>
+                  <div class="z-10 flex items-center gap-2 rounded-lg bg-sky-800 px-2 py-1 ring-1 ring-slate-600">
+                    <div class="cursor-default">{option}</div>
+                    <button
+                      class="block"
+                      onClick={() => state.remove(option)}
+                    >
+                      <CloseIcon class="size-4" />
+                    </button>
                   </div>
                 )}
               </For>

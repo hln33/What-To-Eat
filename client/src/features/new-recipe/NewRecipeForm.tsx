@@ -8,6 +8,8 @@ import {
   required,
   SubmitHandler,
 } from "@modular-forms/solid";
+import TrashIcon from "~icons/fe/trash";
+import PlusIcon from "~icons/fe/plus";
 import { postNewRecipe } from "@/api";
 import TextField from "@/components/TextField";
 import Button from "@/components/Button";
@@ -119,7 +121,7 @@ const NewRecipeForm = () => {
                           remove(form, fieldArray.name, { at: index() })
                         }
                       >
-                        X
+                        <TrashIcon />
                       </Button>
                     </Show>
                   </div>
@@ -134,7 +136,9 @@ const NewRecipeForm = () => {
           onClick={() => insert(form, "instructions", { value: "" })}
           disabled={form.submitting}
         >
-          + Instructions
+          <span class="inline-flex items-center gap-2">
+            <PlusIcon class="inline" /> Instructions
+          </span>
         </Button>
       </div>
 
