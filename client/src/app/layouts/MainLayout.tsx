@@ -2,7 +2,7 @@ import { createEffect, ParentComponent, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { useUserContext } from "@/contexts/UserContext";
 import { checkUserSessionExists, logout } from "@/features/users/api";
-import { createQuery } from "@tanstack/solid-query";
+import { createMutation, createQuery } from "@tanstack/solid-query";
 
 const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
@@ -10,6 +10,13 @@ const MainLayout: ParentComponent = (props) => {
   const sessionExistanceQuery = createQuery(() => ({
     queryKey: ["session"],
     queryFn: checkUserSessionExists,
+  }));
+
+  const logoutUser = createMutation(() => ({
+    mutationFn: logout,
+    onSuccess: () => {
+      user.setIsLoggedin(false);
+    },
   }));
 
   createEffect(() => {
@@ -57,10 +64,7 @@ const MainLayout: ParentComponent = (props) => {
             <A
               class="border border-white p-2"
               href="/"
-              onClick={() => {
-                logout();
-                user.setIsLoggedin(false);
-              }}
+              onClick={() => logoutUser.mutate()}
             >
               Logout
             </A>

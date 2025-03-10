@@ -1,10 +1,16 @@
-import { createEffect, createSignal, type Component } from "solid-js";
+import {
+  createSignal,
+  ErrorBoundary,
+  Suspense,
+  type Component,
+} from "solid-js";
 import Dialog from "@/components/Dialog";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
 import { createQuery } from "@tanstack/solid-query";
 import { getAllIngredients } from "@/features/ingredients/api";
 import Combobox from "@/components/Combobox";
+import Skeleton from "@/components/Skeleton";
 
 const HomePage: Component = () => {
   const [ingredients, setIngredients] = createSignal<string[]>([]);
@@ -15,20 +21,20 @@ const HomePage: Component = () => {
     select: (ingredients) => ingredients.map((i) => i.name),
   }));
 
-  createEffect(() => {
-    console.log(ingredientsQuery);
-  });
-
   return (
     <div class="flex flex-col justify-around gap-16">
-      <Combobox
-        controlled
-        label="Ingredients"
-        placeholder="Search ingredients"
-        options={ingredientsQuery.data ?? []}
-        value={ingredients()}
-        onChange={setIngredients}
-      />
+      <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
+        <Suspense fallback={<Skeleton height={40} />}>
+          <Combobox
+            controlled
+            label="Ingredients"
+            placeholder="Search ingredients"
+            options={ingredientsQuery.data ?? []}
+            value={ingredients()}
+            onChange={setIngredients}
+          />
+        </Suspense>
+      </ErrorBoundary>
 
       <Dialog
         triggerTitle="New Recipe"
