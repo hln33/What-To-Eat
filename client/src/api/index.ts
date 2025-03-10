@@ -37,13 +37,26 @@ export const login = async (): Promise<boolean> => {
   return res.ok;
 };
 
-export const registerUser = async (username: string, password: string) => {
+export const registerUser = async (
+  username: string,
+  password: string,
+): Promise<boolean> => {
   const res = await api.users.register.$post({
     form: { username, password },
   });
-  console.log(res);
+  return res.ok;
 };
 
-export const checkUserLoggedIn = () => {
-  // TODO
+export const logout = async (): Promise<boolean> => {
+  const res = await api.users.logout.$post(undefined, {
+    init: { credentials: "include" },
+  });
+  return res.ok;
+};
+
+export const checkUserSessionExists = async (): Promise<boolean> => {
+  const res = await api.users.session.exists.$get(undefined, {
+    init: { credentials: "include" },
+  });
+  return res.ok;
 };

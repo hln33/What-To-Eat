@@ -1,9 +1,17 @@
-import { ParentComponent, Show } from "solid-js";
+import { createEffect, createResource, ParentComponent, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { useUserContext } from "@/contexts/UserContext";
+import { checkUserSessionExists, logout } from "@/api";
 
 const MainLayout: ParentComponent = (props) => {
+  const [sessionExists] = createResource(checkUserSessionExists);
   const user = useUserContext();
+
+  createEffect(() => {
+    if (sessionExists() !== undefined) {
+      user.setIsLoggedin(sessionExists()!);
+    }
+  });
 
   return (
     <div class="h-fit min-h-screen space-y-20 bg-slate-900 text-center text-white">
@@ -44,7 +52,10 @@ const MainLayout: ParentComponent = (props) => {
             <A
               class="border border-white p-2"
               href="/"
-              onClick={() => user.setIsLoggedin(false)}
+              onClick={() => {
+                logout();
+                user.setIsLoggedin(false);
+              }}
             >
               Logout
             </A>

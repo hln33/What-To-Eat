@@ -33,6 +33,7 @@ export const createSession = async (
   };
 
   await db.insert(sessionTable).values(session);
+
   return session;
 };
 
@@ -69,12 +70,24 @@ const validateSessionToken = async (
   return { user, session };
 };
 
-const invalidateSession = async (sessionId: string): Promise<void> => {
+export const invalidateSession = async (sessionId: string): Promise<void> => {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 };
 
 const invalidateAllSessions = async (userId: number): Promise<void> => {
   await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
+};
+
+export const checkSessionExists = async (token: string): Promise<boolean> => {
+  const sessions = await db.select().from(sessionTable);
+  for (const session of sessions) {
+    const isMatch = await argon2.verify(session.id, token);
+    if (isMatch) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 generateSessionToken();
