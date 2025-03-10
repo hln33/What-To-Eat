@@ -1,12 +1,6 @@
-import {
-  createEffect,
-  createResource,
-  ErrorBoundary,
-  Index,
-  Suspense,
-  type Component,
-} from "solid-js";
+import { ErrorBoundary, Index, Suspense, type Component } from "solid-js";
 import { A, useParams } from "@solidjs/router";
+import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 import Skeleton from "@/components/Skeleton";
 import { getRecipe } from "@/features/recipes/api";
@@ -14,12 +8,10 @@ import { getRecipe } from "@/features/recipes/api";
 const RecipePage: Component = () => {
   const params = useParams();
 
-  const [recipe] = createResource(params.id, getRecipe);
-  createEffect(() => {
-    if (recipe.error) {
-      console.error(recipe.error);
-    }
-  });
+  const recipeQuery = createQuery(() => ({
+    queryKey: ["recipe", params.id],
+    queryFn: () => getRecipe(params.id),
+  }));
 
   return (
     <div class="space-y-10">
@@ -30,7 +22,7 @@ const RecipePage: Component = () => {
         Go Back
       </A>
 
-      <ErrorBoundary fallback={(err: string) => <div>{err.toString()}</div>}>
+      <ErrorBoundary fallback={<div>{recipeQuery.error?.message}</div>}>
         <Suspense
           fallback={
             <div class="space-y-6">
@@ -42,14 +34,14 @@ const RecipePage: Component = () => {
         >
           <section class="space-y-12 text-left">
             <div class="space-y-5">
-              <h2 class="text-5xl">{recipe()?.name}</h2>
+              <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
               <Separator />
             </div>
 
             <section class="space-y-3">
               <h3 class="text-3xl">Ingredients</h3>
               <ul class="list-inside list-disc">
-                <Index each={recipe()?.ingredients}>
+                <Index each={recipeQuery.data?.ingredients}>
                   {(ingredient, _index) => <li>{ingredient()}</li>}
                 </Index>
               </ul>
@@ -58,7 +50,7 @@ const RecipePage: Component = () => {
             <section class="space-y-3">
               <h3 class="text-3xl">Instructions</h3>
               <ul class="list-outside list-decimal space-y-5">
-                <Index each={recipe()?.instructions}>
+                <Index each={recipeQuery.data?.instructions}>
                   {(instruction, _index) => <li>{instruction()}</li>}
                 </Index>
               </ul>
