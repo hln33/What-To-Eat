@@ -3,6 +3,7 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import * as tsParser from "@typescript-eslint/parser"
 import solid from "eslint-plugin-solid/configs/typescript";
+import pluginQuery from '@tanstack/eslint-plugin-query'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -17,6 +18,7 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   solid,
+  ...pluginQuery.configs['flat/recommended'],
   {
     rules: {
     "@typescript-eslint/no-unused-vars": [

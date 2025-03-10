@@ -1,22 +1,37 @@
-import { Component, For, JSX, splitProps } from "solid-js";
+import { Component, For, JSX, Setter, Show, splitProps } from "solid-js";
 import CheckIcon from "~icons/fe/check";
 import CloseIcon from "~icons/fe/close";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
 import InputError from "./InputError";
 
-const Combobox: Component<{
+type UncontrolledProps = {
+  controlled: false;
   name: string;
-  label: string;
-  options: string[];
-  placeholder?: string;
-  required?: boolean;
-  value: string[] | undefined;
-  error: string;
   ref: (element: HTMLSelectElement) => void;
-  onInput: JSX.EventHandler<HTMLSelectElement, InputEvent>;
   onChange: JSX.EventHandler<HTMLSelectElement, Event>;
+  onInput: JSX.EventHandler<HTMLSelectElement, InputEvent>;
   onBlur: JSX.EventHandler<HTMLSelectElement, FocusEvent>;
-}> = (props) => {
+};
+
+type ControlledProps = {
+  controlled: true;
+  onChange: Setter<string[]>;
+  name?: undefined;
+  ref?: undefined;
+  onInput?: undefined;
+  onBlur?: undefined;
+};
+
+const Combobox: Component<
+  {
+    label: string;
+    options: string[];
+    value: string[] | undefined;
+    required?: boolean;
+    placeholder?: string;
+    error?: string;
+  } & (UncontrolledProps | ControlledProps)
+> = (props) => {
   const [rootProps, selectProps] = splitProps(
     props,
     ["name", "placeholder", "options"],
@@ -26,6 +41,7 @@ const Combobox: Component<{
   return (
     <Kobalte<string>
       {...rootProps}
+      onChange={props.controlled ? props.onChange : undefined}
       multiple
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
@@ -45,7 +61,10 @@ const Combobox: Component<{
       >
         {props.label}
       </Kobalte.Label>
-      <Kobalte.HiddenSelect {...selectProps} />
+
+      <Show when={!props.controlled}>
+        <Kobalte.HiddenSelect {...selectProps} />
+      </Show>
       <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
         {(state) => (
           <div class="relative flex justify-between gap-2 p-3">
@@ -63,18 +82,18 @@ const Combobox: Component<{
                   </div>
                 )}
               </For>
-              <Kobalte.Input class="flex-auto bg-inherit outline-none placeholder:text-slate-400" />
+              <Kobalte.Input class="flex-auto bg-inherit text-black outline-none placeholder:text-slate-400" />
             </div>
             <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
           </div>
         )}
       </Kobalte.Control>
       <Kobalte.ErrorMessage>
-        <InputError errorMessage={props.error} />
+        <InputError errorMessage={props.error ?? ""} />
       </Kobalte.ErrorMessage>
 
       <Kobalte.Portal>
-        <Kobalte.Content class="z-50 rounded-lg border border-slate-950 bg-white text-black">
+        <Kobalte.Content class="z-50 max-h-96 overflow-auto rounded-lg border border-slate-950 bg-white text-black">
           <Kobalte.Listbox class="p-2" />
         </Kobalte.Content>
       </Kobalte.Portal>

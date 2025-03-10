@@ -74,6 +74,7 @@ const NewRecipeForm = () => {
         >
           {(field, props) => (
             <Combobox
+              controlled={false}
               {...props}
               label="Ingredients"
               placeholder="Search Ingredients"

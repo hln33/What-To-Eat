@@ -1,75 +1,35 @@
-import { createSignal, Setter, type Component } from "solid-js";
-import { setsEqual } from "@/utils/set";
+import { createEffect, createSignal, type Component } from "solid-js";
 import Dialog from "@/components/Dialog";
-import SelectIngredientsMenu from "@/features/ingredients/components/SelectIngredientsMenu";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
+import { createQuery } from "@tanstack/solid-query";
+import { getAllIngredients } from "@/features/ingredients/api";
+import Combobox from "@/components/Combobox";
 
 const HomePage: Component = () => {
-  const [essentialIngredients, setEssentialIngredients] = createSignal(
-    new Set(["eggs", "olive oil"]),
-    { equals: setsEqual },
-  );
-  const [meatIngredients, setMeatIngredients] = createSignal(new Set([""]), {
-    equals: setsEqual,
+  const [ingredients, setIngredients] = createSignal<string[]>([]);
+
+  const ingredientsQuery = createQuery(() => ({
+    queryKey: ["ingredients"],
+    queryFn: getAllIngredients,
+    select: (ingredients) => ingredients.map((i) => i.name),
+  }));
+
+  createEffect(() => {
+    console.log(ingredientsQuery);
   });
-  const [seafoodIngredients, setSeafoodIngredients] = createSignal(
-    new Set([""]),
-    { equals: setsEqual },
-  );
-
-  const ingredientCategories = () => {
-    const createCategory = (
-      name: string,
-      ingredients: Set<string>,
-      onIngredientsChange: Setter<Set<string>>,
-      options: Set<string>,
-    ) => ({
-      name,
-      ingredients,
-      onIngredientsChange,
-      options,
-    });
-
-    return [
-      createCategory(
-        "Essentials",
-        essentialIngredients(),
-        setEssentialIngredients,
-        new Set([
-          "butter",
-          "milk",
-          "eggs",
-          "garlic",
-          "onion",
-          "olive oil",
-          "garlic powder",
-          "white rice",
-        ]),
-      ),
-      createCategory(
-        "Meats",
-        meatIngredients(),
-        setMeatIngredients,
-        new Set(["pork belly", "steak", "chicken breast", "chicken thigh"]),
-      ),
-      createCategory(
-        "Seafood",
-        seafoodIngredients(),
-        setSeafoodIngredients,
-        new Set(["shrimp", "salmon", "prawns", "crab"]),
-      ),
-    ];
-  };
-
-  const allIngredients = () =>
-    [essentialIngredients(), meatIngredients(), seafoodIngredients()].reduce(
-      (acc, set) => acc.union(set),
-    );
 
   return (
     <div class="flex flex-col justify-around gap-16">
-      <SelectIngredientsMenu categories={ingredientCategories()} />
+      <Combobox
+        controlled
+        label="Ingredients"
+        placeholder="Search ingredients"
+        options={ingredientsQuery.data ?? []}
+        value={ingredients()}
+        onChange={setIngredients}
+      />
+
       <Dialog
         triggerTitle="New Recipe"
         dialogTitle="New Recipe"
@@ -77,7 +37,7 @@ const HomePage: Component = () => {
         <NewRecipeForm />
       </Dialog>
 
-      <Recipes providedIngredients={allIngredients()} />
+      <Recipes providedIngredients={new Set(ingredients())} />
     </div>
   );
 };
