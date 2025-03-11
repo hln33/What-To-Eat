@@ -4,11 +4,11 @@ import {
   Suspense,
   type Component,
 } from "solid-js";
-import Dialog from "@/components/Dialog";
+import { createQuery } from "@tanstack/solid-query";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
-import { createQuery } from "@tanstack/solid-query";
 import { getAllIngredients } from "@/features/ingredients/api";
+import Dialog from "@/components/Dialog";
 import Combobox from "@/components/Combobox";
 import Skeleton from "@/components/Skeleton";
 
@@ -18,11 +18,20 @@ const HomePage: Component = () => {
   const ingredientsQuery = createQuery(() => ({
     queryKey: ["ingredients"],
     queryFn: getAllIngredients,
-    select: (ingredients) => ingredients.map((i) => i.name),
+    select: (ingredients) => ingredients.map((i) => i.name).toSorted(),
   }));
 
   return (
-    <div class="flex flex-col justify-around gap-16">
+    <div class="flex flex-col justify-around gap-8">
+      <h2 class="mb-5 text-4xl">Recipes</h2>
+
+      <Dialog
+        triggerTitle="New Recipe"
+        dialogTitle="New Recipe"
+      >
+        <NewRecipeForm />
+      </Dialog>
+
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
         <Suspense fallback={<Skeleton height={40} />}>
           <Combobox
@@ -35,13 +44,6 @@ const HomePage: Component = () => {
           />
         </Suspense>
       </ErrorBoundary>
-
-      <Dialog
-        triggerTitle="New Recipe"
-        dialogTitle="New Recipe"
-      >
-        <NewRecipeForm />
-      </Dialog>
 
       <Recipes providedIngredients={new Set(ingredients())} />
     </div>

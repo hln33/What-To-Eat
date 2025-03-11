@@ -15,8 +15,6 @@ const Recipes: Component<{
 
   return (
     <section class={props.class}>
-      <h2 class="mb-5 text-4xl">Recipes</h2>
-
       <div class="space-y-4">
         <ErrorBoundary fallback={<div>Error loading recipes</div>}>
           <Suspense

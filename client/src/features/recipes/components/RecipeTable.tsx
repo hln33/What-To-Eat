@@ -10,24 +10,25 @@ import {
 import { getRecipesWithIngredientStatus } from "../utils";
 import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
+import RecipeTableCellStatus from "./RecipeTableCellStatus";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [
   columnHelper.accessor("name", {
     header: () => <div>Name</div>,
-    cell: (info) => <div class="text-red-400">{info.getValue()}</div>,
+    cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("ingredients", {
     header: () => <div>Ingredients</div>,
     cell: (info) => (
-      <div class="text-green-300">
-        {info.getValue().reduce((acc, ingredient) => `${acc}, ${ingredient}`)}
-      </div>
+      <ul class="list-outside list-disc">
+        <For each={info.getValue()}>{(item) => <li>{item}</li>}</For>
+      </ul>
     ),
   }),
-  columnHelper.accessor("status", {
+  columnHelper.accessor("ingredientStatus", {
     header: () => <div>Status</div>,
-    cell: (info) => <div class="text-yellow-300">{info.getValue()}</div>,
+    cell: (info) => <RecipeTableCellStatus {...info} />,
   }),
 ];
 
@@ -58,14 +59,14 @@ const RecipeTable: Component<{
 
   return (
     <div class="flex flex-col">
-      <table class="border-collapse border border-gray-500 text-left capitalize">
+      <table class="border-collapse border border-gray-600 text-left capitalize">
         <thead>
           <For each={table().getHeaderGroups()}>
             {(headerGroup) => (
               <tr>
                 <For each={headerGroup.headers}>
                   {(header) => (
-                    <th class="border-b border-gray-400 p-4">
+                    <th class="border-b-2 border-gray-600 p-4">
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
@@ -81,12 +82,12 @@ const RecipeTable: Component<{
           <For each={table().getRowModel().rows}>
             {(row) => (
               <tr
-                class="cursor-pointer hover:bg-zinc-500"
+                class="cursor-pointer align-top hover:bg-zinc-500"
                 onClick={() => navigate(`/recipe/${row.original.id}`)}
               >
                 <For each={row.getVisibleCells()}>
                   {(cell) => (
-                    <td class="border-b border-gray-400 px-4 py-2">
+                    <td class="relative border-b border-gray-600 px-4 py-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -100,7 +101,7 @@ const RecipeTable: Component<{
         </tbody>
       </table>
       <RecipeTableFooter
-        class="border-x border-b border-gray-400 p-2"
+        class="border-x border-b border-gray-600 p-2"
         table={table()}
       />
     </div>

@@ -11,6 +11,11 @@ const MainLayout: ParentComponent = (props) => {
     queryKey: ["sessionExists"],
     queryFn: checkUserSessionExists,
   }));
+  createEffect(() => {
+    if (sessionExistanceQuery.data !== undefined) {
+      user.setIsLoggedin(sessionExistanceQuery.data);
+    }
+  });
 
   const logoutUser = createMutation(() => ({
     mutationFn: logout,
@@ -18,12 +23,6 @@ const MainLayout: ParentComponent = (props) => {
       user.setIsLoggedin(false);
     },
   }));
-
-  createEffect(() => {
-    if (sessionExistanceQuery.data !== undefined) {
-      user.setIsLoggedin(sessionExistanceQuery.data);
-    }
-  });
 
   return (
     <div class="h-fit min-h-screen space-y-20 bg-slate-900 text-center text-white">
