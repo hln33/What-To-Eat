@@ -15,7 +15,7 @@ const Popover: Component<{
           <Kobalte.Arrow />
           <div class="flex gap-4">
             <Kobalte.Title>{props.title}</Kobalte.Title>
-            <Kobalte.CloseButton>
+            <Kobalte.CloseButton class="rounded-lg hover:bg-gray-400">
               <CloseIcon />
             </Kobalte.CloseButton>
           </div>

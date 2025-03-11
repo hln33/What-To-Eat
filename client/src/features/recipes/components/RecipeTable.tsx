@@ -22,7 +22,9 @@ const columns = [
     header: () => <div>Ingredients</div>,
     cell: (info) => (
       <ul class="list-outside list-disc">
-        <For each={info.getValue()}>{(item) => <li>{item}</li>}</For>
+        <For each={info.getValue()}>
+          {(ingredient) => <li>{ingredient}</li>}
+        </For>
       </ul>
     ),
   }),
@@ -87,7 +89,7 @@ const RecipeTable: Component<{
               >
                 <For each={row.getVisibleCells()}>
                   {(cell) => (
-                    <td class="relative border-b border-gray-600 px-4 py-2">
+                    <td class="relative border-b border-gray-600">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

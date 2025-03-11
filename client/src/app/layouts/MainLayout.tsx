@@ -72,7 +72,7 @@ const MainLayout: ParentComponent = (props) => {
       </header>
 
       <div class="flex items-center justify-center">
-        <main class="w-screen border border-slate-600 bg-slate-800 p-8">
+        <main class="w-screen border border-slate-600 bg-slate-800 p-5">
           {props.children}
         </main>
       </div>

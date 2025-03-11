@@ -1,24 +1,25 @@
-import { Recipe, RecipeTableData } from "./types";
+import { IngredientStatusText, Recipe, RecipeTableData } from "./types";
 
 export const INGREDIENT_STATUSES = {
   missingAll: "Missing all ingredients",
   ready: "Ready to cook",
 };
 
-const getIngredientStatus = (
+const getIngredientStatusText = (
   requiredIngredients: Set<string>,
   providedIngredients: Set<string>,
-) => {
+): IngredientStatusText => {
   const numMissingIngredients =
     requiredIngredients.difference(providedIngredients).size;
 
   if (numMissingIngredients === 0) {
-    return INGREDIENT_STATUSES.ready;
+    return "Ready";
   } else if (numMissingIngredients === requiredIngredients.size) {
-    return INGREDIENT_STATUSES.missingAll;
+    return "MissingAll";
   } else {
-    const isPlural = numMissingIngredients > 1;
-    return `Missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
+    return "MissingSome";
+    // const isPlural = numMissingIngredients > 1;
+    // return `Missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
   }
 };
 
@@ -28,7 +29,7 @@ export const getRecipesWithIngredientStatus = (
 ): RecipeTableData[] => {
   return recipes.map((recipe) => {
     const requiredIngredients = new Set(recipe.ingredients);
-    const statusText = getIngredientStatus(
+    const statusText = getIngredientStatusText(
       requiredIngredients,
       providedIngredients,
     );

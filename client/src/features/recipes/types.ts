@@ -9,7 +9,9 @@ export type Recipe = {
   instructions: string[];
 };
 
+export type IngredientStatusText = "Ready" | "MissingAll" | "MissingSome";
+
 export type IngredientStatus = {
-  statusText: "Missing all ingredients" | "All ingredients" | string;
+  statusText: IngredientStatusText;
   missingIngredients: Set<string>;
 };

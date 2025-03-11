@@ -1,24 +1,32 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, Match, Show, Switch } from "solid-js";
 import { CellContext } from "@tanstack/solid-table";
 import QuestionIcon from "~icons/fe/question";
 import Popover from "@/components/Popover";
 import { IngredientStatus, RecipeTableData } from "../types";
-import { INGREDIENT_STATUSES } from "../utils";
 
 const RecipeTableCellStatus: Component<
   CellContext<RecipeTableData, IngredientStatus>
 > = (props) => {
   const statusText = () => props.getValue().statusText;
-  const shouldShowMissingIngredients = () =>
-    statusText() !== INGREDIENT_STATUSES.ready &&
-    statusText() !== INGREDIENT_STATUSES.missingAll;
+  const shouldShowMissingIngredients = () => statusText() === "MissingSome";
 
   return (
     <div
-      class="flex text-white"
+      class={`flex justify-between text-white`}
       onClick={(e) => shouldShowMissingIngredients() && e.stopPropagation()}
     >
-      {statusText()}
+      <Switch fallback={<span>Error</span>}>
+        <Match when={statusText() === "Ready"}>
+          <span>Ready to cook</span>
+        </Match>
+        <Match when={statusText() === "MissingSome"}>
+          <span>Missing some</span>
+        </Match>
+        <Match when={statusText() === "MissingAll"}>
+          <span>Missing All Ingredients</span>
+        </Match>
+      </Switch>
+
       <Show when={shouldShowMissingIngredients()}>
         <QuestionIcon class="size-10" />
         <Popover
