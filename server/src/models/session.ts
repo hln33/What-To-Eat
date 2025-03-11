@@ -40,17 +40,19 @@ export const createSession = async (
 export const validateSessionToken = async (
   token: string
 ): Promise<SessionValidationResult> => {
-  const sessionId = await argon2.hash(token);
-  const result = await db
-    .select({ user: userTable, session: sessionTable })
-    .from(sessionTable)
-    .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
-    .where(eq(sessionTable.id, sessionId));
-  if (result.length === 0) {
+  const session = await findSessionByToken(token);
+  if (session === null) {
     return { session: null, user: null };
   }
 
-  const { user, session } = result[0];
+  const userQueryResult = await db
+    .select()
+    .from(userTable)
+    .where(eq(userTable.id, session.userId));
+  if (userQueryResult.length === 0) {
+    return { session: null, user: null };
+  }
+  const user = userQueryResult[0];
 
   if (Date.now() >= session.expiresAt.getTime()) {
     await invalidateSession(session.id);
@@ -71,13 +73,9 @@ export const validateSessionToken = async (
 };
 
 export const invalidateSession = async (token: string): Promise<void> => {
-  const sessions = await db.select().from(sessionTable);
-
-  for (const session of sessions) {
-    const isMatch = await argon2.verify(session.id, token);
-    if (isMatch) {
-      await db.delete(sessionTable).where(eq(sessionTable.id, session.id));
-    }
+  const session = await findSessionByToken(token);
+  if (session !== null) {
+    await db.delete(sessionTable).where(eq(sessionTable.id, session.id));
   }
 };
 
@@ -86,13 +84,17 @@ const invalidateAllSessions = async (userId: number): Promise<void> => {
 };
 
 export const checkSessionExists = async (token: string): Promise<boolean> => {
+  const session = await findSessionByToken(token);
+  return session !== null;
+};
+
+const findSessionByToken = async (token: string): Promise<Session | null> => {
   const sessions = await db.select().from(sessionTable);
   for (const session of sessions) {
     const isMatch = await argon2.verify(session.id, token);
     if (isMatch) {
-      return true;
+      return session;
     }
   }
-
-  return false;
+  return null;
 };

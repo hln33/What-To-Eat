@@ -7,6 +7,7 @@ import {
   Setter,
   useContext,
 } from "solid-js";
+import { createSessionExistanceQuery } from "@/queries";
 
 const UserContext = createContext<{
   isLoggedin: Accessor<boolean>;
@@ -16,12 +17,14 @@ const UserContext = createContext<{
 export const UserContextProvider: ParentComponent = (props) => {
   const [isLoggedin, setIsLoggedin] = createSignal(false);
 
+  const sessionExistanceQuery = createSessionExistanceQuery();
   createEffect(() => {
-    console.log(isLoggedin());
+    if (sessionExistanceQuery.data !== undefined) {
+      setIsLoggedin(sessionExistanceQuery.data);
+    }
   });
 
   const loggedInState = { isLoggedin, setIsLoggedin };
-
   return (
     <UserContext.Provider value={loggedInState}>
       {props.children}

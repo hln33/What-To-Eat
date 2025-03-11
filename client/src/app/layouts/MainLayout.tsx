@@ -1,21 +1,15 @@
-import { createEffect, ParentComponent, Show } from "solid-js";
+import { ParentComponent, Show } from "solid-js";
 import { A } from "@solidjs/router";
+import { createMutation } from "@tanstack/solid-query";
 import { useUserContext } from "@/contexts/UserContext";
-import { checkUserSessionExists, logout } from "@/features/users/api";
-import { createMutation, createQuery } from "@tanstack/solid-query";
+import { logout } from "@/features/users/api";
+import { createSessionExistanceQuery } from "@/queries";
+import Skeleton from "@/components/Skeleton";
 
 const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
 
-  const sessionExistanceQuery = createQuery(() => ({
-    queryKey: ["sessionExists"],
-    queryFn: checkUserSessionExists,
-  }));
-  createEffect(() => {
-    if (sessionExistanceQuery.data !== undefined) {
-      user.setIsLoggedin(sessionExistanceQuery.data);
-    }
-  });
+  const sessionExistanceQuery = createSessionExistanceQuery();
 
   const logoutUser = createMutation(() => ({
     mutationFn: logout,
@@ -33,40 +27,51 @@ const MainLayout: ParentComponent = (props) => {
         >
           What to Eat?
         </A>
-        <nav class="space-x-5">
+
+        <nav class="flex space-x-5">
           <A
-            class="border border-white p-2"
+            class="block border border-white p-2"
             href="/"
           >
             Home
           </A>
 
           <Show
-            when={user.isLoggedin()}
+            when={sessionExistanceQuery.data !== undefined}
             fallback={
-              <>
-                <A
-                  class="border border-white p-2"
-                  href="/login"
-                >
-                  Login
-                </A>
-                <A
-                  class="border border-white p-2"
-                  href="/signup"
-                >
-                  Sign Up
-                </A>
-              </>
+              <Skeleton
+                height={40}
+                width={120}
+              />
             }
           >
-            <A
-              class="border border-white p-2"
-              href="/"
-              onClick={() => logoutUser.mutate()}
+            <Show
+              when={user.isLoggedin()}
+              fallback={
+                <>
+                  <A
+                    class="block border border-white p-2"
+                    href="/login"
+                  >
+                    Login
+                  </A>
+                  <A
+                    class="block border border-white p-2"
+                    href="/signup"
+                  >
+                    Sign Up
+                  </A>
+                </>
+              }
             >
-              Logout
-            </A>
+              <A
+                class="block border border-white p-2"
+                href="/"
+                onClick={() => logoutUser.mutate()}
+              >
+                Logout
+              </A>
+            </Show>
           </Show>
         </nav>
       </header>
