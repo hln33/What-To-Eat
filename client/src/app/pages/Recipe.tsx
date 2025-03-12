@@ -4,8 +4,7 @@ import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 import Skeleton from "@/components/ui/Skeleton";
 import { getRecipe } from "@/features/recipes/api";
-import Button from "@/components/ui/Button";
-import Dialog from "@/components/ui/Dialog";
+import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 
 const RecipePage: Component = () => {
   const params = useParams();
@@ -25,19 +24,7 @@ const RecipePage: Component = () => {
           Go Back
         </A>
 
-        <Dialog
-          title="Delete Recipe"
-          trigger={
-            <Button
-              color="red"
-              variant="outline"
-            >
-              Delete
-            </Button>
-          }
-        >
-          <p>heasd</p>
-        </Dialog>
+        <DeleteRecipeDialog />
       </nav>
 
       <ErrorBoundary fallback={<div>{recipeQuery.error?.message}</div>}>

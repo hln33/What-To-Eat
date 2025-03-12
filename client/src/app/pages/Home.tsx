@@ -8,7 +8,7 @@ import { createQuery } from "@tanstack/solid-query";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
 import { getAllIngredients } from "@/features/ingredients/api";
-import Dialog from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Combobox from "@/components/ui/Combobox";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
@@ -26,11 +26,13 @@ const HomePage: Component = () => {
     <div class="flex flex-col justify-around gap-8">
       <h2 class="mb-5 text-4xl">Recipes</h2>
 
-      <Dialog
-        title="New Recipe"
-        trigger={<Button full>New Recipe</Button>}
-      >
-        <NewRecipeForm />
+      <Dialog>
+        <DialogTrigger>
+          <Button full>New Recipe</Button>
+        </DialogTrigger>
+        <DialogContent title="New Recipe">
+          <NewRecipeForm />
+        </DialogContent>
       </Dialog>
 
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
