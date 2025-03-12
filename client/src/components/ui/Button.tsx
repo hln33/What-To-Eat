@@ -1,12 +1,12 @@
 import { Button as Kobalte } from "@kobalte/core/button";
 import { ParentComponent, JSX, splitProps } from "solid-js";
 
+type Color = "red";
+type Variant = "outline";
+
 const COLORS = {
   red: "border-red-500",
 } as const;
-
-type Color = keyof typeof COLORS;
-type Variant = "outline";
 
 const TEXT_COLORS = {
   red: "text-red-500",
@@ -25,6 +25,7 @@ const OUTLINE_HOVER_COLORS = {
 
 const HOVER_COLORS = {
   red: "hover:bg-red-800",
+  default: "hover:bg-slate-500",
 } as const;
 
 const getColor = (color?: Color) => (color ? COLORS[color] : "");
@@ -44,12 +45,11 @@ const getBackgroundColor = (color?: Color, variant?: Variant) => {
 };
 
 const getHoverBackgroundColor = (color?: Color, variant?: Variant) => {
-  if (!color) return "";
+  if (!color) return HOVER_COLORS.default;
 
-  if (variant === "outline") {
-    return OUTLINE_HOVER_COLORS[color];
-  }
-  return HOVER_COLORS[color];
+  return variant == "outline"
+    ? OUTLINE_HOVER_COLORS[color]
+    : HOVER_COLORS[color];
 };
 
 const Button: ParentComponent<
