@@ -11,6 +11,7 @@ import { getAllIngredients } from "@/features/ingredients/api";
 import Dialog from "@/components/ui/Dialog";
 import Combobox from "@/components/ui/Combobox";
 import Skeleton from "@/components/ui/Skeleton";
+import Button from "@/components/ui/Button";
 
 const HomePage: Component = () => {
   const [ingredients, setIngredients] = createSignal<string[]>([]);
@@ -26,8 +27,8 @@ const HomePage: Component = () => {
       <h2 class="mb-5 text-4xl">Recipes</h2>
 
       <Dialog
-        triggerTitle="New Recipe"
-        dialogTitle="New Recipe"
+        title="New Recipe"
+        trigger={<Button full>New Recipe</Button>}
       >
         <NewRecipeForm />
       </Dialog>
