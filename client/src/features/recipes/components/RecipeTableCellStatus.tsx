@@ -1,7 +1,7 @@
 import { Component, For, Match, Show, Switch } from "solid-js";
 import { CellContext } from "@tanstack/solid-table";
 import QuestionIcon from "~icons/fe/question";
-import Popover from "@/components/Popover";
+import Popover from "@/components/ui/Popover";
 import { IngredientStatus, RecipeTableData } from "../types";
 
 const RecipeTableCellStatus: Component<

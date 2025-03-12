@@ -2,7 +2,7 @@ import { ErrorBoundary, Index, Suspense, type Component } from "solid-js";
 import { A, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "@/components/ui/Skeleton";
 import { getRecipe } from "@/features/recipes/api";
 
 const RecipePage: Component = () => {

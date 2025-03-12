@@ -8,9 +8,9 @@ import { createQuery } from "@tanstack/solid-query";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
 import { getAllIngredients } from "@/features/ingredients/api";
-import Dialog from "@/components/Dialog";
-import Combobox from "@/components/Combobox";
-import Skeleton from "@/components/Skeleton";
+import Dialog from "@/components/ui/Dialog";
+import Combobox from "@/components/ui/Combobox";
+import Skeleton from "@/components/ui/Skeleton";
 
 const HomePage: Component = () => {
   const [ingredients, setIngredients] = createSignal<string[]>([]);

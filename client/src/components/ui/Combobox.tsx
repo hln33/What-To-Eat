@@ -2,7 +2,8 @@ import { Component, For, JSX, Setter, Show, splitProps } from "solid-js";
 import CheckIcon from "~icons/fe/check";
 import CloseIcon from "~icons/fe/close";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
-import InputError from "./InputError";
+import InputError from "../InputError";
+import RequiredInputLabel from "../RequiredInputLabel";
 
 type UncontrolledProps = {
   controlled: false;
@@ -56,10 +57,12 @@ const Combobox: Component<
         </Kobalte.Item>
       )}
     >
-      <Kobalte.Label
-        class={`mb-1 block ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
-      >
-        {props.label}
+      <Kobalte.Label class="mb-1 block">
+        {props.required ? (
+          <RequiredInputLabel label={props.label} />
+        ) : (
+          props.label
+        )}
       </Kobalte.Label>
 
       <Show when={!props.controlled}>

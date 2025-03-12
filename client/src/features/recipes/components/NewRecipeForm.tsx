@@ -10,11 +10,11 @@ import {
 } from "@modular-forms/solid";
 import TrashIcon from "~icons/fe/trash";
 import PlusIcon from "~icons/fe/plus";
-import TextField from "@/components/TextField";
-import Button from "@/components/Button";
+import TextField from "@/components/ui/TextField";
+import Button from "@/components/ui/Button";
 import InputError from "@/components/InputError";
-import RequiredInputAsterisk from "@/components/RequiredInputAsterisk";
-import Combobox from "@/components/Combobox";
+import Combobox from "@/components/ui/Combobox";
+import RequiredInputLabel from "@/components/RequiredInputLabel";
 import { postNewRecipe } from "../api";
 
 type RecipeForm = {
@@ -96,7 +96,7 @@ const NewRecipeForm = () => {
                 class="block text-left"
                 for={fieldArray.name}
               >
-                Instructions <RequiredInputAsterisk />
+                <RequiredInputLabel label="Instructions" />
               </label>
               <For each={fieldArray.items}>
                 {(_, index) => (

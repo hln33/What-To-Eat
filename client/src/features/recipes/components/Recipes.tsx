@@ -1,5 +1,5 @@
 import { Component, ErrorBoundary, Show, Suspense } from "solid-js";
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "@/components/ui/Skeleton";
 import { createQuery } from "@tanstack/solid-query";
 import { getAllRecipes } from "../api";
 import RecipeTable from "./RecipeTable";

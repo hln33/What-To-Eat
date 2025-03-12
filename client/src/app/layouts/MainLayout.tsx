@@ -4,7 +4,7 @@ import { createMutation } from "@tanstack/solid-query";
 import { useUserContext } from "@/contexts/UserContext";
 import { logout } from "@/features/users/api";
 import { createSessionExistanceQuery } from "@/queries";
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "@/components/ui/Skeleton";
 
 const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
