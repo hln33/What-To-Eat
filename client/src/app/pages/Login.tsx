@@ -73,7 +73,7 @@ const LoginPage = () => {
         </Field>
 
         <Button
-          full
+          fullWidth
           type="submit"
         >
           Login

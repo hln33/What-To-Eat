@@ -134,7 +134,7 @@ const NewRecipeForm = () => {
           )}
         </FieldArray>
         <Button
-          full
+          fullWidth
           onClick={() => insert(form, "instructions", { value: "" })}
           disabled={form.submitting}
         >
@@ -145,7 +145,7 @@ const NewRecipeForm = () => {
       </div>
 
       <Button
-        full
+        fullWidth
         type="submit"
       >
         Submit

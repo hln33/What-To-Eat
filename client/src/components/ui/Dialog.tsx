@@ -12,7 +12,7 @@ const Dialog: ParentComponent = (props) => {
     return resolvedChildren;
   };
 
-  return <Kobalte>{renderChildren()}</Kobalte>;
+  return <Kobalte open>{renderChildren()}</Kobalte>;
 };
 
 const DialogTrigger = Kobalte.Trigger;

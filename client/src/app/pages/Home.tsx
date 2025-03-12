@@ -28,7 +28,7 @@ const HomePage: Component = () => {
 
       <Dialog>
         <DialogTrigger>
-          <Button full>New Recipe</Button>
+          <Button fullWidth>New Recipe</Button>
         </DialogTrigger>
         <DialogContent title="New Recipe">
           <NewRecipeForm />
