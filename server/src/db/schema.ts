@@ -32,7 +32,7 @@ export const steps = sqliteTable('steps', {
   stepNumber: int().notNull(),
   instruction: text().notNull(),
   recipeId: int('recipe_id')
-    .references(() => recipes.id)
+    .references(() => recipes.id, { onDelete: 'cascade' })
     .notNull(),
 });
 

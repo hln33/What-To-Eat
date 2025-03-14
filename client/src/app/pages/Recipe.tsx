@@ -24,7 +24,7 @@ const RecipePage: Component = () => {
           Go Back
         </A>
 
-        <DeleteRecipeDialog />
+        <DeleteRecipeDialog recipeId={params.id} />
       </nav>
 
       <ErrorBoundary fallback={<div>{recipeQuery.error?.message}</div>}>

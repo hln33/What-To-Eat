@@ -25,3 +25,10 @@ export const postNewRecipe = async ({
   });
   return res.json();
 };
+
+export const deleteRecipe = async (id: string) => {
+  const res = await api.recipes[":id"].$delete({
+    param: { id },
+  });
+  return res.json();
+};

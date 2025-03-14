@@ -1,7 +1,19 @@
+import { Component } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
+import { useDeleteRecipe } from "../mutations";
 
-const DeleteRecipeDialog = () => {
+const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
+  const navigate = useNavigate();
+  const deleteRecipe = useDeleteRecipe();
+
+  const handleDelete = async () => {
+    deleteRecipe.mutate(props.recipeId, {
+      onSuccess: () => navigate("/"),
+    });
+  };
+
   return (
     <Dialog>
       <DialogTrigger as="div">
@@ -19,7 +31,12 @@ const DeleteRecipeDialog = () => {
         </p>
         <div class="flex justify-end gap-4">
           <Button variant="subtle">Cancel</Button>
-          <Button color="red">Delete</Button>
+          <Button
+            color="red"
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

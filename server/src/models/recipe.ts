@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 import {
   db,
   recipes as recipesTable,
@@ -144,4 +144,36 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
   }
 
   return Object.values(recipes);
+};
+
+export const deleteRecipe = async (recipeId: number) => {
+  const associatedIngredients = await db
+    .select({ ingredientId: recipesToIngredients.ingredientId })
+    .from(recipesToIngredients)
+    .where(eq(recipesToIngredients.recipeId, recipeId));
+  if (associatedIngredients.length === 0) {
+    throw new Error(
+      'Recipe should have ingredients associated with it, but none were found.'
+    );
+  }
+
+  await db
+    .delete(recipesToIngredients)
+    .where(eq(recipesToIngredients.recipeId, recipeId));
+
+  // delete any ingredients that no longer have associations with any recipe
+  for (const { ingredientId } of associatedIngredients) {
+    const recipeAssociations = await db
+      .select({ count: count() })
+      .from(recipesToIngredients)
+      .where(eq(recipesToIngredients.ingredientId, ingredientId));
+
+    if (recipeAssociations[0].count === 0) {
+      await db
+        .delete(ingredientsTable)
+        .where(eq(ingredientsTable.id, ingredientId));
+    }
+  }
+
+  await db.delete(recipesTable).where(eq(recipesTable.id, recipeId));
 };
