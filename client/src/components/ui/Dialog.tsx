@@ -12,7 +12,7 @@ const Dialog: ParentComponent = (props) => {
     return resolvedChildren;
   };
 
-  return <Kobalte open>{renderChildren()}</Kobalte>;
+  return <Kobalte>{renderChildren()}</Kobalte>;
 };
 
 const DialogTrigger = Kobalte.Trigger;
@@ -22,11 +22,11 @@ const DialogContent: ParentComponent<{ title: string }> = (props) => {
     <Kobalte.Portal>
       <Kobalte.Overlay class="fixed inset-0 z-50 bg-black/60">
         <div class="fixed inset-0 z-50 flex items-center justify-center">
-          <Kobalte.Content class="rounded-md bg-slate-700 p-8 text-white">
+          <Kobalte.Content class="relative rounded-md bg-slate-700 p-8 text-white">
             <div class="mb-5 flex justify-between text-3xl">
               <Kobalte.Title>{props.title}</Kobalte.Title>
-              <Kobalte.CloseButton class="rounded-lg text-gray-200 hover:bg-slate-500">
-                <CloseIcon />
+              <Kobalte.CloseButton class="absolute right-4 top-4 rounded-lg text-gray-200 hover:bg-slate-500">
+                <CloseIcon class="size-6" />
               </Kobalte.CloseButton>
             </div>
             {props.children}

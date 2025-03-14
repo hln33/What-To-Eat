@@ -18,7 +18,7 @@ const DeleteRecipeDialog = () => {
           Doing so is irreversible.
         </p>
         <div class="flex justify-end gap-4">
-          <Button>Cancel</Button>
+          <Button variant="subtle">Cancel</Button>
           <Button color="red">Delete</Button>
         </div>
       </DialogContent>

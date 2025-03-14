@@ -1,23 +1,17 @@
 import { Component, JSX, Show, splitProps } from "solid-js";
 import { TextField as Kobalte } from "@kobalte/core/text-field";
+
 import InputError from "../InputError";
 import RequiredInputLabel from "../RequiredInputLabel";
 
 type TextInputProps = {
   name: string;
-  type: "text" | "email" | "tel" | "password" | "url" | "date";
-  class?: string;
   label?: string;
-  placeholder?: string;
   value: string | undefined;
   error: string;
-  required?: boolean;
-  disabled?: boolean | undefined;
   ref: (element: HTMLInputElement) => void;
   onInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
-  onChange: JSX.EventHandler<HTMLInputElement, Event>;
-  onBlur: JSX.EventHandler<HTMLInputElement, FocusEvent>;
-};
+} & JSX.InputHTMLAttributes<HTMLInputElement>;
 
 const TextField: Component<TextInputProps> = (props) => {
   const [rootProps, inputProps] = splitProps(

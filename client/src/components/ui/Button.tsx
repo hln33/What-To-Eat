@@ -1,6 +1,7 @@
 import { ParentComponent, JSX, splitProps } from "solid-js";
 import { Button as Kobalte } from "@kobalte/core/button";
 import { cva, VariantProps } from "class-variance-authority";
+import { twMerge } from "tailwind-merge";
 
 const buttonVariants = cva(
   "h-fit max-h-28 rounded-2xl px-4 py-2 text-xl capitalize",
@@ -13,6 +14,7 @@ const buttonVariants = cva(
       variant: {
         outline: "bg-black/20 border",
         filled: "text-white",
+        subtle: "bg-transparent border-none",
       },
       fullWidth: {
         true: "w-full",
@@ -47,11 +49,13 @@ const Button: ParentComponent<Props> = (props) => {
   return (
     <Kobalte
       {...HTMLAttributes}
-      class={buttonVariants({
-        color: props.color,
-        variant: props.variant,
-        fullWidth: local.fullWidth,
-      })}
+      class={twMerge(
+        buttonVariants({
+          color: props.color,
+          variant: props.variant,
+          fullWidth: local.fullWidth,
+        }),
+      )}
     >
       {local.children}
     </Kobalte>
