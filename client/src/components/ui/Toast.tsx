@@ -6,7 +6,7 @@ const success = (message: string) => {
   return toaster.show((props) => (
     <Toast
       toastId={props.toastId}
-      class="ui-opened:animate-slide-in w-full rounded border border-slate-500 bg-slate-600 text-sm text-white shadow-lg ui-closed:animate-content-hide"
+      class="ui-opened:animate-slide-in w-full rounded border border-slate-500 bg-slate-700 text-sm text-white shadow-lg ui-closed:animate-content-hide"
     >
       <div class="flex items-center gap-4 p-3">
         <div class="relative flex size-8 items-center justify-center">
@@ -31,8 +31,8 @@ const success = (message: string) => {
 export const ToastRegion = () => {
   return (
     <Portal>
-      <Toast.Region duration={90000}>
-        <Toast.List class="fixed top-0 flex w-full flex-col-reverse gap-4 p-8 sm:bottom-0 sm:right-0 sm:top-auto sm:w-96" />
+      <Toast.Region duration={5000}>
+        <Toast.List class="fixed top-0 flex w-full flex-col-reverse gap-4 p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:w-96" />
       </Toast.Region>
     </Portal>
   );
