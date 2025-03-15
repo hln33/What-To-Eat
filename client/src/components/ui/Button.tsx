@@ -1,10 +1,11 @@
-import { ParentComponent, JSX, splitProps } from "solid-js";
+import { ParentComponent, JSX, splitProps, Show } from "solid-js";
 import { Button as Kobalte } from "@kobalte/core/button";
+import LoaderCircle from "~icons/lucide/loader-circle";
 import { cva, VariantProps } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 
 const buttonVariants = cva(
-  "h-fit max-h-28 rounded-2xl px-4 py-2 text-xl capitalize",
+  "h-fit max-h-28 rounded-2xl px-4 py-2 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       color: {
@@ -41,7 +42,7 @@ const buttonVariants = cva(
 );
 
 type Props = JSX.ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof buttonVariants>;
+  VariantProps<typeof buttonVariants> & { loading?: boolean };
 
 const Button: ParentComponent<Props> = (props) => {
   const [local, HTMLAttributes] = splitProps(props, ["children", "fullWidth"]);
@@ -57,7 +58,12 @@ const Button: ParentComponent<Props> = (props) => {
         }),
       )}
     >
-      {local.children}
+      <div class="flex items-center gap-2">
+        <Show when={props.loading}>
+          <LoaderCircle class="animate-spin" />
+        </Show>
+        {local.children}
+      </div>
     </Kobalte>
   );
 };

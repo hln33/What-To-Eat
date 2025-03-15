@@ -11,7 +11,10 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
 
   const handleDelete = async () => {
     deleteRecipe.mutate(props.recipeId, {
-      onSuccess: () => navigate("/"),
+      onSuccess: () => {
+        toast.success("Recipe deleted.");
+        navigate("/");
+      },
     });
   };
 
@@ -38,6 +41,8 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
             Cancel
           </Button>
           <Button
+            disabled={deleteRecipe.isPending}
+            loading={deleteRecipe.isPending}
             color="red"
             onClick={handleDelete}
           >
