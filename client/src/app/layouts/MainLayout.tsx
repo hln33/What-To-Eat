@@ -5,6 +5,9 @@ import { useUserContext } from "@/contexts/UserContext";
 import { logout } from "@/features/users/api";
 import { createSessionExistanceQuery } from "@/queries";
 import Skeleton from "@/components/ui/Skeleton";
+import { Portal } from "solid-js/web";
+import { Toast } from "@kobalte/core/toast";
+import { ToastRegion } from "@/components/ui/Toast";
 
 const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
@@ -81,6 +84,7 @@ const MainLayout: ParentComponent = (props) => {
           {props.children}
         </main>
       </div>
+      <ToastRegion />
     </div>
   );
 };

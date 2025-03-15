@@ -3,6 +3,7 @@ import { useNavigate } from "@solidjs/router";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
 import { useDeleteRecipe } from "../mutations";
+import { toast } from "@/components/ui/Toast";
 
 const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
   const navigate = useNavigate();
@@ -30,7 +31,12 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
           Doing so is irreversible.
         </p>
         <div class="flex justify-end gap-4">
-          <Button variant="subtle">Cancel</Button>
+          <Button
+            variant="subtle"
+            onClick={() => toast.success("test success")}
+          >
+            Cancel
+          </Button>
           <Button
             color="red"
             onClick={handleDelete}

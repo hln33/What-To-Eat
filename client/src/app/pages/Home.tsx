@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Combobox from "@/components/ui/Combobox";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
+import { toast } from "@/components/ui/Toast";
 
 const HomePage: Component = () => {
   const [ingredients, setIngredients] = createSignal<string[]>([]);
@@ -25,6 +26,10 @@ const HomePage: Component = () => {
   return (
     <div class="flex flex-col justify-around gap-8">
       <h2 class="mb-5 text-4xl">Recipes</h2>
+
+      <Button onClick={() => toast.success("Recipe deleted")}>
+        Show toast!
+      </Button>
 
       <Dialog>
         <DialogTrigger>
