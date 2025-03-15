@@ -58,7 +58,7 @@ const Button: ParentComponent<Props> = (props) => {
         }),
       )}
     >
-      <div class="flex items-center gap-2">
+      <div class="flex items-center justify-center gap-2">
         <Show when={props.loading}>
           <LoaderCircle class="animate-spin" />
         </Show>

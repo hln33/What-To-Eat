@@ -60,15 +60,15 @@ const RecipeTable: Component<{
     });
 
   return (
-    <div class="flex flex-col">
-      <table class="border-collapse border border-gray-600 text-left capitalize">
+    <div class="flex flex-col rounded border border-gray-600 shadow-xl">
+      <table class="border-collapse rounded-t-full text-left capitalize">
         <thead>
           <For each={table().getHeaderGroups()}>
             {(headerGroup) => (
               <tr>
                 <For each={headerGroup.headers}>
                   {(header) => (
-                    <th class="border-b-2 border-gray-600 p-4">
+                    <th class="border-b-2 border-gray-600 p-3">
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext(),
@@ -89,7 +89,7 @@ const RecipeTable: Component<{
               >
                 <For each={row.getVisibleCells()}>
                   {(cell) => (
-                    <td class="relative border-b border-gray-600">
+                    <td class="relative border-b border-gray-600 p-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -103,7 +103,7 @@ const RecipeTable: Component<{
         </tbody>
       </table>
       <RecipeTableFooter
-        class="border-x border-b border-gray-600 p-2"
+        class="border-gray-600 p-2"
         table={table()}
       />
     </div>

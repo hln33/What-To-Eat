@@ -5,8 +5,6 @@ import { useUserContext } from "@/contexts/UserContext";
 import { logout } from "@/features/users/api";
 import { createSessionExistanceQuery } from "@/queries";
 import Skeleton from "@/components/ui/Skeleton";
-import { Portal } from "solid-js/web";
-import { Toast } from "@kobalte/core/toast";
 import { ToastRegion } from "@/components/ui/Toast";
 
 const MainLayout: ParentComponent = (props) => {
@@ -80,9 +78,7 @@ const MainLayout: ParentComponent = (props) => {
       </header>
 
       <div class="flex items-center justify-center">
-        <main class="w-screen border border-slate-600 bg-slate-800 p-5">
-          {props.children}
-        </main>
+        <main class="w-screen p-5">{props.children}</main>
       </div>
       <ToastRegion />
     </div>
