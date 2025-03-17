@@ -11,4 +11,7 @@ export default defineConfig({
   build: {
     target: "esnext",
   },
+  test: {
+    setupFiles: ["./src/testing/vitest.setup.ts"],
+  },
 });

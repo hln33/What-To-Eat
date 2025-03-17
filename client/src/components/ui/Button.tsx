@@ -1,8 +1,9 @@
-import { ParentComponent, JSX, splitProps, Show } from "solid-js";
-import { Button as Kobalte } from "@kobalte/core/button";
-import LoaderCircle from "~icons/lucide/loader-circle";
-import { cva, VariantProps } from "class-variance-authority";
+import { JSX, splitProps, Show } from "solid-js";
+import { OverrideComponentProps } from "@kobalte/core/polymorphic";
+import { type ButtonRootProps, Button as Kobalte } from "@kobalte/core/button";
 import { twMerge } from "tailwind-merge";
+import { cva, VariantProps } from "class-variance-authority";
+import LoaderCircle from "~icons/lucide/loader-circle";
 
 const buttonVariants = cva(
   "h-fit max-h-28 rounded-2xl px-4 py-2 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
@@ -41,15 +42,20 @@ const buttonVariants = cva(
   },
 );
 
-type Props = JSX.ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof buttonVariants> & { loading?: boolean };
+type ButtonProps = ButtonRootProps &
+  VariantProps<typeof buttonVariants> & {
+    loading?: boolean;
+    children: JSX.Element;
+  };
 
-const Button: ParentComponent<Props> = (props) => {
-  const [local, HTMLAttributes] = splitProps(props, ["children", "fullWidth"]);
+const Button = (props: OverrideComponentProps<"button", ButtonProps>) => {
+  const [local, HTMLAttributes] = splitProps(props as ButtonProps, [
+    "children",
+    "fullWidth",
+  ]);
 
   return (
     <Kobalte
-      {...HTMLAttributes}
       class={twMerge(
         buttonVariants({
           color: props.color,
@@ -57,6 +63,7 @@ const Button: ParentComponent<Props> = (props) => {
           fullWidth: local.fullWidth,
         }),
       )}
+      {...HTMLAttributes}
     >
       <div class="flex items-center justify-center gap-2">
         <Show when={props.loading}>

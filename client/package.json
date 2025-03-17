@@ -29,6 +29,7 @@
     "eslint-plugin-solid": "^0.14.5",
     "globals": "^15.14.0",
     "jsdom": "^26.0.0",
+    "msw": "^2.7.3",
     "postcss": "^8.5.1",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.10",

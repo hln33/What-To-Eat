@@ -31,7 +31,7 @@ const success = (message: string) => {
 export const ToastRegion = () => {
   return (
     <Portal>
-      <Toast.Region duration={5000}>
+      <Toast.Region duration={50000}>
         <Toast.List class="fixed top-0 flex w-full flex-col-reverse gap-4 p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:w-96" />
       </Toast.Region>
     </Portal>
