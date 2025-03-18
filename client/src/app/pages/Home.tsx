@@ -28,7 +28,10 @@ const HomePage: Component = () => {
       <h2 class="mb-5 text-4xl">Recipes</h2>
 
       <Button onClick={() => toast.success("Recipe deleted")}>
-        Show toast!
+        Show Success toast!
+      </Button>
+      <Button onClick={() => toast.error("Failed to delete recipe")}>
+        Show Error toast!
       </Button>
 
       <Dialog>

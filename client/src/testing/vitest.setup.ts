@@ -1,6 +1,5 @@
-import { afterAll, beforeAll } from "vitest";
+import { afterAll, beforeAll, beforeEach } from "vitest";
 import { mockServer } from "./mockServer";
-import { beforeEach } from "node:test";
 
 beforeAll(() => {
   mockServer.listen();

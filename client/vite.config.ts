@@ -6,6 +6,7 @@ import Icons from "unplugin-icons/vite";
 export default defineConfig({
   plugins: [solidPlugin(), tsconfigPaths(), Icons({ compiler: "solid" })],
   server: {
+    open: true,
     port: 3000,
   },
   build: {
