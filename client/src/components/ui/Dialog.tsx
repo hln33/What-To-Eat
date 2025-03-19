@@ -20,8 +20,8 @@ const DialogTrigger = Kobalte.Trigger;
 const DialogContent: ParentComponent<{ title: string }> = (props) => {
   return (
     <Kobalte.Portal>
-      <Kobalte.Overlay class="fixed inset-0 z-50 bg-black/60">
-        <div class="fixed inset-0 z-50 flex items-center justify-center">
+      <Kobalte.Overlay class="fixed inset-0 z-40 bg-black/60">
+        <div class="absolute inset-0 flex items-center justify-center">
           <Kobalte.Content class="relative rounded-md bg-slate-700 p-8 text-white">
             <div class="mb-5 flex justify-between text-3xl">
               <Kobalte.Title>{props.title}</Kobalte.Title>
