@@ -13,8 +13,13 @@ import Combobox from "@/components/ui/Combobox";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
 import { toast } from "@/components/ui/Toast";
+import { Recipe } from "@/features/recipes/types";
+import { postNewRecipe } from "@/features/recipes/api";
+import { useNavigate } from "@solidjs/router";
 
 const HomePage: Component = () => {
+  const navigate = useNavigate();
+
   const [ingredients, setIngredients] = createSignal<string[]>([]);
 
   const ingredientsQuery = createQuery(() => ({
@@ -22,6 +27,13 @@ const HomePage: Component = () => {
     queryFn: getAllIngredients,
     select: (ingredients) => ingredients.map((i) => i.name).toSorted(),
   }));
+
+  const handleNewRecipeSubmit = async (values: Omit<Recipe, "id">) => {
+    const recipe = await postNewRecipe(values);
+    if (recipe) {
+      navigate(`/recipe/${recipe.id}`);
+    }
+  };
 
   return (
     <div class="flex flex-col justify-around gap-8">
@@ -39,7 +51,7 @@ const HomePage: Component = () => {
           <Button fullWidth>New Recipe</Button>
         </DialogTrigger>
         <DialogContent title="New Recipe">
-          <NewRecipeForm />
+          <NewRecipeForm onSubmit={handleNewRecipeSubmit} />
         </DialogContent>
       </Dialog>
 

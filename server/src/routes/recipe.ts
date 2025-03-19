@@ -31,8 +31,6 @@ const recipes = new Hono()
     return c.json(recipe, 201);
   })
   .delete('/:id', async (c) => {
-    throw new HTTPException(422, { message: 'Recipe deletion failed.' });
-
     const id = Number(c.req.param('id'));
 
     try {

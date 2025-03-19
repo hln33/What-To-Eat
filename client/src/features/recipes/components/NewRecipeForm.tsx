@@ -1,21 +1,19 @@
-import { For, Show } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { Component, For, Show } from "solid-js";
 import {
   createForm,
   custom,
   insert,
   remove,
   required,
-  SubmitHandler,
 } from "@modular-forms/solid";
 import TrashIcon from "~icons/fe/trash";
 import PlusIcon from "~icons/fe/plus";
+
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import InputError from "@/components/InputError";
 import Combobox from "@/components/ui/Combobox";
 import RequiredInputLabel from "@/components/RequiredInputLabel";
-import { postNewRecipe } from "../api";
 
 type RecipeForm = {
   name: string;
@@ -23,25 +21,19 @@ type RecipeForm = {
   instructions: string[];
 };
 
-const NewRecipeForm = () => {
+const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
+  props,
+) => {
   const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
     initialValues: {
       instructions: [""],
     },
   });
-  const navigate = useNavigate();
-
-  const handleSubmit: SubmitHandler<RecipeForm> = async (values) => {
-    const recipe = await postNewRecipe(values);
-    if (recipe) {
-      navigate(`/recipe/${recipe.id}`);
-    }
-  };
 
   return (
     <Form
       class="w-80 space-y-10 p-4"
-      onSubmit={handleSubmit}
+      onSubmit={(values) => props.onSubmit(values)}
     >
       <div class="space-y-8">
         <Field
@@ -110,6 +102,7 @@ const NewRecipeForm = () => {
                           {...props}
                           class="w-full"
                           type="text"
+                          label={field.name}
                           value={field.value}
                           error={field.error}
                           required
@@ -134,12 +127,14 @@ const NewRecipeForm = () => {
           )}
         </FieldArray>
         <Button
+          aria-label="Add another instruction"
           fullWidth
           onClick={() => insert(form, "instructions", { value: "" })}
           disabled={form.submitting}
         >
           <span class="inline-flex items-center gap-2">
-            <PlusIcon class="inline" /> Instructions
+            <PlusIcon class="inline" />
+            Instructions
           </span>
         </Button>
       </div>
