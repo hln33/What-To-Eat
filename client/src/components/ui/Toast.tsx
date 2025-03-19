@@ -74,7 +74,6 @@ const error = (message: string) => {
           <ToastDescription>{message}</ToastDescription>
         </div>
       </ToastContent>
-
       <ToastProgress />
     </Toast>
   ));
@@ -84,7 +83,7 @@ export const ToastRegion = () => {
   return (
     <Portal>
       <Kobalte.Region duration={5000}>
-        <Kobalte.List class="fixed top-0 flex w-full flex-col-reverse gap-4 p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:w-96" />
+        <Kobalte.List class="fixed top-0 z-50 flex w-full flex-col-reverse gap-4 p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:w-96" />
       </Kobalte.Region>
     </Portal>
   );

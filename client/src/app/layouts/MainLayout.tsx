@@ -20,7 +20,7 @@ const MainLayout: ParentComponent = (props) => {
   }));
 
   return (
-    <div class="h-fit min-h-screen space-y-20 bg-slate-900 text-center text-white">
+    <div class="h-fit min-h-screen space-y-20 bg-gray-800 text-center text-white">
       <header class="flex flex-row items-center justify-between border-b border-slate-600 bg-slate-950 px-10 py-5">
         <A
           href="/"

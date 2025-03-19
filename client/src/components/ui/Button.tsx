@@ -11,10 +11,10 @@ const buttonVariants = cva(
     variants: {
       color: {
         red: "",
-        default: "bg-slate-600 hover:bg-slate-500",
+        default: "bg-slate-500 hover:bg-slate-400",
       },
       variant: {
-        outline: "bg-black/20 border",
+        outline: "bg-black/5 border",
         filled: "text-white",
         subtle: "bg-transparent border-none",
       },
@@ -26,7 +26,7 @@ const buttonVariants = cva(
       {
         color: "red",
         variant: "outline",
-        class: "bg-black/20 text-red-500 border-red-500 hover:bg-red-500/20",
+        class: "text-red-500 border-red-500 hover:bg-red-500/20",
       },
       {
         color: "red",

@@ -16,6 +16,9 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
         toast.success("Recipe deleted.");
         navigate("/");
       },
+      onError: () => {
+        toast.error("Failed to delete recipe.");
+      },
     });
   };
 
