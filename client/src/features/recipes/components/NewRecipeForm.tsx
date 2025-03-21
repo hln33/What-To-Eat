@@ -78,65 +78,69 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
           )}
         </Field>
 
-        <FieldArray
-          name="instructions"
-          validate={[required("Please add Instructions.")]}
-        >
-          {(fieldArray) => (
-            <div>
-              <label
-                class="block text-left"
-                for={fieldArray.name}
-              >
-                <RequiredInputLabel label="Instructions" />
-              </label>
-              <For each={fieldArray.items}>
-                {(_, index) => (
-                  <div class="mb-2 mt-1 flex gap-4">
-                    <Field
-                      name={`${fieldArray.name}.${index()}`}
-                      validate={[required("Field cannot be empty.")]}
-                    >
-                      {(field, props) => (
-                        <TextField
-                          {...props}
-                          class="w-full"
-                          type="text"
-                          label={field.name}
-                          value={field.value}
-                          error={field.error}
-                          required
-                          disabled={form.submitting}
-                        />
-                      )}
-                    </Field>
-                    <Show when={index() !== 0}>
-                      <Button
-                        onClick={() =>
-                          remove(form, fieldArray.name, { at: index() })
-                        }
+        <div>
+          <FieldArray
+            name="instructions"
+            validate={[required("Please add Instructions.")]}
+          >
+            {(fieldArray) => (
+              <>
+                <label
+                  class="block text-left"
+                  for={fieldArray.name}
+                >
+                  <RequiredInputLabel label="Instructions" />
+                </label>
+                <For each={fieldArray.items}>
+                  {(_, index) => (
+                    <div class="mb-2 mt-1 flex items-center gap-2">
+                      <Field
+                        name={`${fieldArray.name}.${index()}`}
+                        validate={[required("Field cannot be empty.")]}
                       >
-                        <TrashIcon />
-                      </Button>
-                    </Show>
-                  </div>
-                )}
-              </For>
-              <InputError errorMessage={fieldArray.error} />
-            </div>
-          )}
-        </FieldArray>
-        <Button
-          aria-label="Add another instruction"
-          fullWidth
-          onClick={() => insert(form, "instructions", { value: "" })}
-          disabled={form.submitting}
-        >
-          <span class="inline-flex items-center gap-2">
-            <PlusIcon class="inline" />
-            Instructions
-          </span>
-        </Button>
+                        {(field, props) => (
+                          <TextField
+                            {...props}
+                            class="w-full"
+                            type="text"
+                            aria-label={field.name}
+                            value={field.value}
+                            error={field.error}
+                            required
+                            disabled={form.submitting}
+                          />
+                        )}
+                      </Field>
+                      <Show when={index() !== 0}>
+                        <Button
+                          variant="subtle"
+                          color="red"
+                          onClick={() =>
+                            remove(form, fieldArray.name, { at: index() })
+                          }
+                        >
+                          <TrashIcon class="size-6" />
+                        </Button>
+                      </Show>
+                    </div>
+                  )}
+                </For>
+                <InputError errorMessage={fieldArray.error} />
+              </>
+            )}
+          </FieldArray>
+          <Button
+            aria-label="Add another instruction"
+            fullWidth
+            onClick={() => insert(form, "instructions", { value: "" })}
+            disabled={form.submitting}
+          >
+            <span class="inline-flex items-center gap-2">
+              <PlusIcon class="inline" />
+              Instructions
+            </span>
+          </Button>
+        </div>
       </div>
 
       <Button

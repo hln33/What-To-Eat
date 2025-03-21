@@ -17,7 +17,7 @@ const TextField: Component<TextInputProps> = (props) => {
   const [rootProps, inputProps] = splitProps(
     props,
     ["name", "value", "required", "disabled"],
-    ["placeholder", "ref", "onInput", "onChange", "onBlur"],
+    ["placeholder", "ref", "onInput", "onChange", "onBlur", "aria-label"],
   );
 
   return (

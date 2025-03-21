@@ -6,11 +6,11 @@ import { cva, VariantProps } from "class-variance-authority";
 import LoaderCircle from "~icons/lucide/loader-circle";
 
 const buttonVariants = cva(
-  "h-fit max-h-28 rounded-2xl px-4 py-2 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
+  "h-fit max-h-28 rounded-2xl p-3 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       color: {
-        red: "",
+        red: "text-red-500 hover:bg-red-500/20",
         default: "bg-slate-500 hover:bg-slate-400",
       },
       variant: {
@@ -26,7 +26,7 @@ const buttonVariants = cva(
       {
         color: "red",
         variant: "outline",
-        class: "text-red-500 border-red-500 hover:bg-red-500/20",
+        class: "border-red-500",
       },
       {
         color: "red",
