@@ -77,6 +77,7 @@ const Combobox: Component<
                   <div class="z-10 flex items-center gap-2 rounded-lg bg-sky-800 px-2 py-1 ring-1 ring-slate-600">
                     <div class="cursor-default">{option}</div>
                     <button
+                      aria-label={`Remove ${option} from selection`}
                       class="block rounded-lg hover:bg-gray-500"
                       onClick={() => state.remove(option)}
                     >
