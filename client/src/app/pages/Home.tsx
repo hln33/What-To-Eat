@@ -4,18 +4,18 @@ import {
   Suspense,
   type Component,
 } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
+
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
 import { getAllIngredients } from "@/features/ingredients/api";
+import { Recipe } from "@/features/recipes/types";
+import { postNewRecipe } from "@/features/recipes/api";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Combobox from "@/components/ui/Combobox";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
-import { toast } from "@/components/ui/Toast";
-import { Recipe } from "@/features/recipes/types";
-import { postNewRecipe } from "@/features/recipes/api";
-import { useNavigate } from "@solidjs/router";
 
 const HomePage: Component = () => {
   const navigate = useNavigate();
@@ -38,13 +38,6 @@ const HomePage: Component = () => {
   return (
     <div class="flex flex-col justify-around gap-8">
       <h2 class="mb-5 text-4xl">Recipes</h2>
-
-      <Button onClick={() => toast.success("Recipe deleted")}>
-        Show Success toast!
-      </Button>
-      <Button onClick={() => toast.error("Failed to delete recipe")}>
-        Show Error toast!
-      </Button>
 
       <Dialog>
         <DialogTrigger>

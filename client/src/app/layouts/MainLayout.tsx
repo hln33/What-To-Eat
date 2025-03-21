@@ -6,6 +6,7 @@ import { logout } from "@/features/users/api";
 import { createSessionExistanceQuery } from "@/queries";
 import Skeleton from "@/components/ui/Skeleton";
 import { ToastRegion } from "@/components/ui/Toast";
+import Button from "@/components/ui/Button";
 
 const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
@@ -65,13 +66,18 @@ const MainLayout: ParentComponent = (props) => {
                 </>
               }
             >
-              <A
-                class="block border border-white p-2"
-                href="/"
-                onClick={() => logoutUser.mutate()}
+              <Button
+                variant="subtle"
+                loading={logoutUser.isPending}
               >
-                Logout
-              </A>
+                <A
+                  class="block border border-white p-2"
+                  href="/"
+                  onClick={() => logoutUser.mutate()}
+                >
+                  Logout
+                </A>
+              </Button>
             </Show>
           </Show>
         </nav>
