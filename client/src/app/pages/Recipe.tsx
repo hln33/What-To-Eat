@@ -1,23 +1,27 @@
-import { ErrorBoundary, For, Index, Suspense, type Component } from "solid-js";
+import {
+  createSignal,
+  ErrorBoundary,
+  Index,
+  Suspense,
+  type Component,
+} from "solid-js";
 import { A, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
-import StarIcon from "~icons/fe/star";
 
 import { getRecipe } from "@/features/recipes/api";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import Skeleton from "@/components/ui/Skeleton";
+import Rating from "@/components/ui/Rating";
 
 const RecipePage: Component = () => {
   const params = useParams();
-
   const recipeQuery = createQuery(() => ({
     queryKey: ["recipe", params.id],
     queryFn: () => getRecipe(params.id),
   }));
 
-  const MAX_RATING = 5;
-  const rating = 3;
+  const [rating, setRating] = createSignal(3);
 
   return (
     <div class="space-y-10">
@@ -44,17 +48,10 @@ const RecipePage: Component = () => {
           <section class="space-y-12 text-left">
             <div class="space-y-5">
               <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
-              <div
-                class="flex"
-                aria-label={`Rating: ${rating} out of ${MAX_RATING} stars`}
-              >
-                <For each={Array(rating)}>
-                  {() => <StarIcon>rating</StarIcon>}
-                </For>
-                <For each={Array(MAX_RATING - rating)}>
-                  {() => <StarIcon class="text-slate-500">rating</StarIcon>}
-                </For>
-              </div>
+              <Rating
+                value={rating}
+                onChange={(rating) => setRating(rating)}
+              />
               <Separator />
             </div>
 
