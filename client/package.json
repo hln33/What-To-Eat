@@ -11,6 +11,7 @@
     "start": "vite",
     "dev": "vite",
     "test": "vitest",
+    "test:ci": "vitest run" ,
     "build": "vite build",
     "serve": "vite preview"
   },
