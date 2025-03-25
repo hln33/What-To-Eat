@@ -1,13 +1,16 @@
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
+import { getCookie } from 'hono/cookie';
+import { zValidator } from '@hono/zod-validator';
 import {
   createRecipe,
   deleteRecipe,
   getAllRecipes,
   getRecipe,
 } from '../models/recipe.ts';
-import { zValidator } from '@hono/zod-validator';
 import { recpipeValidator } from '../validators/index.js';
-import { HTTPException } from 'hono/http-exception';
+import { getSessionCookie } from './cookies/index.ts';
+import { validateSessionToken } from '../models/session.ts';
 
 const recipes = new Hono()
   .get('/', async (c) => {
@@ -25,8 +28,19 @@ const recipes = new Hono()
     return c.json(recipe);
   })
   .post('/', zValidator('form', recpipeValidator), async (c) => {
+    const sessionToken = getSessionCookie(c);
+    const { user } = await validateSessionToken(sessionToken);
+    if (!user) {
+      throw new HTTPException(401, { message: 'Invalid session.' });
+    }
+
     const { recipeName, ingredients, instructions } = c.req.valid('form');
-    const recipe = await createRecipe(recipeName, ingredients, instructions);
+    const recipe = await createRecipe(
+      user.id,
+      recipeName,
+      ingredients,
+      instructions
+    );
 
     return c.json(recipe, 201);
   })

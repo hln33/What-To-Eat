@@ -10,15 +10,19 @@ import {
   userTable,
 } from '../src/db/schema.ts';
 import { createRecipe } from '../src/models/recipe.ts';
+import { createUser } from '../src/models/user.ts';
 
+/**
+ * Run `npx tsx scripts/seedDatabase.ts`
+ */
 const seedDatabase = async () => {
-  // await db.insert(userTable).values({ id: 1 });
+  const adminUser = await createUser('admin', 'admin');
 
   const pathToJSONFile = path.join(import.meta.dirname, 'recipeData.json');
   for (const { name, ingredients, steps } of JSON.parse(
     fs.readFileSync(pathToJSONFile, 'utf-8')
   )) {
-    await createRecipe(name, ingredients, steps);
+    await createRecipe(adminUser.id, name, ingredients, steps);
   }
 
   const recipes = await db.select().from(recipesTable);

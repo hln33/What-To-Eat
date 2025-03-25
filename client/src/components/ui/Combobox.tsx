@@ -50,7 +50,9 @@ const Combobox: Component<
           class="flex items-center justify-start gap-1 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
           item={props.item}
         >
-          <Kobalte.ItemLabel>{props.item.rawValue}</Kobalte.ItemLabel>
+          <Kobalte.ItemLabel class="capitalize">
+            {props.item.rawValue}
+          </Kobalte.ItemLabel>
           <Kobalte.ItemIndicator>
             <CheckIcon />
           </Kobalte.ItemIndicator>

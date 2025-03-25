@@ -15,13 +15,14 @@ type Recipe = {
 };
 
 export const createRecipe = async (
+  userId: number,
   name: string,
   ingredients: string[],
   steps: string[]
 ): Promise<Recipe | null> => {
   const [newRecipe] = await db
     .insert(recipesTable)
-    .values({ name })
+    .values({ userId, name })
     .returning();
 
   for (const ingredientName of ingredients) {

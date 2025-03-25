@@ -6,6 +6,9 @@ export const db = drizzle(process.env.DB_FILE_NAME!);
 /* RECIPES */
 export const recipes = sqliteTable('recipes', {
   id: int().primaryKey({ autoIncrement: true }),
+  userId: int('user_id')
+    .references(() => userTable.id, { onDelete: 'cascade' })
+    .notNull(),
   name: text().notNull(),
 });
 

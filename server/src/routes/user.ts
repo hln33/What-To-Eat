@@ -1,5 +1,5 @@
-import { Hono, type Context } from 'hono';
-import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
+import { Hono } from 'hono';
+import { deleteCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
 import {
@@ -8,26 +8,19 @@ import {
   generateSessionToken,
   invalidateSession,
   validateSessionToken,
-  type Session,
 } from '../models/session.ts';
-import { userValidator } from '../validators/index.js';
 import {
   createUser,
   getUser,
   userExists,
   verifyPassword,
 } from '../models/user.ts';
-
-const SESSION_COOKIE_NAME = 'session';
-
-const setSessionCookie = (c: Context, token: string, session: Session) =>
-  setCookie(c, SESSION_COOKIE_NAME, token, {
-    path: '/',
-    httpOnly: true,
-    secure: false, // set to `true` in production
-    expires: session.expiresAt,
-    sameSite: 'Lax',
-  });
+import { userValidator } from '../validators/index.js';
+import {
+  getSessionCookie,
+  SESSION_COOKIE_NAME,
+  setSessionCookie,
+} from './cookies/index.ts';
 
 const users = new Hono()
   .post('/login', zValidator('form', userValidator), async (c) => {
@@ -48,14 +41,11 @@ const users = new Hono()
     return c.json({ message: 'Login successful.' });
   })
   .post('/logout', async (c) => {
-    const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
-    if (!sessionToken) {
-      throw new HTTPException(404, { message: 'No session token found.' });
-    }
-
+    const sessionToken = getSessionCookie(c);
     deleteCookie(c, SESSION_COOKIE_NAME);
+
     if (!(await checkSessionExists(sessionToken))) {
-      return c.json({ error: 'Session does not exist.' }, 403);
+      return c.json({ error: 'Session does not exist.' }, 404);
     }
     await invalidateSession(sessionToken);
 
@@ -75,10 +65,7 @@ const users = new Hono()
     return c.json({ message: 'Registration successful.' });
   })
   .get('/session/exists', async (c) => {
-    const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
-    if (!sessionToken) {
-      throw new HTTPException(404, { message: 'No session token found.' });
-    }
+    const sessionToken = getSessionCookie(c);
 
     const { session } = await validateSessionToken(sessionToken);
     if (!session) {
