@@ -3,7 +3,7 @@ import { A } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
 import { useUserContext } from "@/contexts/UserContext";
 import { logout } from "@/features/users/api";
-import { createSessionExistanceQuery } from "@/queries";
+import { createSessionQuery } from "@/queries";
 import Skeleton from "@/components/ui/Skeleton";
 import { ToastRegion } from "@/components/ui/Toast";
 import Button from "@/components/ui/Button";
@@ -11,13 +11,11 @@ import Button from "@/components/ui/Button";
 const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
 
-  const sessionExistanceQuery = createSessionExistanceQuery();
+  const sessionQuery = createSessionQuery();
 
   const logoutUser = createMutation(() => ({
     mutationFn: logout,
-    onSuccess: () => {
-      user.setIsLoggedin(false);
-    },
+    onSuccess: () => user.logout(),
   }));
 
   return (
@@ -31,24 +29,24 @@ const MainLayout: ParentComponent = (props) => {
         </A>
 
         <nav class="flex space-x-5">
-          <A
-            class="block border border-white p-2"
-            href="/"
-          >
-            Home
-          </A>
-
           <Show
-            when={sessionExistanceQuery.data !== undefined}
+            when={sessionQuery.data !== undefined}
             fallback={
               <Skeleton
-                height={40}
-                width={120}
+                height={60}
+                width={200}
               />
             }
           >
+            <A
+              class="block border border-white p-2"
+              href="/"
+            >
+              Home
+            </A>
+
             <Show
-              when={user.isLoggedin()}
+              when={user.isLoggedIn()}
               fallback={
                 <>
                   <A

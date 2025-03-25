@@ -4,29 +4,45 @@ import {
   createEffect,
   createSignal,
   ParentComponent,
-  Setter,
   useContext,
 } from "solid-js";
-import { createSessionExistanceQuery } from "@/queries";
+import { createSessionQuery } from "@/queries";
 
 const UserContext = createContext<{
-  isLoggedin: Accessor<boolean>;
-  setIsLoggedin: Setter<boolean>;
+  id: Accessor<string | null>;
+  isLoggedIn: Accessor<boolean>;
+  login: (userId: string) => void;
+  logout: () => void;
 }>();
 
 export const UserContextProvider: ParentComponent = (props) => {
-  const [isLoggedin, setIsLoggedin] = createSignal(false);
+  const [id, setId] = createSignal<string | null>(null);
+  const [isLoggedIn, setIsLoggedin] = createSignal(false);
 
-  const sessionExistanceQuery = createSessionExistanceQuery();
+  const sessionExistanceQuery = createSessionQuery();
   createEffect(() => {
-    if (sessionExistanceQuery.data !== undefined) {
-      setIsLoggedin(sessionExistanceQuery.data);
+    if (sessionExistanceQuery.data === undefined) {
+      return;
+    }
+
+    if (sessionExistanceQuery.data !== null) {
+      login(sessionExistanceQuery.data.userId);
+    } else {
+      logout();
     }
   });
 
-  const loggedInState = { isLoggedin, setIsLoggedin };
+  const login = (userId: string) => {
+    setId(userId);
+    setIsLoggedin(true);
+  };
+  const logout = () => {
+    setId(null);
+    setIsLoggedin(false);
+  };
+
   return (
-    <UserContext.Provider value={loggedInState}>
+    <UserContext.Provider value={{ id, login, logout, isLoggedIn }}>
       {props.children}
     </UserContext.Provider>
   );

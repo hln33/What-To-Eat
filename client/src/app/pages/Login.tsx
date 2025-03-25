@@ -2,6 +2,7 @@ import { Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
 import { createForm, required, SubmitHandler } from "@modular-forms/solid";
+
 import { useUserContext } from "@/contexts/UserContext";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
@@ -19,9 +20,7 @@ const LoginPage = () => {
 
   const loginUser = createMutation(() => ({
     mutationFn: login,
-    onSuccess: () => {
-      user.setIsLoggedin(true);
-    },
+    onSuccess: (data) => user.login(data.userId),
   }));
 
   const handleLogin: SubmitHandler<LoginForm> = async (credentials) => {

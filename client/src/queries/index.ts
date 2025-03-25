@@ -1,8 +1,8 @@
 import { createQuery } from "@tanstack/solid-query";
-import { checkUserSessionExists } from "@/features/users/api";
+import { getUserSession } from "@/features/users/api";
 
-export const createSessionExistanceQuery = () =>
+export const createSessionQuery = () =>
   createQuery(() => ({
     queryKey: ["sessionExists"],
-    queryFn: checkUserSessionExists,
+    queryFn: getUserSession,
   }));

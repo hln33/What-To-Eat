@@ -23,6 +23,9 @@ import {
 } from './cookies/index.ts';
 
 const users = new Hono()
+  /**
+   *  Authentication
+   */
   .post('/login', zValidator('form', userValidator), async (c) => {
     const { username, password } = c.req.valid('form');
     const user = await getUser(username);
@@ -38,7 +41,10 @@ const users = new Hono()
     const session = await createSession(token, user.id);
     setSessionCookie(c, token, session);
 
-    return c.json({ message: 'Login successful.' });
+    return c.json({
+      message: 'Login successful.',
+      userId: user.id.toString(),
+    });
   })
   .post('/logout', async (c) => {
     const sessionToken = getSessionCookie(c);
@@ -64,14 +70,23 @@ const users = new Hono()
 
     return c.json({ message: 'Registration successful.' });
   })
-  .get('/session/exists', async (c) => {
+  .get('/session', async (c) => {
     const sessionToken = getSessionCookie(c);
 
-    const { session } = await validateSessionToken(sessionToken);
-    if (!session) {
+    const { session, user } = await validateSessionToken(sessionToken);
+    if (!session || !user) {
       throw new HTTPException(401, { message: 'Invalid session.' });
     }
 
-    return c.json({ message: 'Session exists.' });
+    return c.json({
+      message: 'Session exists.',
+      userId: user.id.toString(),
+    });
+  })
+  /**
+   * Owned Resources
+   */
+  .get('/:userId/recipes', async (c) => {
+    const userId = Number(c.req.param('userId'));
   });
 export default users;
