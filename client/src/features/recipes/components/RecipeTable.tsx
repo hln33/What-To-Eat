@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
 } from "@tanstack/solid-table";
+
 import { getRecipesWithIngredientStatus } from "../utils";
 import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
@@ -31,6 +32,10 @@ const columns = [
   columnHelper.accessor("ingredientStatus", {
     header: () => <div>Status</div>,
     cell: (info) => <RecipeTableCellStatus {...info} />,
+  }),
+  columnHelper.accessor("creator", {
+    header: () => <div>Creator</div>,
+    cell: (info) => <div>{info.getValue()}</div>,
   }),
 ];
 

@@ -5,10 +5,12 @@ import {
   ingredients as ingredientsTable,
   recipesToIngredients,
   steps as stepsTable,
+  userTable,
 } from '../db/schema.ts';
 
 type Recipe = {
   id: number;
+  creator: string;
   name: string;
   ingredients: string[];
   instructions: string[];
@@ -96,6 +98,7 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
 
   return {
     id: recipe.id,
+    creator: await getCreatorName(recipe.id, recipe.name),
     name: recipe.name,
     ingredients: ingredients.map((ingredient) => ingredient.name),
     instructions: steps.map((step) => step.instruction),
@@ -123,6 +126,7 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
     if (!recipes[recipeId]) {
       recipes[recipeId] = {
         id: recipeId,
+        creator: await getCreatorName(recipeId, recipeName),
         name: recipeName,
         ingredients: [],
         instructions: [],
@@ -177,4 +181,20 @@ export const deleteRecipe = async (recipeId: number) => {
   }
 
   await db.delete(recipesTable).where(eq(recipesTable.id, recipeId));
+};
+
+const getCreatorName = async (
+  recipeId: number,
+  recipeName: string
+): Promise<string> => {
+  const recipeUserRows = await db
+    .select()
+    .from(userTable)
+    .innerJoin(recipesTable, eq(recipesTable.userId, userTable.id))
+    .where(eq(recipesTable.id, recipeId))
+    .limit(1);
+  if (recipeUserRows.length === 0) {
+    throw new Error(`Recipe: ${recipeName} has no creator`);
+  }
+  return recipeUserRows[0].user.username;
 };

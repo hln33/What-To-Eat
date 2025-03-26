@@ -10,7 +10,7 @@ import { createQuery } from "@tanstack/solid-query";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
 import { getAllIngredients } from "@/features/ingredients/api";
-import { Recipe } from "@/features/recipes/types";
+import { RecipeForm } from "@/features/recipes/types";
 import { postNewRecipe } from "@/features/recipes/api";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Combobox from "@/components/ui/Combobox";
@@ -28,7 +28,7 @@ const HomePage: Component = () => {
     select: (ingredients) => ingredients.map((i) => i.name).toSorted(),
   }));
 
-  const handleNewRecipeSubmit = async (values: Omit<Recipe, "id">) => {
+  const handleNewRecipeSubmit = async (values: RecipeForm) => {
     const recipe = await postNewRecipe(values);
     if (recipe) {
       navigate(`/recipe/${recipe.id}`);

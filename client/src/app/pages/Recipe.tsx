@@ -48,6 +48,7 @@ const RecipePage: Component = () => {
           <section class="space-y-12 text-left">
             <div class="space-y-5">
               <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
+              <div class="text-3xl">By: {recipeQuery.data?.creator}</div>
               <Rating
                 value={rating}
                 onChange={(rating) => setRating(rating)}

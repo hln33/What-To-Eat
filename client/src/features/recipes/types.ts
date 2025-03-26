@@ -1,9 +1,16 @@
+export type Recipe = {
+  id: number;
+  creator: string;
+  name: string;
+  ingredients: string[];
+  instructions: string[];
+};
+
 export type RecipeTableData = Recipe & {
   ingredientStatus: IngredientStatus;
 };
 
-export type Recipe = {
-  id: number;
+export type RecipeForm = {
   name: string;
   ingredients: string[];
   instructions: string[];

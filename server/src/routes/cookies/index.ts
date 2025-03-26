@@ -20,6 +20,7 @@ export const setSessionCookie = (
 
 export const getSessionCookie = (c: Context): string => {
   const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
+  console.log(sessionToken);
   if (!sessionToken) {
     throw new HTTPException(401, { message: 'No session token found.' });
   }
