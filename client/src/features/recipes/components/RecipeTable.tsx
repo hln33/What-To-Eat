@@ -1,4 +1,4 @@
-import { Component, createSignal, For } from "solid-js";
+import { Component, createSignal, For, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import {
   ColumnFiltersState,
@@ -76,21 +76,23 @@ const RecipeTable: Component<{
 
   return (
     <>
-      <div class="flex gap-2">
-        <input
-          type="checkbox"
-          id="show-my-recipes"
-          onClick={(e) =>
-            setColumnFilters([
-              {
-                id: "creator",
-                value: e.currentTarget.checked ? user.info.name : "",
-              },
-            ])
-          }
-        />
-        <label for="show-my-recipes">Show my Recipes</label>
-      </div>
+      <Show when={user.info.isLoggedIn}>
+        <div class="flex gap-2">
+          <input
+            type="checkbox"
+            id="show-my-recipes"
+            onClick={(e) =>
+              setColumnFilters([
+                {
+                  id: "creator",
+                  value: e.currentTarget.checked ? user.info.name : "",
+                },
+              ])
+            }
+          />
+          <label for="show-my-recipes">Show my Recipes</label>
+        </div>
+      </Show>
 
       <div class="flex flex-col rounded border border-gray-600 shadow-xl">
         <table class="border-collapse rounded-t-full text-left capitalize">
