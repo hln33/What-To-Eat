@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { deleteCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
+
 import {
   checkSessionExists,
   createSession,
@@ -15,7 +16,7 @@ import {
   userExists,
   verifyPassword,
 } from '../models/user.ts';
-import { userValidator } from '../validators/index.js';
+import { userValidator } from './validators/index.js';
 import {
   getSessionCookie,
   SESSION_COOKIE_NAME,

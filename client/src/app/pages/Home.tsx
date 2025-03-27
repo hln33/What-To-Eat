@@ -52,7 +52,7 @@ const HomePage: Component = () => {
         <Suspense fallback={<Skeleton height={40} />}>
           <Combobox
             controlled
-            label="Ingredients"
+            label="Your Ingredients"
             placeholder="Search ingredients"
             options={ingredientsQuery.data ?? []}
             value={ingredients()}

@@ -8,7 +8,7 @@ import {
   getAllRecipes,
   getRecipe,
 } from '../models/recipe.ts';
-import { recpipeValidator } from '../validators/index.js';
+import { recpipeValidator } from './validators/index.js';
 import { getSessionCookie } from './cookies/index.ts';
 import { validateSessionToken } from '../models/session.ts';
 
