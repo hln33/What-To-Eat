@@ -1,14 +1,10 @@
-import { beforeAll, describe, test, vi } from "vitest";
+import { describe, test } from "vitest";
 import { render, screen, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 import ProviderWrapper from "@/testing/ProviderWrapper";
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
 
 describe("Delete Recipe Dialog", () => {
-  beforeAll(() => {
-    window.scrollTo = vi.fn();
-  });
-
   test("opens dialog when trigger is pressed", async () => {
     render(() => <DeleteRecipeDialog recipeId="1" />, {
       wrapper: ProviderWrapper,

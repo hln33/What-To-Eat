@@ -1,7 +1,13 @@
 import { Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
-import { createForm, required, SubmitHandler } from "@modular-forms/solid";
+import {
+  createForm,
+  minLength,
+  required,
+  SubmitHandler,
+} from "@modular-forms/solid";
+
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import { registerUser } from "@/features/users/api";
@@ -38,7 +44,7 @@ export const SignupPage = () => {
       >
         <Field
           name="username"
-          validate={[required("Email cannot be empty.")]}
+          validate={[required("User name cannot be empty.")]}
         >
           {(field, props) => (
             <TextField
@@ -53,7 +59,10 @@ export const SignupPage = () => {
         </Field>
         <Field
           name="password"
-          validate={[required("Password cannot be empty.")]}
+          validate={[
+            required("Password cannot be empty."),
+            minLength(10, "Password must be at least 10 characters long"),
+          ]}
         >
           {(field, props) => (
             <TextField

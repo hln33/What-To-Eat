@@ -6,8 +6,8 @@ import { createForm, required, SubmitHandler } from "@modular-forms/solid";
 import { useUserContext } from "@/contexts/UserContext";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
+import PasswordInput from "@/components/PasswordInput";
 import { login } from "@/features/users/api";
-import PasswordInput from "@/components/passwordInput";
 
 type LoginForm = {
   username: string;

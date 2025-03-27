@@ -1,21 +1,11 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
-import {
-  cleanup,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@solidjs/testing-library";
+import { describe, expect, test, vi } from "vitest";
+import { render, screen, waitFor, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
 import ProviderWrapper from "@/testing/ProviderWrapper";
 import NewRecipeForm from "./NewRecipeForm";
 
 describe("New Recipe Form", () => {
-  afterEach(() => {
-    cleanup();
-  });
-
   test("Can submit a new recipe", async () => {
     const handleSubmit = vi.fn();
     render(() => <NewRecipeForm onSubmit={handleSubmit} />, {

@@ -1,9 +1,10 @@
 import { ParentComponent, Show } from "solid-js";
 import { A } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
+
+import { createSessionQuery } from "@/queries";
 import { useUserContext } from "@/contexts/UserContext";
 import { logout } from "@/features/users/api";
-import { createSessionQuery } from "@/queries";
 import Skeleton from "@/components/ui/Skeleton";
 import { ToastRegion } from "@/components/ui/Toast";
 import Button from "@/components/ui/Button";
