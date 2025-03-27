@@ -31,8 +31,12 @@ export const logout = async (): Promise<boolean> => {
   return res.ok;
 };
 
+/**
+ * Returns information about the current user if they are logged in via their session cookie.
+ */
 export const getUserSession = async (): Promise<{
   userId: string;
+  username: string;
 } | null> => {
   try {
     return await callRPC(

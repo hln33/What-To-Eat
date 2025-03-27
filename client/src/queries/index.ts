@@ -3,6 +3,6 @@ import { getUserSession } from "@/features/users/api";
 
 export const createSessionQuery = () =>
   createQuery(() => ({
-    queryKey: ["sessionExists"],
+    queryKey: ["userSession"],
     queryFn: getUserSession,
   }));

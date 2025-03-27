@@ -10,6 +10,7 @@ import { createSessionQuery } from "@/queries";
 
 const UserContext = createContext<{
   id: Accessor<string | null>;
+  username: Accessor<string | null>;
   isLoggedIn: Accessor<boolean>;
   login: (userId: string) => void;
   logout: () => void;
@@ -17,17 +18,20 @@ const UserContext = createContext<{
 
 export const UserContextProvider: ParentComponent = (props) => {
   const [id, setId] = createSignal<string | null>(null);
+  const [username, setUserName] = createSignal<string | null>(null);
   const [isLoggedIn, setIsLoggedin] = createSignal(false);
 
-  const sessionExistanceQuery = createSessionQuery();
+  const sessionQuery = createSessionQuery();
   createEffect(() => {
-    if (sessionExistanceQuery.data === undefined) {
+    if (sessionQuery.data === undefined) {
       return;
     }
 
-    if (sessionExistanceQuery.data !== null) {
-      login(sessionExistanceQuery.data.userId);
+    if (sessionQuery.data !== null) {
+      setUserName(sessionQuery.data.username);
+      login(sessionQuery.data.userId);
     } else {
+      setUserName(null);
       logout();
     }
   });
@@ -42,7 +46,7 @@ export const UserContextProvider: ParentComponent = (props) => {
   };
 
   return (
-    <UserContext.Provider value={{ id, login, logout, isLoggedIn }}>
+    <UserContext.Provider value={{ id, username, login, logout, isLoggedIn }}>
       {props.children}
     </UserContext.Provider>
   );

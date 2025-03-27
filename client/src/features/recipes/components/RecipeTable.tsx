@@ -10,6 +10,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/solid-table";
 
+import { useUserContext } from "@/contexts/UserContext";
 import { getRecipesWithIngredientStatus } from "../utils";
 import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
@@ -45,6 +46,7 @@ const RecipeTable: Component<{
   recipes: Recipe[];
   providedIngredients: Set<string>;
 }> = (props) => {
+  const user = useUserContext();
   const navigate = useNavigate();
 
   const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
@@ -80,7 +82,10 @@ const RecipeTable: Component<{
           id="show-my-recipes"
           onClick={(e) => {
             setColumnFilters([
-              { id: "creator", value: e.currentTarget.checked ? "harry" : "" },
+              {
+                id: "creator",
+                value: e.currentTarget.checked ? user.username() : "",
+              },
             ]);
           }}
         />

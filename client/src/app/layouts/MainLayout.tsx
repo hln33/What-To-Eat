@@ -12,8 +12,7 @@ const MainLayout: ParentComponent = (props) => {
   const user = useUserContext();
 
   const sessionQuery = createSessionQuery();
-
-  const logoutUser = createMutation(() => ({
+  const logoutMutation = createMutation(() => ({
     mutationFn: logout,
     onSuccess: () => user.logout(),
   }));
@@ -66,12 +65,12 @@ const MainLayout: ParentComponent = (props) => {
             >
               <Button
                 variant="subtle"
-                loading={logoutUser.isPending}
+                loading={logoutMutation.isPending}
               >
                 <A
                   class="block border border-white p-2"
                   href="/"
-                  onClick={() => logoutUser.mutate()}
+                  onClick={() => logoutMutation.mutate()}
                 >
                   Logout
                 </A>

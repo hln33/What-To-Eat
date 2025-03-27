@@ -82,6 +82,7 @@ const users = new Hono()
     return c.json({
       message: 'Session exists.',
       userId: user.id.toString(),
+      username: user.username,
     });
   })
   /**
