@@ -45,7 +45,7 @@ const MainLayout: ParentComponent = (props) => {
             </A>
 
             <Show
-              when={user.isLoggedIn()}
+              when={user.info.isLoggedIn}
               fallback={
                 <>
                   <A

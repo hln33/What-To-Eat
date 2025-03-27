@@ -45,6 +45,7 @@ const users = new Hono()
     return c.json({
       message: 'Login successful.',
       userId: user.id.toString(),
+      username: user.username,
     });
   })
   .post('/logout', async (c) => {

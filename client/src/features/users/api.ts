@@ -3,7 +3,7 @@ import { Credentials } from "./types";
 
 export const login = async (
   loginCredentials: Credentials,
-): Promise<{ message: string; userId: string }> => {
+): Promise<{ userId: string; username: string }> => {
   return await callRPC(
     api.users.login.$post(
       { form: loginCredentials },

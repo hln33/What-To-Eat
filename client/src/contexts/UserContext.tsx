@@ -1,25 +1,30 @@
 import {
-  Accessor,
   createContext,
   createEffect,
-  createSignal,
   ParentComponent,
   useContext,
 } from "solid-js";
+import { createStore } from "solid-js/store";
 import { createSessionQuery } from "@/queries";
 
+type User = {
+  id: string | null;
+  name: string | null;
+  isLoggedIn: boolean;
+};
+
 const UserContext = createContext<{
-  id: Accessor<string | null>;
-  username: Accessor<string | null>;
-  isLoggedIn: Accessor<boolean>;
-  login: (userId: string) => void;
+  info: User;
+  login: (userId: string, username: string) => void;
   logout: () => void;
 }>();
 
 export const UserContextProvider: ParentComponent = (props) => {
-  const [id, setId] = createSignal<string | null>(null);
-  const [username, setUserName] = createSignal<string | null>(null);
-  const [isLoggedIn, setIsLoggedin] = createSignal(false);
+  const [user, setUser] = createStore<User>({
+    id: null,
+    name: null,
+    isLoggedIn: false,
+  });
 
   const sessionQuery = createSessionQuery();
   createEffect(() => {
@@ -28,25 +33,29 @@ export const UserContextProvider: ParentComponent = (props) => {
     }
 
     if (sessionQuery.data !== null) {
-      setUserName(sessionQuery.data.username);
-      login(sessionQuery.data.userId);
+      login(sessionQuery.data.userId, sessionQuery.data.username);
     } else {
-      setUserName(null);
       logout();
     }
   });
 
-  const login = (userId: string) => {
-    setId(userId);
-    setIsLoggedin(true);
+  const login = (userId: string, username: string) => {
+    setUser({
+      id: userId,
+      name: username,
+      isLoggedIn: true,
+    });
   };
   const logout = () => {
-    setId(null);
-    setIsLoggedin(false);
+    setUser({
+      id: null,
+      name: null,
+      isLoggedIn: false,
+    });
   };
 
   return (
-    <UserContext.Provider value={{ id, username, login, logout, isLoggedIn }}>
+    <UserContext.Provider value={{ info: user, login, logout }}>
       {props.children}
     </UserContext.Provider>
   );

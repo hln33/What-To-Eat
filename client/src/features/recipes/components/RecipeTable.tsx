@@ -80,14 +80,14 @@ const RecipeTable: Component<{
         <input
           type="checkbox"
           id="show-my-recipes"
-          onClick={(e) => {
+          onClick={(e) =>
             setColumnFilters([
               {
                 id: "creator",
-                value: e.currentTarget.checked ? user.username() : "",
+                value: e.currentTarget.checked ? user.info.name : "",
               },
-            ]);
-          }}
+            ])
+          }
         />
         <label for="show-my-recipes">Show my Recipes</label>
       </div>
