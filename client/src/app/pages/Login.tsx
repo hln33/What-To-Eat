@@ -7,6 +7,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import { login } from "@/features/users/api";
+import PasswordInput from "@/components/passwordInput";
 
 type LoginForm = {
   username: string;
@@ -16,11 +17,11 @@ type LoginForm = {
 const LoginPage = () => {
   const user = useUserContext();
   const navigate = useNavigate();
-  const [form, { Form, Field }] = createForm<LoginForm>();
 
+  const [form, { Form, Field }] = createForm<LoginForm>();
   const loginUser = createMutation(() => ({
     mutationFn: login,
-    onSuccess: (data) => user.login(data.userId),
+    onSuccess: (data) => user.login(data.userId, data.username),
   }));
 
   const handleLogin: SubmitHandler<LoginForm> = async (credentials) => {
@@ -60,10 +61,8 @@ const LoginPage = () => {
           validate={[required("Password cannot be empty.")]}
         >
           {(field, props) => (
-            <TextField
+            <PasswordInput
               {...props}
-              type="password"
-              label="Password"
               value={field.value}
               error={field.error}
               disabled={form.submitting}

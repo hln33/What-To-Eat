@@ -5,12 +5,11 @@ import InputError from "../InputError";
 import RequiredInputLabel from "../RequiredInputLabel";
 
 type TextInputProps = {
-  name: string;
-  label?: string;
   value: string | undefined;
   error: string;
-  ref: (element: HTMLInputElement) => void;
   onInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
+  label?: string;
+  icon?: JSX.Element;
 } & JSX.InputHTMLAttributes<HTMLInputElement>;
 
 const TextField: Component<TextInputProps> = (props) => {
@@ -35,11 +34,20 @@ const TextField: Component<TextInputProps> = (props) => {
           )}
         </Kobalte.Label>
       </Show>
-      <Kobalte.Input
-        class="w-full rounded-md px-2 py-3 text-black ui-invalid:border-2 ui-invalid:border-red-500 ui-disabled:bg-slate-500"
-        {...inputProps}
-        type={props.type}
-      />
+
+      <div class="relative w-full">
+        <Kobalte.Input
+          class="w-full rounded-md px-2 py-3 text-black ui-invalid:border-2 ui-invalid:border-red-500 ui-disabled:bg-slate-500"
+          {...inputProps}
+          type={props.type}
+        />
+        <Show when={props.icon}>
+          <div class="pointer-events-none absolute inset-0 flex items-center justify-end px-4">
+            <div class="pointer-events-auto">{props.icon}</div>
+          </div>
+        </Show>
+      </div>
+
       <Kobalte.ErrorMessage>
         <InputError errorMessage={props.error} />
       </Kobalte.ErrorMessage>
