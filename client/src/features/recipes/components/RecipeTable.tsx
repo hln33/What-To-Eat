@@ -1,10 +1,9 @@
 import { Component, createSignal, For, Show } from "solid-js";
-import { useNavigate } from "@solidjs/router";
 import {
   ColumnFiltersState,
   createColumnHelper,
   createSolidTable,
-  flexRender,
+  // flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -15,6 +14,7 @@ import { getRecipesWithIngredientStatus } from "../utils";
 import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
 import RecipeTableCellStatus from "./RecipeTableCellStatus";
+import RecipeCard from "./RecipeCard";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [
@@ -47,7 +47,6 @@ const RecipeTable: Component<{
   providedIngredients: Set<string>;
 }> = (props) => {
   const user = useUserContext();
-  const navigate = useNavigate();
 
   const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
     [],
@@ -94,7 +93,18 @@ const RecipeTable: Component<{
         </div>
       </Show>
 
-      <div class="flex flex-col rounded border border-gray-600 shadow-xl">
+      <section class="flex flex-col items-center gap-8">
+        <For each={table().getRowModel().rows}>
+          {(row) => (
+            <RecipeCard
+              recipe={row.original}
+              providedIngredients={props.providedIngredients}
+            />
+          )}
+        </For>
+      </section>
+
+      {/* <div class="flex flex-col rounded border border-gray-600 shadow-xl">
         <table class="border-collapse rounded-t-full text-left capitalize">
           <thead>
             <For each={table().getHeaderGroups()}>
@@ -136,11 +146,11 @@ const RecipeTable: Component<{
             </For>
           </tbody>
         </table>
-        <RecipeTableFooter
-          class="border-gray-600 p-2"
-          table={table()}
-        />
-      </div>
+        </div> */}
+      <RecipeTableFooter
+        class="border-gray-600 p-2"
+        table={table()}
+      />
     </>
   );
 };

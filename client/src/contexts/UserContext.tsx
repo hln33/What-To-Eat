@@ -39,20 +39,18 @@ export const UserContextProvider: ParentComponent = (props) => {
     }
   });
 
-  const login = (userId: string, username: string) => {
+  const login = (userId: string, username: string) =>
     setUser({
       id: userId,
       name: username,
       isLoggedIn: true,
     });
-  };
-  const logout = () => {
+  const logout = () =>
     setUser({
       id: null,
       name: null,
       isLoggedIn: false,
     });
-  };
 
   return (
     <UserContext.Provider value={{ info: user, login, logout }}>

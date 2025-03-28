@@ -7,6 +7,8 @@ const RecipeTableFooter: Component<{
   table: Table<RecipeTableData>;
 }> = (props) => {
   const pagination = () => props.table.getState().pagination;
+  const scrollToTopOfPage = () =>
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <div class={props.class}>
@@ -21,15 +23,23 @@ const RecipeTableFooter: Component<{
         of <span class="font-medium">{props.table.getRowCount()}</span>
       </div>
 
-      <div class="flex justify-between">
+      <div class="flex justify-center gap-4">
         <button
-          onClick={() => props.table.previousPage()}
+          class="size-8 border"
+          onClick={() => {
+            props.table.previousPage();
+            scrollToTopOfPage();
+          }}
           disabled={!props.table.getCanPreviousPage()}
         >
           {"<"}
         </button>
         <button
-          onClick={() => props.table.nextPage()}
+          class="size-8 border"
+          onClick={() => {
+            props.table.nextPage();
+            scrollToTopOfPage();
+          }}
           disabled={!props.table.getCanNextPage()}
         >
           {">"}

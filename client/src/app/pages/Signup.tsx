@@ -8,9 +8,10 @@ import {
   SubmitHandler,
 } from "@modular-forms/solid";
 
+import { registerUser } from "@/features/users/api";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
-import { registerUser } from "@/features/users/api";
+import PasswordInput from "@/components/PasswordInput";
 
 type SignupForm = {
   username: string;
@@ -38,6 +39,7 @@ export const SignupPage = () => {
       <Show when={createUser.isError}>
         <div class="text-red-500">{createUser.error?.message}</div>
       </Show>
+
       <Form
         class="space-y-5"
         onSubmit={handleSignup}
@@ -65,10 +67,8 @@ export const SignupPage = () => {
           ]}
         >
           {(field, props) => (
-            <TextField
+            <PasswordInput
               {...props}
-              type="password"
-              label="Password"
               value={field.value}
               error={field.error}
               disabled={form.submitting}
