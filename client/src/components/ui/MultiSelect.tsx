@@ -1,21 +1,20 @@
-import { Component, JSX, Setter, Show, splitProps } from "solid-js";
+import { Component, For, JSX, Setter, Show, splitProps } from "solid-js";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
 import CheckIcon from "~icons/fe/check";
-import ChevronDownIcon from "~icons/lucide/chevron-down";
-
+import CloseIcon from "~icons/fe/close";
 import InputError from "../InputError";
 import RequiredInputLabel from "../RequiredInputLabel";
 
 type ControlledProps = {
   controlled: true;
-  onChange: Setter<string>;
+  onChange: Setter<string[]>;
 };
 
-const Combobox: Component<
+const MultiSelect: Component<
   {
     label: string;
     options: string[];
-    value: string | undefined;
+    value: string[] | undefined;
     placeholder?: string;
     error?: string;
   } & JSX.SelectHTMLAttributes<HTMLSelectElement> &
@@ -31,6 +30,7 @@ const Combobox: Component<
     <Kobalte<string>
       {...rootProps}
       onChange={props.controlled ? props.onChange : undefined}
+      multiple
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
@@ -57,12 +57,29 @@ const Combobox: Component<
       <Show when={!props.controlled}>
         <Kobalte.HiddenSelect {...selectProps} />
       </Show>
-      <Kobalte.Control<string> class="h-12 rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
-        <div class="relative flex items-center justify-between gap-2 p-3 text-black">
-          <Kobalte.Input class="flex-auto bg-inherit outline-none placeholder:text-slate-400" />
-          <ChevronDownIcon />
-          <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
-        </div>
+      <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
+        {(state) => (
+          <div class="relative flex justify-between gap-2 p-3">
+            <div class="flex flex-wrap gap-2">
+              <For each={state.selectedOptions()}>
+                {(option) => (
+                  <div class="z-10 flex items-center gap-2 rounded-lg bg-sky-800 px-2 py-1 ring-1 ring-slate-600">
+                    <div class="cursor-default">{option}</div>
+                    <button
+                      aria-label={`Remove ${option} from selection`}
+                      class="block rounded-lg hover:bg-gray-500"
+                      onClick={() => state.remove(option)}
+                    >
+                      <CloseIcon class="size-4" />
+                    </button>
+                  </div>
+                )}
+              </For>
+              <Kobalte.Input class="flex-auto bg-inherit text-black outline-none placeholder:text-slate-400" />
+            </div>
+            <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
+          </div>
+        )}
       </Kobalte.Control>
       <Kobalte.ErrorMessage>
         <InputError errorMessage={props.error ?? ""} />
@@ -77,4 +94,4 @@ const Combobox: Component<
   );
 };
 
-export default Combobox;
+export default MultiSelect;

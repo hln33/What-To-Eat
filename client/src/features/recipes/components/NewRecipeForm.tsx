@@ -12,7 +12,7 @@ import PlusIcon from "~icons/fe/plus";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import InputError from "@/components/InputError";
-import Combobox from "@/components/ui/Combobox";
+import MultiSelect from "@/components/ui/MultiSelect";
 import RequiredInputLabel from "@/components/RequiredInputLabel";
 
 type RecipeForm = {
@@ -65,7 +65,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
           ]}
         >
           {(field, props) => (
-            <Combobox
+            <MultiSelect
               controlled={false}
               {...props}
               label="Ingredients"

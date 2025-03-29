@@ -13,9 +13,12 @@ import { getAllIngredients } from "@/features/ingredients/api";
 import { RecipeForm } from "@/features/recipes/types";
 import { postNewRecipe } from "@/features/recipes/api";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
-import Combobox from "@/components/ui/Combobox";
+import MultiSelect from "@/components/ui/MultiSelect";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
+import Select from "@/components/ui/Select";
+import Input from "@/components/ui/Input";
+import Combobox from "@/components/ui/Combobox";
 
 const HomePage: Component = () => {
   const navigate = useNavigate();
@@ -48,9 +51,32 @@ const HomePage: Component = () => {
         </DialogContent>
       </Dialog>
 
+      <div class="flex items-end gap-3">
+        <Input
+          type="text"
+          placeholder="type in amount..."
+        />
+        <Select
+          name="units"
+          placeholder="Select a unit..."
+          options={["g", "kg", "mL"]}
+        />
+        <Select
+          placeholder="Search an ingredient..."
+          options={["apple", "bread", "banana"]}
+        />
+        <Combobox
+          controlled
+          value=""
+          onChange={() => {}}
+          label="abc"
+          options={["apple", "bread", "banana"]}
+        />
+      </div>
+
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
         <Suspense fallback={<Skeleton height={40} />}>
-          <Combobox
+          <MultiSelect
             controlled
             label="Your Ingredients"
             placeholder="Search ingredients"
