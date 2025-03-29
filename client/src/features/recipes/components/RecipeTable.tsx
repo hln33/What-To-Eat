@@ -15,6 +15,7 @@ import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
 import RecipeTableCellStatus from "./RecipeTableCellStatus";
 import RecipeCard from "./RecipeCard";
+import Input from "@/components/ui/Input";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [
@@ -92,6 +93,21 @@ const RecipeTable: Component<{
           <label for="show-my-recipes">Show my Recipes</label>
         </div>
       </Show>
+
+      <Input
+        placeholder="Search recipes..."
+        value={
+          (columnFilters().find((filter) => filter.id === "name")
+            ?.value as string) ?? ""
+        }
+        onInput={(e) =>
+          setColumnFilters((prev) =>
+            prev
+              .filter((filter) => filter.id !== "name")
+              .concat({ id: "name", value: e.currentTarget.value }),
+          )
+        }
+      />
 
       <section class="flex flex-col items-center gap-8">
         <For each={table().getRowModel().rows}>
