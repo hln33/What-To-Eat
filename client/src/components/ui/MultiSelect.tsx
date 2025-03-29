@@ -2,23 +2,28 @@ import { Component, For, JSX, Setter, Show, splitProps } from "solid-js";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
 import CheckIcon from "~icons/fe/check";
 import CloseIcon from "~icons/fe/close";
+
 import InputError from "../InputError";
 import RequiredInputLabel from "../RequiredInputLabel";
 
+type UncontrolledProps = {
+  controlled?: false;
+  onChange: JSX.EventHandler<HTMLSelectElement, Event>;
+};
 type ControlledProps = {
   controlled: true;
   onChange: Setter<string[]>;
 };
 
-const MultiSelect: Component<
+const Combobox: Component<
   {
     label: string;
     options: string[];
     value: string[] | undefined;
     placeholder?: string;
     error?: string;
-  } & JSX.SelectHTMLAttributes<HTMLSelectElement> &
-    ControlledProps
+  } & (UncontrolledProps | ControlledProps) &
+    Omit<JSX.SelectHTMLAttributes<HTMLSelectElement>, "onChange">
 > = (props) => {
   const [rootProps, selectProps] = splitProps(
     props,
@@ -94,4 +99,4 @@ const MultiSelect: Component<
   );
 };
 
-export default MultiSelect;
+export default Combobox;

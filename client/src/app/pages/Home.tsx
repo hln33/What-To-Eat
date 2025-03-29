@@ -77,7 +77,6 @@ const HomePage: Component = () => {
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
         <Suspense fallback={<Skeleton height={40} />}>
           <MultiSelect
-            controlled
             label="Your Ingredients"
             placeholder="Search ingredients"
             options={ingredientsQuery.data ?? []}
