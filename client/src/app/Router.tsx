@@ -7,6 +7,7 @@ import LoginPage from "./pages/Login";
 import { SignupPage } from "./pages/Signup";
 import MainLayout from "./layouts/MainLayout";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import RecipeNewPage from "./pages/RecipeNew";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,10 @@ const App = () => (
         <Route
           path="/"
           component={HomePage}
+        />
+        <Route
+          path="/recipe/new"
+          component={RecipeNewPage}
         />
         <Route
           path="/recipe/:id"

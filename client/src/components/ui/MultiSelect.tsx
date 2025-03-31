@@ -15,7 +15,7 @@ type ControlledProps = {
   onChange: Setter<string[]>;
 };
 
-const Combobox: Component<
+const MultiSelect: Component<
   {
     label: string;
     options: string[];
@@ -99,4 +99,4 @@ const Combobox: Component<
   );
 };
 
-export default Combobox;
+export default MultiSelect;

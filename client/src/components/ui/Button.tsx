@@ -44,6 +44,7 @@ const buttonVariants = cva(
 
 type ButtonProps = ButtonRootProps &
   VariantProps<typeof buttonVariants> & {
+    class?: string;
     loading?: boolean;
     children: JSX.Element;
   };
@@ -56,14 +57,15 @@ const Button = (props: OverrideComponentProps<"button", ButtonProps>) => {
 
   return (
     <Kobalte
+      {...HTMLAttributes}
       class={twMerge(
         buttonVariants({
           color: props.color,
           variant: props.variant,
           fullWidth: local.fullWidth,
         }),
+        props.class,
       )}
-      {...HTMLAttributes}
     >
       <div class="flex items-center justify-center gap-2">
         <Show when={props.loading}>

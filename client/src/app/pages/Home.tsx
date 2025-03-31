@@ -56,7 +56,7 @@ const HomePage: Component = () => {
           type="text"
           placeholder="type in amount..."
         />
-        <Select
+        {/* <Select
           name="units"
           placeholder="Select a unit..."
           options={["g", "kg", "mL"]}
@@ -64,7 +64,7 @@ const HomePage: Component = () => {
         <Select
           placeholder="Search an ingredient..."
           options={["apple", "bread", "banana"]}
-        />
+        /> */}
         <Combobox
           controlled
           value=""

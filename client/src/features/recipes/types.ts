@@ -12,7 +12,7 @@ export type RecipeTableData = Recipe & {
 
 export type RecipeForm = {
   name: string;
-  ingredients: string[];
+  ingredients: { amount: number; unit: string; name: string }[];
   instructions: string[];
 };
 

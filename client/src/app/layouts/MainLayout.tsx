@@ -19,7 +19,7 @@ const MainLayout: ParentComponent = (props) => {
   }));
 
   return (
-    <div class="h-fit min-h-screen space-y-20 bg-gray-800 text-center text-white">
+    <div class="h-fit min-h-screen bg-gray-800 text-center text-white">
       <header class="flex flex-row items-center justify-between border-b border-slate-600 bg-slate-950 px-10 py-5">
         <A
           href="/"
@@ -81,7 +81,7 @@ const MainLayout: ParentComponent = (props) => {
         </nav>
       </header>
 
-      <div class="flex items-center justify-center">
+      <div class="flex items-center justify-center py-8">
         <main class="w-screen p-5">{props.children}</main>
       </div>
       <ToastRegion />

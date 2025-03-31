@@ -1,8 +1,8 @@
-import { Component, For, Show } from "solid-js";
+import { Component, For, ParentComponent } from "solid-js";
 import {
   createForm,
-  custom,
   insert,
+  minRange,
   remove,
   required,
 } from "@modular-forms/solid";
@@ -12,13 +12,49 @@ import PlusIcon from "~icons/fe/plus";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import InputError from "@/components/InputError";
-import MultiSelect from "@/components/ui/MultiSelect";
-import RequiredInputLabel from "@/components/RequiredInputLabel";
+import Select from "@/components/ui/Select";
+import Combobox from "@/components/ui/Combobox";
+import { RecipeForm } from "../types";
 
-type RecipeForm = {
-  name: string;
-  ingredients: string[];
-  instructions: string[];
+const SectionHeader: Component<{ for: string; label: string }> = (props) => (
+  <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
+);
+
+const DeleteFieldButton: Component<{
+  ariaLabel: string;
+  onClick: () => void;
+  disabled: boolean;
+}> = (props) => {
+  return (
+    <Button
+      class="w-2/12 self-end"
+      variant="subtle"
+      color="red"
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
+      <TrashIcon class="size-6" />
+    </Button>
+  );
+};
+
+const AddFieldButton: ParentComponent<{
+  onClick: () => void;
+  disabled: boolean;
+}> = (props) => {
+  return (
+    <Button
+      class="mt-3"
+      fullWidth
+      onClick={props.onClick}
+      disabled={props.disabled}
+    >
+      <span class="inline-flex items-center gap-2">
+        <PlusIcon class="inline" />
+        {props.children}
+      </span>
+    </Button>
+  );
 };
 
 const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
@@ -26,19 +62,20 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
 ) => {
   const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
     initialValues: {
+      ingredients: [{ amount: 0, unit: "", name: "" }],
       instructions: [""],
     },
   });
 
   return (
     <Form
-      class="w-80 space-y-10 p-4"
+      class="flex flex-col items-center gap-12"
       onSubmit={(values) => props.onSubmit(values)}
     >
-      <div class="space-y-8">
+      <div class="w-full space-y-10">
         <Field
           name="name"
-          validate={[required("Please enter a name for the recipe.")]}
+          validate={[required("Please enter a name for the recipe")]}
         >
           {(field, props) => (
             <TextField
@@ -47,100 +84,160 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
               label="Recipe Name"
               value={field.value}
               error={field.error}
-              required
               disabled={form.submitting}
             />
           )}
         </Field>
 
-        <Field
+        <FieldArray
           name="ingredients"
-          type="string[]"
-          validate={[
-            custom((values: string[] | undefined) => {
-              return (
-                values !== undefined && values.length !== 0 && values[0] !== ""
-              );
-            }, "Please enter ingredients."),
-          ]}
+          validate={[required("Please add Ingredients")]}
         >
-          {(field, props) => (
-            <MultiSelect
-              controlled={false}
-              {...props}
-              label="Ingredients"
-              placeholder="Search Ingredients"
-              options={["eggs", "cheese", "salt", "pepper"]}
-              value={field.value}
-              error={field.error}
-              required
-            />
-          )}
-        </Field>
-
-        <div>
-          <FieldArray
-            name="instructions"
-            validate={[required("Please add Instructions.")]}
-          >
-            {(fieldArray) => (
-              <>
-                <label
-                  class="block text-left"
-                  for={fieldArray.name}
-                >
-                  <RequiredInputLabel label="Instructions" />
-                </label>
+          {(fieldArray) => (
+            <div>
+              <SectionHeader
+                for={fieldArray.name}
+                label="Ingredients"
+              />
+              <div class="space-y-8">
                 <For each={fieldArray.items}>
                   {(_, index) => (
-                    <div class="mb-2 mt-1 flex items-center gap-2">
+                    <fieldset class="rounded bg-slate-600 p-4 shadow-lg">
+                      <legend class="rounded border border-slate-400 bg-slate-950 p-2 text-left text-xl">
+                        Ingredient {index() + 1}
+                      </legend>
+                      <div class="my-2 flex w-full items-start gap-3">
+                        <Field
+                          name={`${fieldArray.name}.${index()}.amount`}
+                          type="number"
+                          validate={[
+                            required("Please enter an amount"),
+                            minRange(
+                              1,
+                              "Please enter an amount greater than zero",
+                            ),
+                          ]}
+                        >
+                          {(field, props) => (
+                            <TextField
+                              {...props}
+                              class="w-3/12"
+                              label="Amount"
+                              type="number"
+                              value={field.value?.toString()}
+                              error={field.error}
+                            />
+                          )}
+                        </Field>
+                        <Field
+                          name={`${fieldArray.name}.${index()}.unit`}
+                          validate={[required("Please enter a unit")]}
+                        >
+                          {(field, props) => (
+                            <Select
+                              {...props}
+                              class="w-3/12"
+                              label="Unit"
+                              options={["g", "kg", "oz", "lb"]}
+                              value={field.value}
+                              error={field.error}
+                              required
+                            />
+                          )}
+                        </Field>
+                        <Field
+                          name={`${fieldArray.name}.${index()}.name`}
+                          validate={[required("Please enter an ingredient")]}
+                        >
+                          {(field, props) => (
+                            <Combobox
+                              {...props}
+                              class="w-4/12"
+                              controlled={false}
+                              label="Name"
+                              value={field.value}
+                              error={field.error}
+                              options={["apples", "eggs", "salt", "cheese"]}
+                            />
+                          )}
+                        </Field>
+                        <DeleteFieldButton
+                          ariaLabel={`Delete ingredient ${index() + 1}`}
+                          onClick={() =>
+                            remove(form, fieldArray.name, { at: index() })
+                          }
+                          disabled={index() === 0}
+                        />
+                      </div>
+                    </fieldset>
+                  )}
+                </For>
+              </div>
+              <InputError errorMessage={fieldArray.error} />
+              <AddFieldButton
+                onClick={() =>
+                  insert(form, "ingredients", {
+                    value: { amount: 0, unit: "", name: "" },
+                  })
+                }
+                disabled={form.submitting}
+              >
+                Add Ingredient
+              </AddFieldButton>
+            </div>
+          )}
+        </FieldArray>
+
+        <FieldArray
+          name="instructions"
+          validate={[required("Please add Instructions")]}
+        >
+          {(fieldArray) => (
+            <div>
+              <SectionHeader
+                for={fieldArray.name}
+                label="Instructions"
+              />
+              <div class="space-y-8">
+                <For each={fieldArray.items}>
+                  {(_, index) => (
+                    <div class="my-2 flex items-center gap-3">
                       <Field
                         name={`${fieldArray.name}.${index()}`}
-                        validate={[required("Field cannot be empty.")]}
+                        validate={[required("Field cannot be empty")]}
                       >
                         {(field, props) => (
                           <TextField
                             {...props}
-                            class="w-full"
                             type="text"
-                            aria-label={field.name}
+                            label={`Instruction ${index() + 1}`}
                             value={field.value}
                             error={field.error}
-                            required
                             disabled={form.submitting}
                           />
                         )}
                       </Field>
-                      <Show when={index() !== 0}>
-                        <Button
-                          variant="subtle"
-                          color="red"
-                          onClick={() =>
-                            remove(form, fieldArray.name, { at: index() })
-                          }
-                        >
-                          <TrashIcon class="size-6" />
-                        </Button>
-                      </Show>
+                      <DeleteFieldButton
+                        ariaLabel={`Delete instruction ${index()}`}
+                        onClick={() =>
+                          remove(form, fieldArray.name, { at: index() })
+                        }
+                        disabled={index() === 0}
+                      />
                     </div>
                   )}
                 </For>
-                <InputError errorMessage={fieldArray.error} />
-              </>
-            )}
-          </FieldArray>
-          <Button
-            aria-label="Add another instruction"
-            fullWidth
-            onClick={() => insert(form, "instructions", { value: "" })}
-            disabled={form.submitting}
-          >
-            <span class="inline-flex items-center gap-2">
-              <PlusIcon class="inline" />
-              Instructions
-            </span>
-          </Button>
-        </div>
+              </div>
+              <InputError errorMessage={fieldArray.error} />
+              <AddFieldButton
+                onClick={() => insert(form, "instructions", { value: "" })}
+                disabled={form.submitting}
+              >
+                Add Instructions
+              </AddFieldButton>
+            </div>
+          )}
+        </FieldArray>
       </div>
 
       <Button

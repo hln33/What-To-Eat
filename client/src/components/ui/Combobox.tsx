@@ -6,6 +6,10 @@ import ChevronDownIcon from "~icons/lucide/chevron-down";
 import InputError from "../InputError";
 import RequiredInputLabel from "../RequiredInputLabel";
 
+type UncontrolledProps = {
+  controlled?: false;
+  onChange: JSX.EventHandler<HTMLSelectElement, Event>;
+};
 type ControlledProps = {
   controlled: true;
   onChange: Setter<string>;
@@ -13,13 +17,14 @@ type ControlledProps = {
 
 const Combobox: Component<
   {
-    label: string;
+    class?: string;
+    label?: string;
     options: string[];
     value: string | undefined;
     placeholder?: string;
     error?: string;
   } & JSX.SelectHTMLAttributes<HTMLSelectElement> &
-    ControlledProps
+    (ControlledProps | UncontrolledProps)
 > = (props) => {
   const [rootProps, selectProps] = splitProps(
     props,
@@ -30,6 +35,7 @@ const Combobox: Component<
   return (
     <Kobalte<string>
       {...rootProps}
+      class={props.class ?? ""}
       onChange={props.controlled ? props.onChange : undefined}
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
@@ -46,20 +52,25 @@ const Combobox: Component<
         </Kobalte.Item>
       )}
     >
-      <Kobalte.Label class="mb-1 block">
-        {props.required ? (
-          <RequiredInputLabel label={props.label} />
-        ) : (
-          props.label
-        )}
-      </Kobalte.Label>
+      <Show when={props.label}>
+        <Kobalte.Label class="mb-1 block text-left text-xl">
+          {props.required ? (
+            <RequiredInputLabel label={props.label!} />
+          ) : (
+            props.label
+          )}
+        </Kobalte.Label>
+      </Show>
 
       <Show when={!props.controlled}>
         <Kobalte.HiddenSelect {...selectProps} />
       </Show>
       <Kobalte.Control<string> class="h-12 rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
-        <div class="relative flex items-center justify-between gap-2 p-3 text-black">
-          <Kobalte.Input class="flex-auto bg-inherit outline-none placeholder:text-slate-400" />
+        <div class="relative flex w-full items-center gap-2 p-3 text-black">
+          <Kobalte.Input
+            class="w-full bg-inherit outline-none placeholder:text-slate-400"
+            aria-label={props["aria-label"]}
+          />
           <ChevronDownIcon />
           <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
         </div>
