@@ -1,8 +1,9 @@
-import { Component, createEffect, JSX, splitProps } from "solid-js";
+import { Component, JSX, splitProps } from "solid-js";
 import { Select as Kobalte } from "@kobalte/core/select";
 import CheckIcon from "~icons/fe/check";
 import ChevronDownIcon from "~icons/lucide/chevron-down";
 import { twMerge } from "tailwind-merge";
+
 import InputError from "../InputError";
 
 const Select: Component<
