@@ -100,7 +100,7 @@ describe("New Recipe Form", () => {
     );
   });
 
-  test.only("Displays validation errors", async () => {
+  test("Displays validation errors", async () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
     render(() => <NewRecipeForm onSubmit={handleSubmit} />, {

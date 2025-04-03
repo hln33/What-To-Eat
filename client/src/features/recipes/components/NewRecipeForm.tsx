@@ -14,7 +14,7 @@ import Button from "@/components/ui/Button";
 import InputError from "@/components/InputError";
 import Select from "@/components/ui/Select";
 import Combobox from "@/components/ui/Combobox";
-import { RecipeForm } from "../types";
+import { RecipeForm, SubmittedRecipeForm } from "../types";
 
 const SectionHeader: Component<{ for: string; label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -57,12 +57,12 @@ const AddFieldButton: ParentComponent<{
   );
 };
 
-const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
-  props,
-) => {
+const NewRecipeForm: Component<{
+  onSubmit: (recipe: SubmittedRecipeForm) => void;
+}> = (props) => {
   const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
     initialValues: {
-      ingredients: [{ amount: 0, unit: "g", name: "" }],
+      ingredients: [{ amount: 0, unit: undefined, name: "" }],
       instructions: [""],
     },
   });
@@ -70,7 +70,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
   return (
     <Form
       class="flex flex-col items-center gap-12"
-      onSubmit={(values) => props.onSubmit(values)}
+      onSubmit={(values) => props.onSubmit(values as SubmittedRecipeForm)}
     >
       <div class="space-y-10">
         <Field
@@ -139,6 +139,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
                               class="w-3/12"
                               label="Unit"
                               options={["g", "kg", "oz", "lb"]}
+                              defaultValue={field.value ?? ""}
                               value={field.value}
                               error={field.error}
                               required
@@ -177,7 +178,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
               <AddFieldButton
                 onClick={() =>
                   insert(form, "ingredients", {
-                    value: { amount: 0, unit: "g", name: "" },
+                    value: { amount: 0, unit: undefined, name: "" },
                   })
                 }
                 disabled={form.submitting}

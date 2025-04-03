@@ -10,11 +10,11 @@ export type RecipeTableData = Recipe & {
   ingredientStatus: IngredientStatus;
 };
 
-export type RecipeForm = {
-  name: string;
-  ingredients: Ingredient[];
-  instructions: string[];
+export type RecipeForm = Omit<Recipe, "ingredients" | "creator" | "id"> & {
+  ingredients: Array<Omit<Ingredient, "unit"> & { unit?: Ingredient["unit"] }>;
 };
+
+export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id">;
 
 type Ingredient = {
   amount: number;

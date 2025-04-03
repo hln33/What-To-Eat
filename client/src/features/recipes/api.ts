@@ -1,5 +1,5 @@
 import { api } from "@/api";
-import { Recipe, RecipeForm } from "./types";
+import { Recipe, SubmittedRecipeForm } from "./types";
 
 export const getRecipe = async (id: string): Promise<Recipe> => {
   const res = await api.recipes[":id"].$get({ param: { id } });
@@ -19,7 +19,7 @@ export const postNewRecipe = async ({
   name,
   ingredients,
   instructions,
-}: RecipeForm): Promise<Recipe | null> => {
+}: SubmittedRecipeForm): Promise<Recipe | null> => {
   const res = await api.recipes.$post(
     {
       json: {

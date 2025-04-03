@@ -1,4 +1,4 @@
-import { Component, JSX, splitProps } from "solid-js";
+import { Component, createEffect, JSX, splitProps } from "solid-js";
 import { Select as Kobalte } from "@kobalte/core/select";
 import CheckIcon from "~icons/fe/check";
 import ChevronDownIcon from "~icons/lucide/chevron-down";
@@ -11,13 +11,18 @@ const Select: Component<
     label: string;
     error: string;
     options: string[];
+    defaultValue: string;
   } & JSX.InputHTMLAttributes<HTMLSelectElement>
 > = (props) => {
   const [rootProps, selectProps] = splitProps(
     props,
-    ["name", "placeholder", "options", "required", "disabled"],
+    ["name", "placeholder", "options", "required", "disabled", "defaultValue"],
     ["placeholder", "ref", "onInput", "onChange", "onBlur"],
   );
+
+  createEffect(() => {
+    console.log(props.value);
+  });
 
   return (
     <Kobalte

@@ -10,13 +10,12 @@ import { createQuery } from "@tanstack/solid-query";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
 import Recipes from "@/features/recipes/components/Recipes";
 import { getAllIngredients } from "@/features/ingredients/api";
-import { RecipeForm } from "@/features/recipes/types";
+import { SubmittedRecipeForm } from "@/features/recipes/types";
 import { postNewRecipe } from "@/features/recipes/api";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import MultiSelect from "@/components/ui/MultiSelect";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
-import Select from "@/components/ui/Select";
 import Input from "@/components/ui/Input";
 import Combobox from "@/components/ui/Combobox";
 
@@ -31,7 +30,7 @@ const HomePage: Component = () => {
     select: (ingredients) => ingredients.map((i) => i.name).toSorted(),
   }));
 
-  const handleNewRecipeSubmit = async (values: RecipeForm) => {
+  const handleNewRecipeSubmit = async (values: SubmittedRecipeForm) => {
     const recipe = await postNewRecipe(values);
     if (recipe) {
       navigate(`/recipe/${recipe.id}`);
