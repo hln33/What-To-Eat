@@ -52,8 +52,6 @@ const RecipeCard: Component<{
               {(ingredient) => {
                 const hasIngredient = () =>
                   props.providedIngredients.has(ingredient.name);
-
-                console.log(ingredient);
                 return (
                   <div class="flex items-center gap-2">
                     {hasIngredient() ? (

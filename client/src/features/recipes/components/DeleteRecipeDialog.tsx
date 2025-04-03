@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { type DialogTriggerProps } from "@kobalte/core/dialog";
 
@@ -9,6 +9,8 @@ import { useDeleteRecipe } from "../mutations";
 
 const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
   const navigate = useNavigate();
+  const [open, setOpen] = createSignal(false);
+
   const deleteRecipe = useDeleteRecipe();
 
   const handleDelete = async () => {
@@ -24,7 +26,10 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
   };
 
   return (
-    <Dialog>
+    <Dialog
+      open={open()}
+      setOpen={setOpen}
+    >
       <DialogTrigger
         as={(props: DialogTriggerProps) => (
           <Button
@@ -46,7 +51,7 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
         <div class="flex justify-end gap-4">
           <Button
             variant="subtle"
-            onClick={() => toast.success("test success")}
+            onClick={() => setOpen(false)}
           >
             Cancel
           </Button>

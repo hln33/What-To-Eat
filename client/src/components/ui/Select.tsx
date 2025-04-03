@@ -20,10 +20,6 @@ const Select: Component<
     ["placeholder", "ref", "onInput", "onChange", "onBlur"],
   );
 
-  createEffect(() => {
-    console.log(props.value);
-  });
-
   return (
     <Kobalte
       {...rootProps}

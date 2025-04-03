@@ -1,8 +1,10 @@
-import { children, ParentComponent } from "solid-js";
+import { children, ParentComponent, Setter } from "solid-js";
 import { Dialog as Kobalte } from "@kobalte/core/dialog";
 import CloseIcon from "~icons/fe/close";
 
-const Dialog: ParentComponent = (props) => {
+const Dialog: ParentComponent<{ open?: boolean; setOpen?: Setter<boolean> }> = (
+  props,
+) => {
   const renderChildren = () => {
     const resolvedChildren = children(() => props.children).toArray();
     console.assert(
@@ -12,7 +14,14 @@ const Dialog: ParentComponent = (props) => {
     return resolvedChildren;
   };
 
-  return <Kobalte>{renderChildren()}</Kobalte>;
+  return (
+    <Kobalte
+      open={props.open}
+      onOpenChange={props.setOpen}
+    >
+      {renderChildren()}
+    </Kobalte>
+  );
 };
 
 const DialogTrigger = Kobalte.Trigger;
