@@ -21,6 +21,8 @@ export const recipesToIngredients = sqliteTable(
     ingredientId: int('ingredient_id')
       .references(() => ingredients.id)
       .notNull(),
+    amount: int().notNull(),
+    unit: text({ enum: ['g', 'kg', 'oz', 'lb'] }).notNull(),
   },
   (table) => [primaryKey({ columns: [table.recipeId, table.ingredientId] })]
 );

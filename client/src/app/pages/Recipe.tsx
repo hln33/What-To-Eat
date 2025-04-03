@@ -60,7 +60,12 @@ const RecipePage: Component = () => {
               <h3 class="text-3xl">Ingredients</h3>
               <ul class="list-inside list-disc">
                 <Index each={recipeQuery.data?.ingredients}>
-                  {(ingredient) => <li>{ingredient()}</li>}
+                  {(ingredient) => (
+                    <li>
+                      {ingredient().amount} {ingredient().unit}{" "}
+                      {ingredient().name}
+                    </li>
+                  )}
                 </Index>
               </ul>
             </section>

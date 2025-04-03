@@ -8,18 +8,13 @@ const RecipeNewPage = () => {
   const navigate = useNavigate();
 
   const handleNewRecipeSubmit = async (values: RecipeForm) => {
-    console.log(values);
-    // const recipe = await postNewRecipe(values);
-    // if (recipe) {
-    //   navigate(`/recipe/${recipe.id}`);
-    // }
+    const recipe = await postNewRecipe(values);
+    if (recipe) {
+      navigate(`/recipe/${recipe.id}`);
+    }
   };
 
-  return (
-    <div>
-      <NewRecipeForm onSubmit={handleNewRecipeSubmit} />
-    </div>
-  );
+  return <NewRecipeForm onSubmit={handleNewRecipeSubmit} />;
 };
 
 export default RecipeNewPage;

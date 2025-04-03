@@ -7,19 +7,22 @@ import {
   steps as stepsTable,
   userTable,
 } from '../db/schema.ts';
+import type { z } from 'zod';
+import type { ingredientSchema } from '../routes/validators/index.ts';
 
+type Ingredient = z.infer<typeof ingredientSchema>;
 type Recipe = {
   id: number;
   creator: string;
   name: string;
-  ingredients: string[];
+  ingredients: Ingredient[];
   instructions: string[];
 };
 
 export const createRecipe = async (
   userId: number,
   name: string,
-  ingredients: string[],
+  ingredients: Ingredient[],
   steps: string[]
 ): Promise<Recipe | null> => {
   const [newRecipe] = await db
@@ -27,12 +30,12 @@ export const createRecipe = async (
     .values({ userId, name })
     .returning();
 
-  for (const ingredientName of ingredients) {
+  for (const ingredient of ingredients) {
     const existingIngredient = (
       await db
         .select()
         .from(ingredientsTable)
-        .where(eq(ingredientsTable.name, ingredientName))
+        .where(eq(ingredientsTable.name, ingredient.name))
         .limit(1)
     ).at(0);
 
@@ -40,16 +43,19 @@ export const createRecipe = async (
     if (!existingIngredient) {
       const [newIngredient] = await db
         .insert(ingredientsTable)
-        .values({ name: ingredientName })
+        .values({ name: ingredient.name })
         .returning();
       ingredientId = newIngredient.id;
     } else {
       ingredientId = existingIngredient.id;
     }
 
-    await db
-      .insert(recipesToIngredients)
-      .values({ recipeId: newRecipe.id, ingredientId });
+    await db.insert(recipesToIngredients).values({
+      recipeId: newRecipe.id,
+      ingredientId,
+      unit: ingredient.unit,
+      amount: ingredient.amount,
+    });
   }
 
   for (const [index, step] of steps.entries()) {
@@ -76,7 +82,11 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
   }
 
   const ingredients = await db
-    .select({ name: ingredientsTable.name })
+    .select({
+      name: ingredientsTable.name,
+      unit: recipesToIngredients.unit,
+      amount: recipesToIngredients.amount,
+    })
     .from(ingredientsTable)
     .innerJoin(
       recipesToIngredients,
@@ -100,7 +110,7 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
     id: recipe.id,
     creator: await getCreatorName(recipe.id, recipe.name),
     name: recipe.name,
-    ingredients: ingredients.map((ingredient) => ingredient.name),
+    ingredients,
     instructions: steps.map((step) => step.instruction),
   };
 };
@@ -121,9 +131,9 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
   const recipes: { [key: number]: Recipe } = {};
   for (const row of recipeRows) {
     const recipeId = row.recipes.id;
-    const recipeName = row.recipes.name;
 
     if (!recipes[recipeId]) {
+      const recipeName = row.recipes.name;
       recipes[recipeId] = {
         id: recipeId,
         creator: await getCreatorName(recipeId, recipeName),
@@ -132,7 +142,11 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
         instructions: [],
       };
     }
-    recipes[recipeId].ingredients.push(row.ingredients.name);
+    recipes[recipeId].ingredients.push({
+      unit: row.recipes_to_ingredients.unit,
+      amount: row.recipes_to_ingredients.amount,
+      name: row.ingredients.name,
+    });
 
     const steps = await db
       .select({

@@ -27,14 +27,14 @@ const recipes = new Hono()
     }
     return c.json(recipe);
   })
-  .post('/', zValidator('form', recpipeValidator), async (c) => {
+  .post('/', zValidator('json', recpipeValidator), async (c) => {
     const sessionToken = getSessionCookie(c);
     const { user } = await validateSessionToken(sessionToken);
     if (!user) {
       throw new HTTPException(401, { message: 'Invalid session.' });
     }
 
-    const { recipeName, ingredients, instructions } = c.req.valid('form');
+    const { recipeName, ingredients, instructions } = c.req.valid('json');
     const recipe = await createRecipe(
       user.id,
       recipeName,

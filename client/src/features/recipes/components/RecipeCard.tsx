@@ -51,7 +51,9 @@ const RecipeCard: Component<{
             <For each={props.recipe.ingredients}>
               {(ingredient) => {
                 const hasIngredient = () =>
-                  props.providedIngredients.has(ingredient);
+                  props.providedIngredients.has(ingredient.name);
+
+                console.log(ingredient);
                 return (
                   <div class="flex items-center gap-2">
                     {hasIngredient() ? (
@@ -60,7 +62,7 @@ const RecipeCard: Component<{
                       <XIcon class="text-red-400" />
                     )}
                     <li class={`${hasIngredient() ? "line-through" : ""}`}>
-                      {ingredient}
+                      {ingredient.name}
                     </li>
                   </div>
                 );

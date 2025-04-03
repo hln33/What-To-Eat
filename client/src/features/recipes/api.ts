@@ -22,7 +22,11 @@ export const postNewRecipe = async ({
 }: RecipeForm): Promise<Recipe | null> => {
   const res = await api.recipes.$post(
     {
-      form: { recipeName: name, ingredients, instructions },
+      json: {
+        recipeName: name,
+        ingredients,
+        instructions,
+      },
     },
     { init: { credentials: "include" } },
   );

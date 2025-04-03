@@ -2,7 +2,7 @@ export type Recipe = {
   id: number;
   creator: string;
   name: string;
-  ingredients: string[];
+  ingredients: Ingredient[];
   instructions: string[];
 };
 
@@ -12,8 +12,14 @@ export type RecipeTableData = Recipe & {
 
 export type RecipeForm = {
   name: string;
-  ingredients: { amount: number; unit: string; name: string }[];
+  ingredients: Ingredient[];
   instructions: string[];
+};
+
+type Ingredient = {
+  amount: number;
+  unit: "g" | "kg" | "lb" | "oz";
+  name: string;
 };
 
 export type IngredientStatusText = "Ready" | "MissingAll" | "MissingSome";

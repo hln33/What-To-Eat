@@ -27,7 +27,7 @@ const DeleteFieldButton: Component<{
 }> = (props) => {
   return (
     <Button
-      class="w-2/12 self-end"
+      class="self-end"
       variant="subtle"
       color="red"
       onClick={props.onClick}
@@ -62,7 +62,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
 ) => {
   const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
     initialValues: {
-      ingredients: [{ amount: 0, unit: "", name: "" }],
+      ingredients: [{ amount: 0, unit: "g", name: "" }],
       instructions: [""],
     },
   });
@@ -72,7 +72,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
       class="flex flex-col items-center gap-12"
       onSubmit={(values) => props.onSubmit(values)}
     >
-      <div class="w-full space-y-10">
+      <div class="space-y-10">
         <Field
           name="name"
           validate={[required("Please enter a name for the recipe")]}
@@ -106,7 +106,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
                       <legend class="rounded border border-slate-400 bg-slate-950 p-2 text-left text-xl">
                         Ingredient {index() + 1}
                       </legend>
-                      <div class="my-2 flex w-full items-start gap-3">
+                      <div class="my-2 flex items-start gap-3">
                         <Field
                           name={`${fieldArray.name}.${index()}.amount`}
                           type="number"
@@ -177,7 +177,7 @@ const NewRecipeForm: Component<{ onSubmit: (recipe: RecipeForm) => void }> = (
               <AddFieldButton
                 onClick={() =>
                   insert(form, "ingredients", {
-                    value: { amount: 0, unit: "", name: "" },
+                    value: { amount: 0, unit: "g", name: "" },
                   })
                 }
                 disabled={form.submitting}
