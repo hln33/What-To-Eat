@@ -18,10 +18,10 @@ const FileUpload: Component<{
   return (
     <Kobalte
       onFileAccept={(data) => console.log(data)}
-      class="flex w-full flex-col items-center gap-2"
+      class="flex w-full flex-col gap-2"
       onFileReject={(data) => console.error(data)}
     >
-      <Kobalte.Label class="text-xl">{props.label}</Kobalte.Label>
+      <Kobalte.Label class="text-left text-xl">{props.label}</Kobalte.Label>
 
       <Kobalte.ItemList class="peer">
         {(_file) => (
@@ -42,7 +42,7 @@ const FileUpload: Component<{
         )}
       </Kobalte.ItemList>
 
-      <Kobalte.Dropzone class="flex size-full h-60 flex-col items-center justify-center gap-4 rounded border border-dashed border-slate-400 bg-slate-800 text-xl hover:border-slate-200 hover:bg-slate-600 peer-[:not(:empty)]:hidden">
+      <Kobalte.Dropzone class="flex size-full h-60 flex-col items-center justify-center gap-4 rounded border-2 border-dashed border-slate-400 bg-slate-800 text-xl hover:border-slate-200 hover:bg-slate-600 peer-[:not(:empty)]:hidden">
         <FileImageIcon class="size-20" />
         <div class="whitespace-pre-wrap font-semibold">
           Drop image here, or{" "}

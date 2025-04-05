@@ -14,8 +14,8 @@ import Button from "@/components/ui/Button";
 import InputError from "@/components/InputError";
 import Select from "@/components/ui/Select";
 import Combobox from "@/components/ui/Combobox";
-import { RecipeForm, SubmittedRecipeForm } from "../types";
 import FileUpload from "@/components/ui/FileUpload";
+import { RecipeForm, SubmittedRecipeForm } from "../types";
 
 const SectionHeader: Component<{ for: string; label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -46,7 +46,7 @@ const AddFieldButton: ParentComponent<{
   return (
     <Button
       class="mt-3"
-      fullWidth
+      variant="outline"
       onClick={props.onClick}
       disabled={props.disabled}
     >
@@ -73,7 +73,7 @@ const NewRecipeForm: Component<{
       class="flex flex-col items-center gap-12 p-8"
       onSubmit={(values) => props.onSubmit(values as SubmittedRecipeForm)}
     >
-      <FileUpload label="Upload recipe image" />
+      <FileUpload label="Recipe image (optional)" />
 
       <div class="w-full space-y-10">
         <Field
@@ -97,7 +97,7 @@ const NewRecipeForm: Component<{
           validate={[required("Please add Ingredients")]}
         >
           {(fieldArray) => (
-            <div>
+            <div class="flex flex-col">
               <SectionHeader
                 for={fieldArray.name}
                 label="Ingredients"
@@ -197,7 +197,7 @@ const NewRecipeForm: Component<{
           validate={[required("Please add Instructions")]}
         >
           {(fieldArray) => (
-            <div>
+            <div class="flex flex-col">
               <SectionHeader
                 for={fieldArray.name}
                 label="Instructions"

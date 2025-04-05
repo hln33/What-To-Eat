@@ -6,7 +6,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import LoaderCircle from "~icons/lucide/loader-circle";
 
 const buttonVariants = cva(
-  "h-fit max-h-28 rounded-2xl p-3 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
+  "h-fit max-h-28 w-fit rounded-2xl p-3 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       color: {
