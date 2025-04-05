@@ -16,7 +16,9 @@ const Recipes: Component<{
   return (
     <section class={props.class}>
       <div class="space-y-4">
-        <ErrorBoundary fallback={<div>Error loading recipes</div>}>
+        <ErrorBoundary
+          fallback={(e) => <div>Error loading recipes: {e.toString()}</div>}
+        >
           <Suspense
             fallback={
               <>

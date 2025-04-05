@@ -19,7 +19,6 @@ const MultiSelect: Component<
   {
     label: string;
     options: string[];
-    value: string[] | undefined;
     placeholder?: string;
     error?: string;
   } & (UncontrolledProps | ControlledProps) &
@@ -51,7 +50,7 @@ const MultiSelect: Component<
         </Kobalte.Item>
       )}
     >
-      <Kobalte.Label class="mb-1 block">
+      <Kobalte.Label class="mb-1 block text-left">
         {props.required ? (
           <RequiredInputLabel label={props.label} />
         ) : (

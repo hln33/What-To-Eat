@@ -15,6 +15,7 @@ import InputError from "@/components/InputError";
 import Select from "@/components/ui/Select";
 import Combobox from "@/components/ui/Combobox";
 import { RecipeForm, SubmittedRecipeForm } from "../types";
+import FileUpload from "@/components/ui/FileUpload";
 
 const SectionHeader: Component<{ for: string; label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -69,10 +70,12 @@ const NewRecipeForm: Component<{
 
   return (
     <Form
-      class="flex flex-col items-center gap-12"
+      class="flex flex-col items-center gap-12 p-8"
       onSubmit={(values) => props.onSubmit(values as SubmittedRecipeForm)}
     >
-      <div class="space-y-10">
+      <FileUpload label="Upload recipe image" />
+
+      <div class="w-full space-y-10">
         <Field
           name="name"
           validate={[required("Please enter a name for the recipe")]}

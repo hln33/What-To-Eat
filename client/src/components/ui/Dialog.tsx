@@ -1,6 +1,11 @@
 import { children, ParentComponent, Setter } from "solid-js";
-import { Dialog as Kobalte } from "@kobalte/core/dialog";
+import {
+  DialogCloseButtonProps,
+  Dialog as Kobalte,
+} from "@kobalte/core/dialog";
 import CloseIcon from "~icons/fe/close";
+
+import Button from "./Button";
 
 const Dialog: ParentComponent<{ open?: boolean; setOpen?: Setter<boolean> }> = (
   props,
@@ -34,9 +39,17 @@ const DialogContent: ParentComponent<{ title: string }> = (props) => {
           <Kobalte.Content class="relative rounded-md bg-slate-700 p-8 text-white">
             <div class="mb-5 flex justify-between text-3xl">
               <Kobalte.Title>{props.title}</Kobalte.Title>
-              <Kobalte.CloseButton class="absolute right-4 top-4 rounded-lg text-gray-200 hover:bg-slate-500">
-                <CloseIcon class="size-6" />
-              </Kobalte.CloseButton>
+              <Kobalte.CloseButton
+                as={(props: DialogCloseButtonProps) => (
+                  <Button
+                    class="absolute right-4 top-4 text-gray-200 hover:bg-slate-500"
+                    variant="subtle"
+                    {...props}
+                  >
+                    <CloseIcon class="size-6" />
+                  </Button>
+                )}
+              />
             </div>
             {props.children}
           </Kobalte.Content>
