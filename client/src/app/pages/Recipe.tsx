@@ -1,7 +1,9 @@
 import {
+  createEffect,
   createSignal,
   ErrorBoundary,
   Index,
+  Show,
   Suspense,
   type Component,
 } from "solid-js";
@@ -46,6 +48,15 @@ const RecipePage: Component = () => {
           }
         >
           <section class="space-y-12 text-left">
+            <Show
+              when={
+                recipeQuery.data !== undefined &&
+                recipeQuery.data.imageUrl !== null
+              }
+            >
+              <img src={recipeQuery.data!.imageUrl!} />
+            </Show>
+
             <div class="space-y-5">
               <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
               <div class="text-3xl">By: {recipeQuery.data?.creator}</div>

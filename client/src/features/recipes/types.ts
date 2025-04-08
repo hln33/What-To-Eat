@@ -16,7 +16,7 @@ export type RecipeForm = Omit<Recipe, "ingredients" | "creator" | "id"> & {
 };
 
 export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id"> & {
-  uploadedImageName?: string;
+  uploadedImageName: string | null;
 };
 
 type Ingredient = {

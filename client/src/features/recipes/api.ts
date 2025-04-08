@@ -26,6 +26,7 @@ export const postRecipeImage = async (
 
 export const postNewRecipe = async ({
   name,
+  uploadedImageName,
   ingredients,
   instructions,
 }: SubmittedRecipeForm): Promise<Recipe> => {
@@ -35,6 +36,7 @@ export const postNewRecipe = async ({
         recipeName: name,
         ingredients,
         instructions,
+        uploadedImageName,
       },
     },
     { init: { credentials: "include" } },

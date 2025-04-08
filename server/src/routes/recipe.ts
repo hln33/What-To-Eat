@@ -12,10 +12,11 @@ import {
 import { ingredientSchema } from './validators/index.js';
 import { getSessionCookie } from './cookies/index.ts';
 import { validateSessionToken } from '../models/session.ts';
+import { createPresignedUrl } from './imageUtils/index.ts';
 
 const recipeSchema = z.object({
   recipeName: z.string().min(1),
-  uploadedImageName: z.string().optional(),
+  uploadedImageName: z.string().nullable(),
   ingredients: z.array(ingredientSchema),
   instructions: z
     .union([z.string(), z.string().array()])
@@ -31,11 +32,15 @@ const recipes = new Hono()
   .get('/:id', async (c) => {
     const id = Number(c.req.param('id'));
     const recipe = await getRecipe(id);
-
     if (recipe === null) {
       return c.json({}, 404);
     }
-    return c.json({ ...recipe, imageUrl: 'testing' });
+
+    const imageUrl =
+      recipe.imageName !== null
+        ? await createPresignedUrl(recipe.imageName)
+        : null;
+    return c.json({ ...recipe, imageUrl });
   })
   .post('/', zValidator('json', recipeSchema), async (c) => {
     const sessionToken = getSessionCookie(c);
