@@ -7,7 +7,7 @@ import { drizzle } from 'drizzle-orm/libsql';
 export const db = drizzle(process.env.DB_FILE_NAME!);
 
 /* RECIPES */
-export const recipes = sqliteTable('recipes', {
+export const recipeTable = sqliteTable('recipes', {
   id: int().primaryKey({ autoIncrement: true }),
   userId: int('user_id')
     .references(() => userTable.id, { onDelete: 'cascade' })
@@ -19,14 +19,14 @@ export const recipes = sqliteTable('recipes', {
   imageName: text(),
 });
 
-export const recipesToIngredients = sqliteTable(
+export const recipeToIngredientTable = sqliteTable(
   'recipes_to_ingredients',
   {
     recipeId: int('recipe_id')
-      .references(() => recipes.id)
+      .references(() => recipeTable.id)
       .notNull(),
     ingredientId: int('ingredient_id')
-      .references(() => ingredients.id)
+      .references(() => ingredientTable.id)
       .notNull(),
     amount: int().notNull(),
     unit: text({ enum: ['g', 'kg', 'oz', 'lb'] }).notNull(),
@@ -34,17 +34,17 @@ export const recipesToIngredients = sqliteTable(
   (table) => [primaryKey({ columns: [table.recipeId, table.ingredientId] })]
 );
 
-export const ingredients = sqliteTable('ingredients', {
+export const ingredientTable = sqliteTable('ingredients', {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull().unique(),
 });
 
-export const steps = sqliteTable('steps', {
+export const stepTable = sqliteTable('steps', {
   id: int().primaryKey({ autoIncrement: true }),
   stepNumber: int().notNull(),
   instruction: text().notNull(),
   recipeId: int('recipe_id')
-    .references(() => recipes.id, { onDelete: 'cascade' })
+    .references(() => recipeTable.id, { onDelete: 'cascade' })
     .notNull(),
 });
 

@@ -1,7 +1,7 @@
 import type { InferSelectModel } from 'drizzle-orm';
-import { db, ingredients as ingredientTable } from '../db/schema.ts';
+import { db, ingredientTable } from '../db/schema.ts';
 
-export type Ingredient = Omit<InferSelectModel<typeof ingredientTable>, 'id'>;
+type Ingredient = Omit<InferSelectModel<typeof ingredientTable>, 'id'>;
 
 export const getAllIngredients = async (): Promise<Ingredient[]> => {
   const res = await db

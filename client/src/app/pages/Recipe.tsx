@@ -1,5 +1,4 @@
 import {
-  createEffect,
   createSignal,
   ErrorBoundary,
   Index,
@@ -15,6 +14,7 @@ import { getRecipe } from "@/features/recipes/api";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
+import Image from "@/components/ui/Image";
 
 const RecipePage: Component = () => {
   const params = useParams();
@@ -47,14 +47,19 @@ const RecipePage: Component = () => {
             </div>
           }
         >
-          <section class="space-y-12 text-left">
+          <section class="flex flex-col space-y-12 text-left">
             <Show
               when={
                 recipeQuery.data !== undefined &&
                 recipeQuery.data.imageUrl !== null
               }
             >
-              <img src={recipeQuery.data!.imageUrl!} />
+              <Image
+                class="self-center"
+                src={recipeQuery.data!.imageUrl!}
+                fallbackWidth={700}
+                fallbackHeight={500}
+              />
             </Show>
 
             <div class="space-y-5">

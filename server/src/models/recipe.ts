@@ -1,16 +1,18 @@
 import { count, eq } from 'drizzle-orm';
+
 import {
   db,
-  recipes as recipesTable,
-  ingredients as ingredientsTable,
-  recipesToIngredients,
-  steps as stepsTable,
+  recipeTable,
+  ingredientTable,
+  recipeToIngredientTable,
+  stepTable,
   userTable,
 } from '../db/schema.ts';
 import type { z } from 'zod';
 import type { ingredientSchema } from '../routes/validators/index.ts';
 
 type Ingredient = z.infer<typeof ingredientSchema>;
+
 type Recipe = {
   id: number;
   creator: string;
@@ -28,7 +30,7 @@ export const createRecipe = async ({
   instructions: steps,
 }: Omit<Recipe, 'creator'>): Promise<Recipe> => {
   const [newRecipe] = await db
-    .insert(recipesTable)
+    .insert(recipeTable)
     .values({
       userId,
       name,
@@ -40,15 +42,15 @@ export const createRecipe = async ({
     const existingIngredient = (
       await db
         .select()
-        .from(ingredientsTable)
-        .where(eq(ingredientsTable.name, ingredient.name))
+        .from(ingredientTable)
+        .where(eq(ingredientTable.name, ingredient.name))
         .limit(1)
     ).at(0);
 
     let ingredientId;
     if (!existingIngredient) {
       const [newIngredient] = await db
-        .insert(ingredientsTable)
+        .insert(ingredientTable)
         .values({ name: ingredient.name })
         .returning();
       ingredientId = newIngredient.id;
@@ -56,7 +58,7 @@ export const createRecipe = async ({
       ingredientId = existingIngredient.id;
     }
 
-    await db.insert(recipesToIngredients).values({
+    await db.insert(recipeToIngredientTable).values({
       recipeId: newRecipe.id,
       ingredientId,
       unit: ingredient.unit,
@@ -65,7 +67,7 @@ export const createRecipe = async ({
   }
 
   for (const [index, step] of steps.entries()) {
-    await db.insert(stepsTable).values({
+    await db.insert(stepTable).values({
       stepNumber: index,
       instruction: step,
       recipeId: newRecipe.id,
@@ -78,7 +80,7 @@ export const createRecipe = async ({
 
 export const getRecipe = async (id: number): Promise<Recipe | null> => {
   const recipe = (
-    await db.select().from(recipesTable).where(eq(recipesTable.id, id)).limit(1)
+    await db.select().from(recipeTable).where(eq(recipeTable.id, id)).limit(1)
   ).at(0);
   if (recipe === undefined) {
     return null;
@@ -86,25 +88,25 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
 
   const ingredients = await db
     .select({
-      name: ingredientsTable.name,
-      unit: recipesToIngredients.unit,
-      amount: recipesToIngredients.amount,
+      name: ingredientTable.name,
+      unit: recipeToIngredientTable.unit,
+      amount: recipeToIngredientTable.amount,
     })
-    .from(ingredientsTable)
+    .from(ingredientTable)
     .innerJoin(
-      recipesToIngredients,
-      eq(recipesToIngredients.ingredientId, ingredientsTable.id)
+      recipeToIngredientTable,
+      eq(recipeToIngredientTable.ingredientId, ingredientTable.id)
     )
-    .where(eq(recipesToIngredients.recipeId, id));
+    .where(eq(recipeToIngredientTable.recipeId, id));
   if (ingredients.length === 0) {
     return null;
   }
 
   const steps = await db
-    .select({ instruction: stepsTable.instruction })
-    .from(stepsTable)
-    .innerJoin(recipesTable, eq(recipesTable.id, stepsTable.recipeId))
-    .where(eq(stepsTable.recipeId, id));
+    .select({ instruction: stepTable.instruction })
+    .from(stepTable)
+    .innerJoin(recipeTable, eq(recipeTable.id, stepTable.recipeId))
+    .where(eq(stepTable.recipeId, id));
   if (steps.length === 0) {
     return null;
   }
@@ -122,14 +124,14 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
 export const getAllRecipes = async (): Promise<Recipe[]> => {
   const recipeRows = await db
     .select()
-    .from(recipesTable)
+    .from(recipeTable)
     .innerJoin(
-      recipesToIngredients,
-      eq(recipesToIngredients.recipeId, recipesTable.id)
+      recipeToIngredientTable,
+      eq(recipeToIngredientTable.recipeId, recipeTable.id)
     )
     .innerJoin(
-      ingredientsTable,
-      eq(ingredientsTable.id, recipesToIngredients.ingredientId)
+      ingredientTable,
+      eq(ingredientTable.id, recipeToIngredientTable.ingredientId)
     );
 
   const recipes: { [key: number]: Recipe } = {};
@@ -155,12 +157,12 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
 
     const steps = await db
       .select({
-        order: stepsTable.stepNumber,
-        instruction: stepsTable.instruction,
+        order: stepTable.stepNumber,
+        instruction: stepTable.instruction,
       })
-      .from(stepsTable)
-      .where(eq(stepsTable.recipeId, recipeId))
-      .innerJoin(recipesTable, eq(recipesTable.id, stepsTable.recipeId));
+      .from(stepTable)
+      .where(eq(stepTable.recipeId, recipeId))
+      .innerJoin(recipeTable, eq(recipeTable.id, stepTable.recipeId));
 
     recipes[recipeId].instructions = steps
       .toSorted((a, b) => a.order - b.order)
@@ -172,9 +174,9 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
 
 export const deleteRecipe = async (recipeId: number) => {
   const associatedIngredients = await db
-    .select({ ingredientId: recipesToIngredients.ingredientId })
-    .from(recipesToIngredients)
-    .where(eq(recipesToIngredients.recipeId, recipeId));
+    .select({ ingredientId: recipeToIngredientTable.ingredientId })
+    .from(recipeToIngredientTable)
+    .where(eq(recipeToIngredientTable.recipeId, recipeId));
   if (associatedIngredients.length === 0) {
     throw new Error(
       'Recipe should have ingredients associated with it, but none were found.'
@@ -182,24 +184,24 @@ export const deleteRecipe = async (recipeId: number) => {
   }
 
   await db
-    .delete(recipesToIngredients)
-    .where(eq(recipesToIngredients.recipeId, recipeId));
+    .delete(recipeToIngredientTable)
+    .where(eq(recipeToIngredientTable.recipeId, recipeId));
 
   // delete any ingredients that no longer have associations with any recipe
   for (const { ingredientId } of associatedIngredients) {
     const recipeAssociations = await db
       .select({ count: count() })
-      .from(recipesToIngredients)
-      .where(eq(recipesToIngredients.ingredientId, ingredientId));
+      .from(recipeToIngredientTable)
+      .where(eq(recipeToIngredientTable.ingredientId, ingredientId));
 
     if (recipeAssociations[0].count === 0) {
       await db
-        .delete(ingredientsTable)
-        .where(eq(ingredientsTable.id, ingredientId));
+        .delete(ingredientTable)
+        .where(eq(ingredientTable.id, ingredientId));
     }
   }
 
-  await db.delete(recipesTable).where(eq(recipesTable.id, recipeId));
+  await db.delete(recipeTable).where(eq(recipeTable.id, recipeId));
 };
 
 const getCreatorName = async (
@@ -209,8 +211,8 @@ const getCreatorName = async (
   const recipeUserRows = await db
     .select()
     .from(userTable)
-    .innerJoin(recipesTable, eq(recipesTable.userId, userTable.id))
-    .where(eq(recipesTable.id, recipeId))
+    .innerJoin(recipeTable, eq(recipeTable.userId, userTable.id))
+    .where(eq(recipeTable.id, recipeId))
     .limit(1);
   if (recipeUserRows.length === 0) {
     throw new Error(`Recipe: ${recipeName} has no creator`);

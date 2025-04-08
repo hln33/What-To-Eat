@@ -2,11 +2,11 @@ import 'dotenv/config';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import {
-  recipes as recipesTable,
-  recipesToIngredients as recipesToIngredientsTable,
-  ingredients as ingredientsTable,
+  recipeTable as recipesTable,
+  recipeToIngredientTable as recipeToIngredientTable,
+  ingredientTable as ingredientsTable,
   db,
-  steps as stepsTable,
+  stepTable as stepsTable,
   userTable,
 } from '../src/db/schema.ts';
 import { createRecipe } from '../src/models/recipe.ts';
@@ -27,9 +27,7 @@ const seedDatabase = async () => {
 
   const recipes = await db.select().from(recipesTable);
   const ingredients = await db.select().from(ingredientsTable);
-  const recipesToIngredients = await db
-    .select()
-    .from(recipesToIngredientsTable);
+  const recipesToIngredients = await db.select().from(recipeToIngredientTable);
   const steps = await db.select().from(stepsTable);
   const users = await db.select().from(userTable);
 
