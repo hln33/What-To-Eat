@@ -1,4 +1,5 @@
-import { Component, For, ParentComponent } from "solid-js";
+import { Component, createSignal, For, ParentComponent } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
 import {
   createForm,
   insert,
@@ -16,6 +17,7 @@ import Select from "@/components/ui/Select";
 import Combobox from "@/components/ui/Combobox";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../types";
+import { postRecipeImage } from "../api";
 
 const SectionHeader: Component<{ for: string; label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -67,13 +69,41 @@ const NewRecipeForm: Component<{
       instructions: [""],
     },
   });
+  const [uploadedImageName, setUploadedImageName] = createSignal<string>();
+
+  /**
+   * Upload image to a separate API endpoint for UX/DX purposes
+   * https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
+   */
+  const uploadImage = createMutation(() => ({
+    mutationFn: postRecipeImage,
+  }));
+  const handleRecipeImageUpload = (file: File[]) => {
+    if (file.length !== 1) {
+      console.error("Only expected 1 file, but got:", file.length);
+      return;
+    }
+    uploadImage.mutate(file[0], {
+      onSuccess: (data) => setUploadedImageName(data.imageName),
+    });
+  };
+
+  const handleSubmit = (values: SubmittedRecipeForm) => {
+    props.onSubmit({
+      ...values,
+      uploadedImageName: uploadedImageName(),
+    });
+  };
 
   return (
     <Form
       class="flex flex-col items-center gap-12 p-8"
-      onSubmit={(values) => props.onSubmit(values as SubmittedRecipeForm)}
+      onSubmit={(values) => handleSubmit(values as SubmittedRecipeForm)}
     >
-      <FileUpload label="Recipe image (optional)" />
+      <FileUpload
+        label="Recipe image (optional)"
+        onFileAccept={handleRecipeImageUpload}
+      />
 
       <div class="w-full space-y-10">
         <Field
@@ -84,7 +114,7 @@ const NewRecipeForm: Component<{
             <TextField
               {...props}
               type="text"
-              label="Recipe Name"
+              label="Recipe name"
               value={field.value}
               error={field.error}
               disabled={form.submitting}

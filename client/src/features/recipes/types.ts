@@ -1,6 +1,7 @@
 export type Recipe = {
   id: number;
   creator: string;
+  imageUrl: string | null;
   name: string;
   ingredients: Ingredient[];
   instructions: string[];
@@ -14,7 +15,9 @@ export type RecipeForm = Omit<Recipe, "ingredients" | "creator" | "id"> & {
   ingredients: Array<Omit<Ingredient, "unit"> & { unit?: Ingredient["unit"] }>;
 };
 
-export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id">;
+export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id"> & {
+  uploadedImageName?: string;
+};
 
 type Ingredient = {
   amount: number;

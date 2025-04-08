@@ -14,14 +14,16 @@ import Button from "./Button";
 const FileUpload: Component<{
   label: string;
   description?: string;
+  onFileAccept: (file: File[]) => void;
 }> = (props) => {
   return (
     <Kobalte
-      onFileAccept={(data) => console.log(data)}
-      class="flex w-full flex-col gap-2"
+      class="group flex w-full flex-col items-center gap-2"
+      accept={[".png", ".jpg"]}
+      onFileAccept={props.onFileAccept}
       onFileReject={(data) => console.error(data)}
     >
-      <Kobalte.Label class="text-left text-xl">{props.label}</Kobalte.Label>
+      <Kobalte.Label class="self-start text-xl">{props.label}</Kobalte.Label>
 
       <Kobalte.ItemList class="peer">
         {(_file) => (
@@ -46,9 +48,10 @@ const FileUpload: Component<{
         <FileImageIcon class="size-20" />
         <div class="whitespace-pre-wrap font-semibold">
           Drop image here, or{" "}
-          <Kobalte.Trigger class="text-blue-400 hover:text-blue-600">
+          <Kobalte.Trigger class="text-blue-400 group-hover:text-sky-600">
             browse
           </Kobalte.Trigger>
+          <small class="block">(png, jpg)</small>
         </div>
       </Kobalte.Dropzone>
       <Kobalte.HiddenInput />

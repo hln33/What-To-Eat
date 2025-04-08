@@ -15,11 +15,20 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
   return res.json();
 };
 
+export const postRecipeImage = async (
+  file: File,
+): Promise<{ imageName: string }> => {
+  const res = await api.images.$post({
+    form: { file },
+  });
+  return res.json();
+};
+
 export const postNewRecipe = async ({
   name,
   ingredients,
   instructions,
-}: SubmittedRecipeForm): Promise<Recipe | null> => {
+}: SubmittedRecipeForm): Promise<Recipe> => {
   const res = await api.recipes.$post(
     {
       json: {

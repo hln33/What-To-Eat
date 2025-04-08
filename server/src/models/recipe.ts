@@ -14,20 +14,26 @@ type Ingredient = z.infer<typeof ingredientSchema>;
 type Recipe = {
   id: number;
   creator: string;
+  imageName: string | null;
   name: string;
   ingredients: Ingredient[];
   instructions: string[];
 };
 
-export const createRecipe = async (
-  userId: number,
-  name: string,
-  ingredients: Ingredient[],
-  steps: string[]
-): Promise<Recipe | null> => {
+export const createRecipe = async ({
+  id: userId,
+  name,
+  imageName,
+  ingredients,
+  instructions: steps,
+}: Omit<Recipe, 'creator'>): Promise<Recipe> => {
   const [newRecipe] = await db
     .insert(recipesTable)
-    .values({ userId, name })
+    .values({
+      userId,
+      name,
+      imageName,
+    })
     .returning();
 
   for (const ingredient of ingredients) {
@@ -66,16 +72,13 @@ export const createRecipe = async (
     });
   }
 
-  return await getRecipe(newRecipe.id);
+  // guranteed to not be null because we just created the recipe in the db
+  return (await getRecipe(newRecipe.id))!;
 };
 
 export const getRecipe = async (id: number): Promise<Recipe | null> => {
   const recipe = (
-    await db
-      .select({ id: recipesTable.id, name: recipesTable.name })
-      .from(recipesTable)
-      .where(eq(recipesTable.id, id))
-      .limit(1)
+    await db.select().from(recipesTable).where(eq(recipesTable.id, id)).limit(1)
   ).at(0);
   if (recipe === undefined) {
     return null;
@@ -109,6 +112,7 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
   return {
     id: recipe.id,
     creator: await getCreatorName(recipe.id, recipe.name),
+    imageName: recipe.imageName,
     name: recipe.name,
     ingredients,
     instructions: steps.map((step) => step.instruction),
@@ -137,6 +141,7 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
       recipes[recipeId] = {
         id: recipeId,
         creator: await getCreatorName(recipeId, recipeName),
+        imageName: row.recipes.imageName,
         name: recipeName,
         ingredients: [],
         instructions: [],

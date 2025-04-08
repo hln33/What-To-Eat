@@ -34,7 +34,7 @@ describe("New Recipe Form", () => {
 
     await user.type(
       screen.getByRole("textbox", {
-        name: "Recipe Name",
+        name: "Recipe name",
       }),
       "Scrambled Eggs",
     );
@@ -110,7 +110,7 @@ describe("New Recipe Form", () => {
     await user.click(screen.getByRole("button", { name: "Submit" }));
 
     expect(
-      screen.getByRole("textbox", { name: "Recipe Name" }),
+      screen.getByRole("textbox", { name: "Recipe name" }),
     ).not.toBeValid();
     screen.getByText("Please enter a name for the recipe");
 

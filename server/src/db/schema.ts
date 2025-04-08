@@ -1,6 +1,9 @@
 import { int, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { drizzle } from 'drizzle-orm/libsql';
 
+/**
+ * To apply db changes, run `npx drizzle-kit push`
+ */
 export const db = drizzle(process.env.DB_FILE_NAME!);
 
 /* RECIPES */
@@ -10,6 +13,10 @@ export const recipes = sqliteTable('recipes', {
     .references(() => userTable.id, { onDelete: 'cascade' })
     .notNull(),
   name: text().notNull(),
+  /**
+   * name used to fetch from S3 bucket
+   */
+  imageName: text(),
 });
 
 export const recipesToIngredients = sqliteTable(
