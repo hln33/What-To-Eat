@@ -1,210 +1,172 @@
 [
   {
-    "name": "Classic Spaghetti Carbonara",
-    "ingredients": ["spaghetti", "eggs", "parmesan cheese", "pancetta", "garlic", "black pepper"],
-    "steps": [
-      "Cook spaghetti according to package instructions.",
-      "Fry pancetta with garlic until crispy.",
-      "Whisk eggs and parmesan cheese in a bowl.",
-      "Combine cooked spaghetti with pancetta and egg mixture.",
-      "Season with black pepper and serve immediately."
-    ]
-  },
-  {
-    "name": "Chicken Tikka Masala",
-    "ingredients": ["chicken breast", "yogurt", "tomato puree", "onion", "garlic", "ginger", "garam masala", "cream"],
-    "steps": [
-      "Marinate chicken in yogurt and spices for 1 hour.",
-      "Grill or bake chicken until cooked through.",
-      "Sauté onions, garlic, and ginger in a pan.",
-      "Add tomato puree and garam masala, then simmer.",
-      "Add grilled chicken and cream, then simmer for 10 minutes."
-    ]
-  },
-  {
-    "name": "Chocolate Chip Cookies",
-    "ingredients": ["flour", "butter", "sugar", "brown sugar", "eggs", "vanilla extract", "baking soda", "chocolate chips"],
-    "steps": [
-      "Preheat oven to 350°F (175°C).",
-      "Cream butter and sugars together.",
-      "Add eggs and vanilla, then mix.",
-      "Combine dry ingredients and mix into the wet ingredients.",
-      "Fold in chocolate chips and drop spoonfuls onto a baking sheet.",
+    "name": "Classic Chocolate Chip Cookies",
+    "ingredients": [
+      { "unit": "g", "amount": 250, "name": "all-purpose flour" },
+      { "unit": "g", "amount": 150, "name": "butter" },
+      { "unit": "g", "amount": 200, "name": "chocolate chips" },
+      { "unit": "oz", "amount": 1, "name": "vanilla extract" },
+      { "unit": "g", "amount": 100, "name": "brown sugar" }
+    ],
+    "instructions": [
+      "Preheat oven to 190°C (375°F).",
+      "Cream butter and sugars, then add eggs and vanilla.",
+      "Mix in flour and chocolate chips.",
+      "Drop spoonfuls onto a baking sheet.",
       "Bake for 10-12 minutes."
     ]
   },
   {
-    "name": "Beef Stir Fry",
-    "ingredients": ["beef sirloin", "soy sauce", "broccoli", "carrots", "bell peppers", "garlic", "ginger", "sesame oil"],
-    "steps": [
-      "Slice beef thinly and marinate in soy sauce.",
-      "Stir-fry beef in sesame oil until browned, then set aside.",
-      "Stir-fry vegetables with garlic and ginger.",
-      "Add beef back to the pan and toss to combine.",
-      "Serve with rice or noodles."
+    "name": "Spaghetti Bolognese",
+    "ingredients": [
+      { "unit": "g", "amount": 400, "name": "ground beef" },
+      { "unit": "g", "amount": 300, "name": "spaghetti" },
+      { "unit": "oz", "amount": 14, "name": "canned tomatoes" },
+      { "unit": "g", "amount": 100, "name": "onion" },
+      { "unit": "lb", "amount": 0.5, "name": "carrots" }
+    ],
+    "instructions": [
+      "Sauté onions and carrots until soft.",
+      "Brown the ground beef in a pan.",
+      "Add tomatoes and simmer for 20 minutes.",
+      "Cook spaghetti according to package instructions.",
+      "Serve sauce over pasta."
     ]
   },
   {
-    "name": "Margherita Pizza",
-    "ingredients": ["pizza dough", "tomato sauce", "fresh mozzarella", "basil", "olive oil"],
-    "steps": [
-      "Preheat oven to 475°F (245°C).",
-      "Roll out pizza dough and spread tomato sauce.",
-      "Top with sliced mozzarella and fresh basil leaves.",
-      "Drizzle with olive oil and bake for 10-12 minutes."
-    ]
-  },
-  {
-    "name": "Caesar Salad",
-    "ingredients": ["romaine lettuce", "croutons", "parmesan cheese", "caesar dressing", "chicken breast"],
-    "steps": [
-      "Grill or bake chicken breast until cooked.",
-      "Chop romaine lettuce and place in a bowl.",
-      "Add croutons, parmesan cheese, and sliced chicken.",
-      "Toss with caesar dressing and serve."
-    ]
-  },
-  {
-    "name": "Pancakes",
-    "ingredients": ["flour", "sugar", "baking powder", "milk", "eggs", "butter"],
-    "steps": [
-      "Mix dry ingredients in a bowl.",
-      "Whisk wet ingredients in another bowl.",
-      "Combine wet and dry ingredients to form a batter.",
-      "Heat a skillet and pour batter to form pancakes.",
-      "Flip when bubbles form on the surface, then cook the other side."
-    ]
-  },
-  {
-    "name": "Guacamole",
-    "ingredients": ["avocados", "lime", "onion", "tomato", "cilantro", "jalapeño", "salt"],
-    "steps": [
-      "Mash avocados in a bowl.",
-      "Add lime juice, diced onion, tomato, cilantro, and jalapeño.",
-      "Season with salt and mix well.",
-      "Serve with tortilla chips."
-    ]
-  },
-  {
-    "name": "Beef Burger",
-    "ingredients": ["ground beef", "burger buns", "lettuce", "tomato", "onion", "cheese", "pickles", "ketchup"],
-    "steps": [
-      "Form ground beef into patties and season with salt and pepper.",
-      "Grill or fry patties until cooked to desired doneness.",
-      "Toast burger buns and assemble with lettuce, tomato, onion, cheese, and pickles.",
-      "Add ketchup and serve."
-    ]
-  },
-  {
-    "name": "Vegetable Soup",
-    "ingredients": ["carrots", "celery", "onion", "potatoes", "tomatoes", "vegetable broth", "garlic", "thyme"],
-    "steps": [
-      "Sauté onions, carrots, and celery in a pot.",
-      "Add garlic and thyme, then cook for 1 minute.",
-      "Add diced potatoes, tomatoes, and vegetable broth.",
-      "Simmer for 20-30 minutes until vegetables are tender."
-    ]
-  },
-  {
-    "name": "Fried Rice",
-    "ingredients": ["cooked rice", "eggs", "peas", "carrots", "soy sauce", "green onions", "sesame oil"],
-    "steps": [
-      "Heat sesame oil in a pan and scramble eggs.",
-      "Add diced carrots and peas, then stir-fry.",
-      "Add cooked rice and soy sauce, then toss to combine.",
-      "Garnish with green onions and serve."
-    ]
-  },
-  {
-    "name": "Lasagna",
-    "ingredients": ["lasagna noodles", "ground beef", "tomato sauce", "ricotta cheese", "mozzarella cheese", "parmesan cheese"],
-    "steps": [
-      "Cook lasagna noodles according to package instructions.",
-      "Brown ground beef and mix with tomato sauce.",
-      "Layer noodles, beef sauce, ricotta, and mozzarella in a baking dish.",
-      "Top with parmesan cheese and bake at 375°F (190°C) for 30 minutes."
-    ]
-  },
-  {
-    "name": "Omelette",
-    "ingredients": ["eggs", "milk", "cheese", "ham", "bell peppers", "onion"],
-    "steps": [
-      "Whisk eggs and milk in a bowl.",
-      "Pour into a heated skillet and let it set slightly.",
-      "Add diced ham, bell peppers, and onions.",
-      "Fold the omelette and cook until eggs are fully set."
+    "name": "Greek Salad",
+    "ingredients": [
+      { "unit": "g", "amount": 200, "name": "cucumber" },
+      { "unit": "g", "amount": 150, "name": "tomatoes" },
+      { "unit": "g", "amount": 100, "name": "feta cheese" },
+      { "unit": "oz", "amount": 2, "name": "olives" },
+      { "unit": "g", "amount": 30, "name": "olive oil" }
+    ],
+    "instructions": [
+      "Dice cucumbers and tomatoes.",
+      "Cut feta into cubes.",
+      "Combine all ingredients in a bowl.",
+      "Drizzle with olive oil.",
+      "Toss gently and serve."
     ]
   },
   {
     "name": "Banana Bread",
-    "ingredients": ["bananas", "flour", "sugar", "eggs", "butter", "baking soda", "vanilla extract"],
-    "steps": [
+    "ingredients": [
+      { "unit": "g", "amount": 300, "name": "ripe bananas" },
+      { "unit": "g", "amount": 200, "name": "flour" },
+      { "unit": "g", "amount": 100, "name": "sugar" },
+      { "unit": "oz", "amount": 4, "name": "butter" },
+      { "unit": "lb", "amount": 0.25, "name": "walnuts" }
+    ],
+    "instructions": [
       "Mash bananas in a bowl.",
-      "Mix in melted butter, sugar, eggs, and vanilla.",
-      "Add flour and baking soda, then mix until combined.",
-      "Pour into a loaf pan and bake at 350°F (175°C) for 50-60 minutes."
+      "Mix flour, sugar, and melted butter.",
+      "Fold in bananas and walnuts.",
+      "Bake at 180°C (350°F) for 50 minutes.",
+      "Cool before slicing."
     ]
   },
   {
-    "name": "Sushi Rolls",
-    "ingredients": ["sushi rice", "nori", "cucumber", "avocado", "crab sticks", "rice vinegar", "soy sauce"],
-    "steps": [
-      "Cook sushi rice and mix with rice vinegar.",
-      "Spread rice on a sheet of nori.",
-      "Add sliced cucumber, avocado, and crab sticks.",
-      "Roll tightly and slice into pieces.",
-      "Serve with soy sauce."
+    "name": "Vegetable Stir-Fry",
+    "ingredients": [
+      { "unit": "g", "amount": 150, "name": "broccoli" },
+      { "unit": "g", "amount": 100, "name": "bell peppers" },
+      { "unit": "oz", "amount": 8, "name": "tofu" },
+      { "unit": "g", "amount": 50, "name": "soy sauce" },
+      { "unit": "lb", "amount": 0.2, "name": "carrots" }
+    ],
+    "instructions": [
+      "Chop all vegetables into bite-sized pieces.",
+      "Heat oil in a wok or pan.",
+      "Stir-fry vegetables for 5 minutes.",
+      "Add tofu and soy sauce.",
+      "Cook for another 3 minutes and serve."
     ]
   },
   {
-    "name": "Shepherd's Pie",
-    "ingredients": ["ground lamb", "potatoes", "carrots", "peas", "onion", "beef broth", "butter"],
-    "steps": [
-      "Cook ground lamb with onions and carrots.",
-      "Add peas and beef broth, then simmer.",
-      "Mash boiled potatoes with butter.",
-      "Layer meat mixture in a baking dish and top with mashed potatoes.",
-      "Bake at 400°F (200°C) for 20 minutes."
+    "name": "Pancakes",
+    "ingredients": [
+      { "unit": "g", "amount": 200, "name": "flour" },
+      { "unit": "g", "amount": 30, "name": "sugar" },
+      { "unit": "oz", "amount": 8, "name": "milk" },
+      { "unit": "oz", "amount": 2, "name": "butter" },
+      { "unit": "g", "amount": 5, "name": "baking powder" }
+    ],
+    "instructions": [
+      "Mix dry ingredients in a bowl.",
+      "Whisk in milk and eggs.",
+      "Melt butter and add to batter.",
+      "Cook on a greased pan until bubbles form.",
+      "Flip and cook for another minute."
     ]
   },
   {
-    "name": "French Toast",
-    "ingredients": ["bread", "eggs", "milk", "cinnamon", "vanilla extract", "butter"],
-    "steps": [
-      "Whisk eggs, milk, cinnamon, and vanilla in a bowl.",
-      "Dip bread slices into the mixture.",
-      "Fry in butter until golden brown on both sides.",
-      "Serve with syrup or powdered sugar."
+    "name": "Chicken Curry",
+    "ingredients": [
+      { "unit": "g", "amount": 500, "name": "chicken thighs" },
+      { "unit": "g", "amount": 200, "name": "coconut milk" },
+      { "unit": "g", "amount": 50, "name": "curry paste" },
+      { "unit": "g", "amount": 100, "name": "onion" },
+      { "unit": "lb", "amount": 0.3, "name": "potatoes" }
+    ],
+    "instructions": [
+      "Brown chicken in a pan and set aside.",
+      "Sauté onions until translucent.",
+      "Add curry paste and cook for 1 minute.",
+      "Return chicken to pan, add coconut milk and potatoes.",
+      "Simmer for 25 minutes until chicken is cooked through."
     ]
   },
   {
-    "name": "Chicken Noodle Soup",
-    "ingredients": ["chicken breast", "noodles", "carrots", "celery", "onion", "chicken broth"],
-    "steps": [
-      "Cook chicken breast in chicken broth until tender.",
-      "Shred chicken and return to the pot.",
-      "Add diced carrots, celery, and onions.",
-      "Add noodles and cook until tender."
+    "name": "Omelette",
+    "ingredients": [
+      { "unit": "g", "amount": 50, "name": "cheese" },
+      { "unit": "g", "amount": 30, "name": "mushrooms" },
+      { "unit": "g", "amount": 20, "name": "butter" },
+      { "unit": "oz", "amount": 2, "name": "milk" },
+      { "unit": "g", "amount": 10, "name": "chives" }
+    ],
+    "instructions": [
+      "Whisk eggs with milk and salt.",
+      "Melt butter in a non-stick pan.",
+      "Pour egg mixture into pan.",
+      "Add cheese and mushrooms when eggs begin to set.",
+      "Fold omelette in half and garnish with chives."
     ]
   },
   {
-    "name": "Tacos",
-    "ingredients": ["ground beef", "taco shells", "lettuce", "tomato", "cheese", "sour cream", "taco seasoning"],
-    "steps": [
-      "Brown ground beef and add taco seasoning.",
-      "Fill taco shells with beef.",
-      "Top with lettuce, tomato, cheese, and sour cream.",
-      "Serve immediately."
+    "name": "Beef Tacos",
+    "ingredients": [
+      { "unit": "g", "amount": 300, "name": "ground beef" },
+      { "unit": "g", "amount": 100, "name": "taco seasoning" },
+      { "unit": "oz", "amount": 8, "name": "taco shells" },
+      { "unit": "g", "amount": 50, "name": "lettuce" },
+      { "unit": "lb", "amount": 0.2, "name": "cheddar cheese" }
+    ],
+    "instructions": [
+      "Brown ground beef in a skillet.",
+      "Add taco seasoning and water, simmer for 5 minutes.",
+      "Warm taco shells according to package.",
+      "Assemble tacos with beef, lettuce, and cheese.",
+      "Serve with salsa and sour cream."
     ]
   },
   {
     "name": "Apple Pie",
-    "ingredients": ["apples", "pie crust", "sugar", "cinnamon", "butter", "flour"],
-    "steps": [
-      "Peel and slice apples, then toss with sugar, cinnamon, and flour.",
-      "Line a pie dish with pie crust and add the apple mixture.",
-      "Dot with butter and cover with the top crust.",
-      "Bake at 375°F (190°C) for 45-50 minutes."
+    "ingredients": [
+      { "unit": "g", "amount": 500, "name": "apples" },
+      { "unit": "g", "amount": 250, "name": "pie crust" },
+      { "unit": "g", "amount": 100, "name": "sugar" },
+      { "unit": "oz", "amount": 1, "name": "cinnamon" },
+      { "unit": "g", "amount": 30, "name": "butter" }
+    ],
+    "instructions": [
+      "Peel and slice apples, mix with sugar and cinnamon.",
+      "Line pie dish with bottom crust.",
+      "Add apple mixture and dot with butter.",
+      "Cover with top crust and seal edges.",
+      "Bake at 200°C (400°F) for 45 minutes."
     ]
   }
 ]

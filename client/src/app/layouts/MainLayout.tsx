@@ -48,20 +48,12 @@ const MainLayout: ParentComponent = (props) => {
             <Show
               when={user.info.isLoggedIn}
               fallback={
-                <>
-                  <A
-                    class="block border border-white p-2"
-                    href="/login"
-                  >
-                    Login
-                  </A>
-                  <A
-                    class="block border border-white p-2"
-                    href="/signup"
-                  >
-                    Sign Up
-                  </A>
-                </>
+                <A
+                  class="block border border-white p-2"
+                  href="/login"
+                >
+                  Login
+                </A>
               }
             >
               <Button

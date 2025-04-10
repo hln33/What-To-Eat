@@ -25,7 +25,6 @@ describe("Login Page", () => {
     });
     await screen.findByRole("link", { name: "Home" });
     await screen.findByRole("link", { name: "Login" });
-    await screen.findByRole("link", { name: "Sign Up" });
   });
 
   test("allows user to login", async () => {

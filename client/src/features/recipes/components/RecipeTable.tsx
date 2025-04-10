@@ -28,7 +28,7 @@ const columns = [
     cell: (info) => (
       <ul class="list-outside list-disc">
         <For each={info.getValue()}>
-          {(ingredient) => <li>{ingredient}</li>}
+          {(ingredient) => <li>{ingredient.name}</li>}
         </For>
       </ul>
     ),
@@ -109,7 +109,7 @@ const RecipeTable: Component<{
         }
       />
 
-      <section class="flex flex-col items-center gap-8">
+      <section class="flex flex-col items-center gap-4">
         <For each={table().getRowModel().rows}>
           {(row) => (
             <RecipeCard

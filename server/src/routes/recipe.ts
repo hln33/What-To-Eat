@@ -27,7 +27,16 @@ const recipes = new Hono()
   .get('/', async (c) => {
     const recipes = await getAllRecipes();
 
-    return c.json(recipes.map((recipe) => ({ ...recipe, imageUrl: null })));
+    const recipesWithImages = await Promise.all(
+      recipes.map(async (recipe) => ({
+        ...recipe,
+        imageUrl:
+          recipe.imageName !== null
+            ? await createPresignedUrl(recipe.imageName)
+            : null,
+      }))
+    );
+    return c.json(recipesWithImages);
   })
   .get('/:id', async (c) => {
     const id = Number(c.req.param('id'));

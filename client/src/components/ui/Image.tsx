@@ -10,11 +10,11 @@ const Image: Component<{
   fallbackHeight: number;
 }> = (props) => {
   return (
-    <Kobalte
-      class={props.class}
-      fallbackDelay={0}
-    >
-      <Kobalte.Img src={props.src} />
+    <Kobalte class={props.class}>
+      <Kobalte.Img
+        class="size-full object-cover"
+        src={props.src}
+      />
       <Kobalte.Fallback>
         <Skeleton
           width={props.fallbackWidth}

@@ -55,10 +55,10 @@ const RecipePage: Component = () => {
               }
             >
               <Image
-                class="self-center"
+                class="h-72 w-96 self-center"
                 src={recipeQuery.data!.imageUrl!}
-                fallbackWidth={700}
-                fallbackHeight={500}
+                fallbackWidth={380}
+                fallbackHeight={250}
               />
             </Show>
 

@@ -1,9 +1,9 @@
 import { useNavigate } from "@solidjs/router";
+import { createMutation } from "@tanstack/solid-query";
 
 import { postNewRecipe } from "@/features/recipes/api";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
 import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
-import { createMutation } from "@tanstack/solid-query";
 
 const RecipeNewPage = () => {
   const navigate = useNavigate();

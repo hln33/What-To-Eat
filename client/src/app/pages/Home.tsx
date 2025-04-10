@@ -39,7 +39,7 @@ const HomePage: Component = () => {
           <MultiSelect
             controlled
             label="Your Ingredients"
-            placeholder="Search ingredients"
+            placeholder="Search ingredients..."
             options={ingredientsQuery.data ?? []}
             onChange={setIngredients}
           />
