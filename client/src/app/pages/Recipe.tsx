@@ -9,20 +9,40 @@ import {
 import { A, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
+import { createForm } from "@modular-forms/solid";
+import PencilIcon from "~icons/lucide/pencil";
 
 import { getRecipe } from "@/features/recipes/api";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
+import { RecipeForm } from "@/features/recipes/types";
+import RecipeInputIngredients from "@/features/recipes/components/RecipeInputIngredients";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 
+const EditIngredientsForm: Component = () => {
+  const [form, { Form }] = createForm<RecipeForm>({
+    initialValues: {
+      ingredients: [{ amount: 0, unit: undefined, name: "" }],
+    },
+  });
+
+  return (
+    <Form>
+      <RecipeInputIngredients form={form} />
+    </Form>
+  );
+};
+
 const RecipePage: Component = () => {
   const params = useParams();
+
   const recipeQuery = createQuery(() => ({
     queryKey: ["recipe", params.id],
     queryFn: () => getRecipe(params.id),
   }));
 
+  const [isEditingIngredients, setIsEditingIngredients] = createSignal(false);
   const [rating, setRating] = createSignal(3);
 
   return (
@@ -47,7 +67,7 @@ const RecipePage: Component = () => {
             </div>
           }
         >
-          <section class="flex flex-col space-y-12 text-left">
+          <section class="flex flex-col space-y-8 text-left">
             <Show
               when={
                 recipeQuery.data !== undefined &&
@@ -73,17 +93,28 @@ const RecipePage: Component = () => {
             </div>
 
             <section class="space-y-3">
-              <h3 class="text-3xl">Ingredients</h3>
-              <ul class="list-inside list-disc">
-                <Index each={recipeQuery.data?.ingredients}>
-                  {(ingredient) => (
-                    <li>
-                      {ingredient().amount} {ingredient().unit}{" "}
-                      {ingredient().name}
-                    </li>
-                  )}
-                </Index>
-              </ul>
+              <div class="flex items-center gap-2">
+                <h3 class="text-3xl">Ingredients</h3>
+                <PencilIcon
+                  class="cursor-pointer"
+                  onClick={() => setIsEditingIngredients((prev) => !prev)}
+                />
+              </div>
+              <Show
+                when={isEditingIngredients() === false}
+                fallback={<EditIngredientsForm />}
+              >
+                <ul class="list-inside list-disc">
+                  <Index each={recipeQuery.data?.ingredients}>
+                    {(ingredient) => (
+                      <li>
+                        {ingredient().amount} {ingredient().unit}{" "}
+                        {ingredient().name}
+                      </li>
+                    )}
+                  </Index>
+                </ul>
+              </Show>
             </section>
 
             <section class="space-y-3">

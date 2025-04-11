@@ -96,6 +96,7 @@ describe("New Recipe Form", () => {
           "Cook until golden brown",
           "Serve and enjoy!",
         ],
+        uploadedImageName: null,
       }),
     );
   });
