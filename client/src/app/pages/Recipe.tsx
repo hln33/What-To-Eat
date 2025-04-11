@@ -10,6 +10,7 @@ import { A, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 import { createForm } from "@modular-forms/solid";
+import { DialogTriggerProps } from "@kobalte/core/dialog";
 import PencilIcon from "~icons/lucide/pencil";
 
 import { getRecipe } from "@/features/recipes/api";
@@ -19,8 +20,12 @@ import RecipeInputIngredients from "@/features/recipes/components/RecipeInputIng
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
+import Button from "@/components/ui/Button";
 
-const EditIngredientsForm: Component = () => {
+const EditIngredientsDialog: Component = () => {
+  const [open, setOpen] = createSignal(false);
+
   const [form, { Form }] = createForm<RecipeForm>({
     initialValues: {
       ingredients: [{ amount: 0, unit: undefined, name: "" }],
@@ -28,9 +33,42 @@ const EditIngredientsForm: Component = () => {
   });
 
   return (
-    <Form>
-      <RecipeInputIngredients form={form} />
-    </Form>
+    <Dialog
+      open={open()}
+      setOpen={setOpen}
+    >
+      <DialogTrigger
+        as={(props: DialogTriggerProps) => (
+          <Button
+            variant="subtle"
+            {...props}
+          >
+            <PencilIcon />
+          </Button>
+        )}
+      />
+
+      <DialogContent title="Ingredients">
+        <Form>
+          <RecipeInputIngredients form={form} />
+          <div class="mt-8 flex justify-end gap-4">
+            <Button
+              variant="subtle"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="blue"
+              variant="filled"
+              onClick={() => setOpen(false)}
+            >
+              Save
+            </Button>
+          </div>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -42,7 +80,6 @@ const RecipePage: Component = () => {
     queryFn: () => getRecipe(params.id),
   }));
 
-  const [isEditingIngredients, setIsEditingIngredients] = createSignal(false);
   const [rating, setRating] = createSignal(3);
 
   return (
@@ -95,26 +132,18 @@ const RecipePage: Component = () => {
             <section class="space-y-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-3xl">Ingredients</h3>
-                <PencilIcon
-                  class="cursor-pointer"
-                  onClick={() => setIsEditingIngredients((prev) => !prev)}
-                />
+                <EditIngredientsDialog />
               </div>
-              <Show
-                when={isEditingIngredients() === false}
-                fallback={<EditIngredientsForm />}
-              >
-                <ul class="list-inside list-disc">
-                  <Index each={recipeQuery.data?.ingredients}>
-                    {(ingredient) => (
-                      <li>
-                        {ingredient().amount} {ingredient().unit}{" "}
-                        {ingredient().name}
-                      </li>
-                    )}
-                  </Index>
-                </ul>
-              </Show>
+              <ul class="list-inside list-disc">
+                <Index each={recipeQuery.data?.ingredients}>
+                  {(ingredient) => (
+                    <li>
+                      {ingredient().amount} {ingredient().unit}{" "}
+                      {ingredient().name}
+                    </li>
+                  )}
+                </Index>
+              </ul>
             </section>
 
             <section class="space-y-3">

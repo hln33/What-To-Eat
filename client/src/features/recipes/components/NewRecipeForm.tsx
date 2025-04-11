@@ -8,12 +8,12 @@ import InputError from "@/components/InputError";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../types";
 import { postRecipeImage } from "../api";
-import {
-  AddFieldButton,
-  DeleteFieldButton,
-  SectionHeader,
-} from "./FormHelpers";
+import { AddFieldButton, DeleteFieldButton } from "./FormHelpers";
 import RecipeInputIngredients from "./RecipeInputIngredients";
+
+const SectionHeader: Component<{ label: string }> = (props) => (
+  <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
+);
 
 const NewRecipeForm: Component<{
   onSubmit: (recipe: SubmittedRecipeForm) => void;
@@ -79,6 +79,7 @@ const NewRecipeForm: Component<{
           )}
         </Field>
 
+        <SectionHeader label="Ingredients" />
         <RecipeInputIngredients form={form} />
 
         <FieldArray
@@ -87,10 +88,7 @@ const NewRecipeForm: Component<{
         >
           {(fieldArray) => (
             <div class="flex flex-col">
-              <SectionHeader
-                for={fieldArray.name}
-                label="Instructions"
-              />
+              <SectionHeader label="Instructions" />
               <div class="space-y-8">
                 <For each={fieldArray.items}>
                   {(_, index) => (

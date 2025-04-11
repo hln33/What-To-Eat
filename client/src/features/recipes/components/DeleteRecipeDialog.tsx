@@ -43,7 +43,7 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
       />
 
       <DialogContent title="Delete Recipe">
-        <p class="my-8 block">
+        <p class="block">
           Are you sure you want to delete this recipe?
           <br />
           Doing so is irreversible.

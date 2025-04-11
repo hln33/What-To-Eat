@@ -4,10 +4,6 @@ import PlusIcon from "~icons/fe/plus";
 
 import Button from "@/components/ui/Button";
 
-export const SectionHeader: Component<{ for: string; label: string }> = (
-  props,
-) => <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>;
-
 export const DeleteFieldButton: Component<{
   ariaLabel: string;
   onClick: () => void;

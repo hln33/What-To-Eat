@@ -14,11 +14,7 @@ import Combobox from "@/components/ui/Combobox";
 import Select from "@/components/ui/Select";
 import TextField from "@/components/ui/TextField";
 import { RecipeForm } from "../types";
-import {
-  AddFieldButton,
-  DeleteFieldButton,
-  SectionHeader,
-} from "./FormHelpers";
+import { AddFieldButton, DeleteFieldButton } from "./FormHelpers";
 
 const RecipeInputIngredients: Component<{
   form: FormStore<RecipeForm>;
@@ -31,10 +27,6 @@ const RecipeInputIngredients: Component<{
     >
       {(fieldArray) => (
         <div class="flex flex-col">
-          <SectionHeader
-            for={fieldArray.name}
-            label="Ingredients"
-          />
           <div class="space-y-8">
             <For each={fieldArray.items}>
               {(_, index) => (
