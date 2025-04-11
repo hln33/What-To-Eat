@@ -8,7 +8,7 @@ import { useNavigate } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 
 import Recipes from "@/features/recipes/components/Recipes";
-import { getAllIngredients } from "@/features/ingredients/api";
+import { getAllIngredientNames } from "@/features/ingredients/api";
 import MultiSelect from "@/components/ui/MultiSelect";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
@@ -19,7 +19,7 @@ const HomePage: Component = () => {
 
   const ingredientsQuery = createQuery(() => ({
     queryKey: ["ingredients"],
-    queryFn: getAllIngredients,
+    queryFn: getAllIngredientNames,
     select: (ingredients) => ingredients.map((i) => i.name).toSorted(),
   }));
 

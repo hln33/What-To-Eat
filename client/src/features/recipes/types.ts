@@ -19,7 +19,7 @@ export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id"> & {
   uploadedImageName: string | null;
 };
 
-type Ingredient = {
+export type Ingredient = {
   amount: number;
   unit: "g" | "kg" | "lb" | "oz";
   name: string;

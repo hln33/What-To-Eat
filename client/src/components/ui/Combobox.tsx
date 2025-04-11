@@ -36,6 +36,7 @@ const Combobox: Component<
     <Kobalte<string>
       {...rootProps}
       class={props.class ?? ""}
+      defaultValue={props.value}
       onChange={props.controlled ? props.onChange : undefined}
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (

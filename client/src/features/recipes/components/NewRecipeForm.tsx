@@ -8,7 +8,7 @@ import InputError from "@/components/InputError";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../types";
 import { postRecipeImage } from "../api";
-import { AddFieldButton, DeleteFieldButton } from "./FormHelpers";
+import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 
 const SectionHeader: Component<{ label: string }> = (props) => (

@@ -14,7 +14,7 @@ import Combobox from "@/components/ui/Combobox";
 import Select from "@/components/ui/Select";
 import TextField from "@/components/ui/TextField";
 import { RecipeForm } from "../types";
-import { AddFieldButton, DeleteFieldButton } from "./FormHelpers";
+import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 
 const RecipeInputIngredients: Component<{
   form: FormStore<RecipeForm>;
