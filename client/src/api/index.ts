@@ -1,8 +1,8 @@
 import { ClientResponse, hc } from "hono/client";
-import { AppType } from "../../../server/src";
+import { type ApiRoutes } from "@server/src";
 
-const API_URL = "http://localhost:3001";
-export const api = hc<AppType>(API_URL);
+const API_URL = "http://localhost:3000";
+export const api = hc<ApiRoutes>(API_URL).api;
 
 export const callRPC = async <T>(
   rpc: Promise<ClientResponse<T>>,

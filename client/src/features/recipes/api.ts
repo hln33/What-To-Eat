@@ -60,7 +60,7 @@ export const updateRecipe = async ({
         instructions: recipe.instructions,
       },
     },
-    { init: { credentials: "include" } },
+    // { init: { credentials: "include" } },
   );
 };
 

@@ -22,105 +22,6 @@ type Recipe = {
   instructions: string[];
 };
 
-export const createRecipe = async ({
-  id: userId,
-  name,
-  imageName,
-  ingredients,
-  instructions: steps,
-}: Omit<Recipe, 'creator'>): Promise<Recipe> => {
-  const [newRecipe] = await db
-    .insert(recipeTable)
-    .values({
-      userId,
-      name,
-      imageName,
-    })
-    .returning();
-
-  for (const ingredient of ingredients) {
-    const existingIngredient = (
-      await db
-        .select()
-        .from(ingredientTable)
-        .where(eq(ingredientTable.name, ingredient.name))
-        .limit(1)
-    ).at(0);
-
-    let ingredientId;
-    if (!existingIngredient) {
-      const [newIngredient] = await db
-        .insert(ingredientTable)
-        .values({ name: ingredient.name })
-        .returning();
-      ingredientId = newIngredient.id;
-    } else {
-      ingredientId = existingIngredient.id;
-    }
-
-    await db.insert(recipeToIngredientTable).values({
-      recipeId: newRecipe.id,
-      ingredientId,
-      unit: ingredient.unit,
-      amount: ingredient.amount,
-    });
-  }
-
-  for (const [index, step] of steps.entries()) {
-    await db.insert(stepTable).values({
-      stepNumber: index,
-      instruction: step,
-      recipeId: newRecipe.id,
-    });
-  }
-
-  // guranteed to not be null because we just created the recipe in the db
-  return (await getRecipe(newRecipe.id))!;
-};
-
-export const getRecipe = async (id: number): Promise<Recipe | null> => {
-  const recipe = (
-    await db.select().from(recipeTable).where(eq(recipeTable.id, id)).limit(1)
-  ).at(0);
-  if (recipe === undefined) {
-    return null;
-  }
-
-  const ingredients = await db
-    .select({
-      name: ingredientTable.name,
-      unit: recipeToIngredientTable.unit,
-      amount: recipeToIngredientTable.amount,
-    })
-    .from(ingredientTable)
-    .innerJoin(
-      recipeToIngredientTable,
-      eq(recipeToIngredientTable.ingredientId, ingredientTable.id)
-    )
-    .where(eq(recipeToIngredientTable.recipeId, id));
-  if (ingredients.length === 0) {
-    return null;
-  }
-
-  const steps = await db
-    .select({ instruction: stepTable.instruction })
-    .from(stepTable)
-    .innerJoin(recipeTable, eq(recipeTable.id, stepTable.recipeId))
-    .where(eq(stepTable.recipeId, id));
-  if (steps.length === 0) {
-    return null;
-  }
-
-  return {
-    id: recipe.id,
-    creator: await getCreatorName(recipe.id, recipe.name),
-    imageName: recipe.imageName,
-    name: recipe.name,
-    ingredients,
-    instructions: steps.map((step) => step.instruction),
-  };
-};
-
 export const getAllRecipes = async (): Promise<Recipe[]> => {
   const recipeRows = await db
     .select()
@@ -170,6 +71,131 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
   }
 
   return Object.values(recipes);
+};
+
+export const getRecipe = async (id: number): Promise<Recipe | null> => {
+  const recipe = (
+    await db.select().from(recipeTable).where(eq(recipeTable.id, id)).limit(1)
+  ).at(0);
+  if (recipe === undefined) {
+    return null;
+  }
+
+  const ingredients = await db
+    .select({
+      name: ingredientTable.name,
+      unit: recipeToIngredientTable.unit,
+      amount: recipeToIngredientTable.amount,
+    })
+    .from(ingredientTable)
+    .innerJoin(
+      recipeToIngredientTable,
+      eq(recipeToIngredientTable.ingredientId, ingredientTable.id)
+    )
+    .where(eq(recipeToIngredientTable.recipeId, id));
+  if (ingredients.length === 0) {
+    return null;
+  }
+
+  const steps = await db
+    .select({ instruction: stepTable.instruction })
+    .from(stepTable)
+    .innerJoin(recipeTable, eq(recipeTable.id, stepTable.recipeId))
+    .where(eq(stepTable.recipeId, id));
+  if (steps.length === 0) {
+    return null;
+  }
+
+  return {
+    id: recipe.id,
+    creator: await getCreatorName(recipe.id, recipe.name),
+    imageName: recipe.imageName,
+    name: recipe.name,
+    ingredients,
+    instructions: steps.map((step) => step.instruction),
+  };
+};
+
+export const createRecipe = async ({
+  userId,
+  name,
+  imageName,
+  ingredients,
+  instructions: steps,
+}: Omit<Recipe, 'creator' | 'id'> & { userId: number }): Promise<Recipe> => {
+  const [newRecipe] = await db
+    .insert(recipeTable)
+    .values({
+      userId,
+      name,
+      imageName,
+    })
+    .returning();
+
+  for (const ingredient of ingredients) {
+    const existingIngredient = (
+      await db
+        .select()
+        .from(ingredientTable)
+        .where(eq(ingredientTable.name, ingredient.name))
+        .limit(1)
+    ).at(0);
+
+    let ingredientId;
+    if (!existingIngredient) {
+      const [newIngredient] = await db
+        .insert(ingredientTable)
+        .values({ name: ingredient.name })
+        .returning();
+      ingredientId = newIngredient.id;
+    } else {
+      ingredientId = existingIngredient.id;
+    }
+
+    await db.insert(recipeToIngredientTable).values({
+      recipeId: newRecipe.id,
+      ingredientId,
+      unit: ingredient.unit,
+      amount: ingredient.amount,
+    });
+  }
+
+  for (const [index, step] of steps.entries()) {
+    await db.insert(stepTable).values({
+      stepNumber: index,
+      instruction: step,
+      recipeId: newRecipe.id,
+    });
+  }
+
+  // guranteed to not be null because we just created the recipe in the db
+  return (await getRecipe(newRecipe.id))!;
+};
+
+export const updateRecipe = async (values: {
+  recipeId: number;
+  recipeName: string;
+}) => {
+  // await db
+  //   .update(recipeTable)
+  //   .set({ name: values.recipeName })
+  //   .where(eq(recipeTable.id, values.recipeId));
+
+  // 1. find ingredients for recipe
+  // 2. find the diff the old ingredients between and new ingredients
+  // 3. remove and add ingredients accordingly
+
+  const res = await db
+    .select()
+    .from(recipeToIngredientTable)
+    .innerJoin(
+      ingredientTable,
+      eq(
+        recipeToIngredientTable.ingredientId,
+        recipeToIngredientTable.ingredientId
+      )
+    )
+    .where(eq(recipeTable.id, values.recipeId));
 };
 
 export const deleteRecipe = async (recipeId: number) => {
