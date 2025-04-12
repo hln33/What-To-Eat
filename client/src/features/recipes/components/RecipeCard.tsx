@@ -37,7 +37,7 @@ const RecipeCard: Component<{
       <div class="flex size-32 shrink-0 items-center justify-center rounded bg-slate-400 group-hover:bg-slate-600">
         <Show
           when={props.recipe.imageUrl !== null}
-          fallback={<ImageIcon class="size-28" />}
+          fallback={<ImageIcon class="size-28 text-slate-200" />}
         >
           <Image
             class="size-full"
@@ -56,7 +56,7 @@ const RecipeCard: Component<{
           <div class="h-fit rounded-full border px-2 py-1 text-sm">Easy</div>
         </div>
 
-        <div class="text-md flex gap-6 font-extralight">
+        <div class="text-md flex gap-6">
           <span class="flex items-center gap-2">
             <ClockIcon />
             25 mins
@@ -86,7 +86,7 @@ const RecipeCard: Component<{
           </Match>
         </Switch>
 
-        <div class="flex items-center gap-2 font-semibold">
+        <div class="flex items-center gap-2 font-extralight">
           <UserIcon />
           {props.recipe.creator}
         </div>

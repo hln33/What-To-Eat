@@ -102,7 +102,7 @@ const RecipePage: Component = () => {
                   />
                 </Show>
               </div>
-              <ul class="list-inside list-disc">
+              <ul class="list-inside list-disc text-slate-100">
                 <Index each={recipeQuery.data?.ingredients}>
                   {(ingredient) => (
                     <li>
@@ -116,7 +116,7 @@ const RecipePage: Component = () => {
 
             <section class="space-y-3">
               <h3 class="text-3xl">Instructions</h3>
-              <ul class="list-inside list-decimal space-y-5">
+              <ul class="list-inside list-decimal space-y-5 text-slate-100">
                 <Index each={recipeQuery.data?.instructions}>
                   {(instruction) => <li>{instruction()}</li>}
                 </Index>

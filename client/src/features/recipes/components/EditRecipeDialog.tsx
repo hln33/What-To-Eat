@@ -35,7 +35,10 @@ const EditIngredientsDialog: Component<{
             {...props}
             variant="subtle"
           >
-            <PencilIcon aria-label="Edit recipe" />
+            <PencilIcon
+              class="text-slate-300"
+              aria-label="Edit recipe"
+            />
           </Button>
         )}
       />
