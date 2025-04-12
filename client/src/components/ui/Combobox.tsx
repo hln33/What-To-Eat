@@ -41,7 +41,7 @@ const Combobox: Component<
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
-          class="flex items-center justify-start gap-1 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
+          class="flex cursor-pointer items-center justify-start gap-1 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
           item={props.item}
         >
           <Kobalte.ItemLabel class="capitalize">
@@ -80,7 +80,10 @@ const Combobox: Component<
         <InputError errorMessage={props.error ?? ""} />
       </Kobalte.ErrorMessage>
 
-      <Kobalte.Portal>
+      <Kobalte.Portal
+        // mount the portal in the currently opened dialog if it exists so that it is accessible
+        mount={document.querySelector("[role=dialog]") ?? undefined}
+      >
         <Kobalte.Content class="z-50 max-h-96 overflow-auto rounded-lg border border-slate-950 bg-white text-black">
           <Kobalte.Listbox class="p-2" />
         </Kobalte.Content>

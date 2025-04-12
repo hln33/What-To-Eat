@@ -1,5 +1,4 @@
 import {
-  createEffect,
   createSignal,
   ErrorBoundary,
   Index,
@@ -9,77 +8,16 @@ import {
 } from "solid-js";
 import { A, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { createForm, setValues } from "@modular-forms/solid";
 import { Separator } from "@kobalte/core/separator";
-import { DialogTriggerProps } from "@kobalte/core/dialog";
-import PencilIcon from "~icons/lucide/pencil";
 
 import { getRecipe } from "@/features/recipes/api";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
-import { RecipeForm, Ingredient } from "@/features/recipes/types";
-import RecipeInputIngredients from "@/features/recipes/components/RecipeInputIngredients";
+import EditIngredientsDialog, {
+  EditIngredientsFormValues,
+} from "@/features/recipes/components/EditRecipeDialog";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
-import Button from "@/components/ui/Button";
-
-const EditIngredientsDialog: Component<{ initialIngredients: Ingredient[] }> = (
-  props,
-) => {
-  const [open, setOpen] = createSignal(false);
-  const [form, { Form }] = createForm<RecipeForm>();
-
-  console.log(props.initialIngredients);
-
-  // initial ingredients could come from a query so we need to create an effect
-  // so that the form will have the proper intial values when the query succeeds
-  createEffect(() => {
-    setValues(form, "ingredients", props.initialIngredients, {
-      shouldTouched: false,
-      shouldDirty: false,
-    });
-  });
-
-  return (
-    <Dialog
-      open={open()}
-      setOpen={setOpen}
-    >
-      <DialogTrigger
-        as={(props: DialogTriggerProps) => (
-          <Button
-            variant="subtle"
-            {...props}
-          >
-            <PencilIcon />
-          </Button>
-        )}
-      />
-
-      <DialogContent title="Ingredients">
-        <Form>
-          <RecipeInputIngredients form={form} />
-          <div class="mt-8 flex justify-end gap-4">
-            <Button
-              variant="subtle"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="blue"
-              variant="filled"
-              onClick={() => setOpen(false)}
-            >
-              Save
-            </Button>
-          </div>
-        </Form>
-      </DialogContent>
-    </Dialog>
-  );
-};
 
 const RecipePage: Component = () => {
   const params = useParams();
@@ -90,6 +28,10 @@ const RecipePage: Component = () => {
   }));
 
   const [rating, setRating] = createSignal(3);
+
+  const onEditIngredientsSubmit = (values: EditIngredientsFormValues) => {
+    console.log(values);
+  };
 
   return (
     <div class="space-y-10">
@@ -141,9 +83,12 @@ const RecipePage: Component = () => {
             <section class="space-y-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-3xl">Ingredients</h3>
-                <EditIngredientsDialog
-                  initialIngredients={recipeQuery.data?.ingredients ?? []}
-                />
+                <Show when={recipeQuery.data?.ingredients}>
+                  <EditIngredientsDialog
+                    initialIngredients={recipeQuery.data!.ingredients}
+                    onSubmit={onEditIngredientsSubmit}
+                  />
+                </Show>
               </div>
               <ul class="list-inside list-disc">
                 <Index each={recipeQuery.data?.ingredients}>

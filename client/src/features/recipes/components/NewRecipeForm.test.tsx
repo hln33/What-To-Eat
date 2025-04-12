@@ -43,8 +43,8 @@ describe("New Recipe Form", () => {
       screen.getByRole("group", { name: "Ingredient 1" }),
     );
     await user.type(firstIngredientInputs.amount, "1");
-    await user.click(firstIngredientInputs.unit);
 
+    await user.click(firstIngredientInputs.unit);
     await user.click(screen.getByRole("option", { name: "kg" }));
     removeListbox("Unit");
 
@@ -83,7 +83,7 @@ describe("New Recipe Form", () => {
       "Serve and enjoy!",
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Submit" }));
+    await user.click(screen.getByRole("button", { name: "Submit" }));
     await waitFor(() =>
       expect(handleSubmit).toHaveBeenCalledWith({
         name: "Scrambled Eggs",

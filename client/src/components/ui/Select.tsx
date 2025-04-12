@@ -28,7 +28,7 @@ const Select: Component<
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
-          class="flex items-center gap-2 rounded-lg px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
+          class="flex items-center gap-2 rounded-lg px-2 text-black ui-highlighted:bg-sky-700 ui-highlighted:text-white"
           item={props.item}
         >
           <Kobalte.ItemLabel>{props.item.rawValue}</Kobalte.ItemLabel>
@@ -53,7 +53,11 @@ const Select: Component<
       <Kobalte.ErrorMessage>
         <InputError errorMessage={props.error} />
       </Kobalte.ErrorMessage>
-      <Kobalte.Portal>
+
+      <Kobalte.Portal
+        // mount the portal in the currently opened dialog if it exists so that it is accessible
+        mount={document.querySelector("[role=dialog]") ?? undefined}
+      >
         <Kobalte.Content class="z-50 rounded-lg border border-slate-400 bg-white p-2 shadow-xl">
           <Kobalte.Listbox class="outline-none" />
         </Kobalte.Content>

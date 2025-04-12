@@ -36,7 +36,19 @@ const DialogContent: ParentComponent<{ title: string }> = (props) => {
     <Kobalte.Portal>
       <Kobalte.Overlay class="fixed inset-0 z-40 bg-black/60">
         <div class="absolute inset-0 flex items-center justify-center">
-          <Kobalte.Content class="relative rounded-md bg-slate-700 p-8 text-white">
+          <Kobalte.Content
+            class="relative rounded-md bg-slate-700 p-8 text-white"
+            onMouseDown={(e) => {
+              // combobox listboxes inside dialogs were not able to be clicked on for some reason
+              // this is a workaround.
+              // It may have something to do the events the listbox was propagating
+              // and the dialog interfering with them as its default behavior.
+              if (e.target.closest('[role="listbox"]')) {
+                e.preventDefault();
+              }
+            }}
+            onPointerDownOutside={() => console.log("pointer down outside")}
+          >
             <div class="mb-8 flex justify-between text-3xl">
               <Kobalte.Title>{props.title}</Kobalte.Title>
               <Kobalte.CloseButton
