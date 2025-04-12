@@ -3,14 +3,14 @@ import { http, HttpResponse } from "msw";
 import { render, screen } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
-import { mockServer } from "@/testing/mockServer";
+import { MOCK_SERVER_ORIGIN, mockServer } from "@/testing/mockServer";
 import ProviderWrapper from "@/testing/ProviderWrapper";
 import LoginPage from "./Login";
 
 describe("Login Page", () => {
   beforeEach(async () => {
     mockServer.use(
-      http.get("http://localhost:3001/users/session", () => {
+      http.get(`${MOCK_SERVER_ORIGIN}/users/session`, () => {
         return HttpResponse.json(
           {
             message: "Invalid session.",
