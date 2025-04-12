@@ -7,10 +7,10 @@ import {
   type Component,
 } from "solid-js";
 import { A, useParams } from "@solidjs/router";
-import { createQuery } from "@tanstack/solid-query";
+import { createMutation, createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 
-import { getRecipe } from "@/features/recipes/api";
+import { getRecipe, updateRecipe } from "@/features/recipes/api";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditIngredientsDialog, {
   EditIngredientsFormValues,
@@ -29,8 +29,20 @@ const RecipePage: Component = () => {
 
   const [rating, setRating] = createSignal(3);
 
+  const updateRecipeMutation = createMutation(() => ({
+    mutationFn: updateRecipe,
+  }));
+
   const onEditIngredientsSubmit = (values: EditIngredientsFormValues) => {
-    console.log(values);
+    if (!recipeQuery.data) {
+      console.error("Nothing to edit; no recipe loaded.");
+      return;
+    }
+
+    updateRecipeMutation.mutate({
+      recipeId: params.id,
+      recipe: { ...recipeQuery.data, ingredients: values.ingredients },
+    });
   };
 
   return (

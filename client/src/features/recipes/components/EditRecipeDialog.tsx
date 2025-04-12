@@ -5,10 +5,13 @@ import PencilIcon from "~icons/lucide/pencil";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
-import { Ingredient, RecipeForm } from "../types";
+import { Ingredient, RecipeForm, SubmittedRecipeForm } from "../types";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 
-export type EditIngredientsFormValues = Pick<RecipeForm, "ingredients">;
+export type EditIngredientsFormValues = Pick<
+  SubmittedRecipeForm,
+  "ingredients"
+>;
 
 const EditIngredientsDialog: Component<{
   initialIngredients: Ingredient[];
@@ -38,7 +41,11 @@ const EditIngredientsDialog: Component<{
       />
 
       <DialogContent title="Ingredients">
-        <Form onSubmit={(values) => props.onSubmit(values)}>
+        <Form
+          onSubmit={(values) =>
+            props.onSubmit(values as EditIngredientsFormValues)
+          }
+        >
           <RecipeInputIngredients form={form} />
           <div class="mt-8 flex justify-end gap-4">
             <Button

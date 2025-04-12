@@ -8,6 +8,7 @@ import {
   deleteRecipe,
   getAllRecipes,
   getRecipe,
+  updateRecipe,
 } from '../models/recipe.ts';
 import { ingredientSchema } from './validators/index.js';
 import { getSessionCookie } from './cookies/index.ts';
@@ -61,7 +62,7 @@ const recipes = new Hono()
     const { recipeName, uploadedImageName, ingredients, instructions } =
       c.req.valid('json');
     const recipe = await createRecipe({
-      id: user.id,
+      userId: user.id,
       name: recipeName,
       imageName: uploadedImageName ?? null,
       ingredients,
@@ -70,6 +71,27 @@ const recipes = new Hono()
 
     return c.json({ ...recipe, imageUrl: null }, 201);
   })
+  .put(
+    '/:id',
+    zValidator('json', recipeSchema.omit({ uploadedImageName: true })),
+    async (c) => {
+      const sessionToken = getSessionCookie(c);
+      const { user } = await validateSessionToken(sessionToken);
+      console.log(user);
+
+      if (!user) {
+        throw new HTTPException(401, { message: 'Invalid session.' });
+      }
+
+      const id = Number(c.req.param('id'));
+      const { recipeName, ingredients, instructions } = c.req.valid('json');
+      // await updateRecipe({ recipeId: id, recipeName });
+
+      console.log(ingredients);
+
+      return c.json({ message: 'Recipe successfully updated' }, 200);
+    }
+  )
   .delete('/:id', async (c) => {
     const id = Number(c.req.param('id'));
 
