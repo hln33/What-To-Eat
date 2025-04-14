@@ -33,7 +33,7 @@ describe("New Recipe Form", () => {
     });
 
     await user.type(
-      screen.getByRole("textbox", {
+      await screen.findByRole("textbox", {
         name: "Recipe name",
       }),
       "Scrambled Eggs",
@@ -108,7 +108,7 @@ describe("New Recipe Form", () => {
       wrapper: ProviderWrapper,
     });
 
-    await user.click(screen.getByRole("button", { name: "Submit" }));
+    await user.click(await screen.findByRole("button", { name: "Submit" }));
 
     expect(
       screen.getByRole("textbox", { name: "Recipe name" }),

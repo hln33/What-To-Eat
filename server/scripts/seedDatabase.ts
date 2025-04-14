@@ -25,7 +25,7 @@ const seedDatabase = async () => {
     fs.readFileSync(pathToJSONFile, 'utf-8')
   )) {
     await createRecipe({
-      id: adminUser.id,
+      userId: adminUser.id,
       imageName: null,
       name,
       ingredients,

@@ -9,6 +9,7 @@ import {
   required,
 } from "@modular-forms/solid";
 
+import { createIngredientNamesQuery } from "@/features/ingredients/queries";
 import InputError from "@/components/InputError";
 import Combobox from "@/components/ui/Combobox";
 import Select from "@/components/ui/Select";
@@ -19,6 +20,8 @@ import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 const RecipeInputIngredients: Component<{
   form: FormStore<RecipeForm>;
 }> = (props) => {
+  const ingredientNamesQuery = createIngredientNamesQuery();
+
   return (
     <FieldArray
       of={props.form}
@@ -86,7 +89,7 @@ const RecipeInputIngredients: Component<{
                           label="Name"
                           value={field.value}
                           error={field.error}
-                          options={["apples", "eggs", "salt", "cheese"]}
+                          options={ingredientNamesQuery.data ?? []}
                         />
                       )}
                     </Field>

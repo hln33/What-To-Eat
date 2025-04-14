@@ -5,10 +5,9 @@ import {
   type Component,
 } from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { createQuery } from "@tanstack/solid-query";
 
+import { createIngredientNamesQuery } from "@/features/ingredients/queries";
 import Recipes from "@/features/recipes/components/Recipes";
-import { getAllIngredientNames } from "@/features/ingredients/api";
 import MultiSelect from "@/components/ui/MultiSelect";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
@@ -17,11 +16,7 @@ const HomePage: Component = () => {
   const navigate = useNavigate();
   const [ingredients, setIngredients] = createSignal<string[]>([]);
 
-  const ingredientsQuery = createQuery(() => ({
-    queryKey: ["ingredients"],
-    queryFn: getAllIngredientNames,
-    select: (ingredients) => ingredients.map((i) => i.name).toSorted(),
-  }));
+  const ingredientsQuery = createIngredientNamesQuery();
 
   return (
     <div class="flex flex-col justify-around gap-8">

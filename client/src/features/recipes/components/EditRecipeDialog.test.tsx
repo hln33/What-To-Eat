@@ -62,7 +62,7 @@ describe("Edit Recipe Dialog", () => {
       }),
     );
 
-    await user.click(screen.getByRole("option", { name: newValue }));
+    await user.click(await screen.findByRole("option", { name: newValue }));
     expect(
       within(ingredient).getByRole("combobox", { name: "Name" }),
     ).toHaveValue(newValue);

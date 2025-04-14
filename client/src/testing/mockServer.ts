@@ -10,6 +10,17 @@ const handlers = [
       { status: 200 },
     );
   }),
+  http.get(`${MOCK_SERVER_ORIGIN}/ingredients/all`, () => {
+    return HttpResponse.json(
+      [
+        { name: "apples" },
+        { name: "salt" },
+        { name: "eggs" },
+        { name: "cheese" },
+      ],
+      { status: 200 },
+    );
+  }),
   http.get(`${MOCK_SERVER_ORIGIN}/users/session`, () => {
     return HttpResponse.json({
       message: "Session exists.",

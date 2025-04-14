@@ -10,6 +10,7 @@ import {
 } from '../db/schema.ts';
 import type { z } from 'zod';
 import type { ingredientSchema } from '../routes/validators/index.ts';
+import { addIngredient, getIngredient } from './ingredient.ts';
 
 type Ingredient = z.infer<typeof ingredientSchema>;
 
@@ -133,20 +134,11 @@ export const createRecipe = async ({
     .returning();
 
   for (const ingredient of ingredients) {
-    const existingIngredient = (
-      await db
-        .select()
-        .from(ingredientTable)
-        .where(eq(ingredientTable.name, ingredient.name))
-        .limit(1)
-    ).at(0);
-
     let ingredientId;
-    if (!existingIngredient) {
-      const [newIngredient] = await db
-        .insert(ingredientTable)
-        .values({ name: ingredient.name })
-        .returning();
+
+    const existingIngredient = await getIngredient(ingredient.name);
+    if (existingIngredient === null) {
+      const newIngredient = await addIngredient(ingredient.name);
       ingredientId = newIngredient.id;
     } else {
       ingredientId = existingIngredient.id;
@@ -175,27 +167,52 @@ export const createRecipe = async ({
 export const updateRecipe = async (values: {
   recipeId: number;
   recipeName: string;
+  newIngredients: Ingredient[];
 }) => {
-  // await db
-  //   .update(recipeTable)
-  //   .set({ name: values.recipeName })
-  //   .where(eq(recipeTable.id, values.recipeId));
-
-  // 1. find ingredients for recipe
-  // 2. find the diff the old ingredients between and new ingredients
-  // 3. remove and add ingredients accordingly
-
-  const res = await db
-    .select()
-    .from(recipeToIngredientTable)
-    .innerJoin(
-      ingredientTable,
-      eq(
-        recipeToIngredientTable.ingredientId,
-        recipeToIngredientTable.ingredientId
-      )
-    )
+  await db
+    .update(recipeTable)
+    .set({ name: values.recipeName })
     .where(eq(recipeTable.id, values.recipeId));
+
+  /**
+   * Update ingredients by simply deleting them all and inserting them again.
+   * There will not be many ingredients for a recipe anyways so the
+   * computation cost is low and the code is simple.
+   */
+  await db
+    .delete(recipeToIngredientTable)
+    .where(eq(recipeToIngredientTable.recipeId, values.recipeId));
+  for (const newIngredient of values.newIngredients) {
+    const recipeToIngredientAssociation = await db
+      .select()
+      .from(recipeToIngredientTable)
+      .innerJoin(
+        ingredientTable,
+        eq(ingredientTable.id, recipeToIngredientTable.ingredientId)
+      )
+      .where(eq(ingredientTable.name, newIngredient.name))
+      .limit(1);
+
+    let ingredientId;
+    if (recipeToIngredientAssociation.length === 0) {
+      const existingIngredient = await getIngredient(newIngredient.name);
+      if (existingIngredient === null) {
+        const { id } = await addIngredient(newIngredient.name);
+        ingredientId = id;
+      } else {
+        ingredientId = existingIngredient.id;
+      }
+    } else {
+      ingredientId = recipeToIngredientAssociation[0].ingredients.id;
+    }
+
+    await db.insert(recipeToIngredientTable).values({
+      recipeId: values.recipeId,
+      ingredientId,
+      amount: newIngredient.amount,
+      unit: newIngredient.unit,
+    });
+  }
 };
 
 export const deleteRecipe = async (recipeId: number) => {

@@ -5,7 +5,9 @@ import { UserContextProvider } from "@/contexts/UserContext";
 import MainLayout from "@/app/layouts/MainLayout";
 
 const ProviderWrapper: ParentComponent = (props) => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

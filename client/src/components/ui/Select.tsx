@@ -46,7 +46,7 @@ const Select: Component<
             {(state) => state.selectedOption()}
           </Kobalte.Value>
           <Kobalte.Icon>
-            <ChevronDownIcon />
+            <ChevronDownIcon class="size-5" />
           </Kobalte.Icon>
         </Kobalte.Trigger>
       </div>

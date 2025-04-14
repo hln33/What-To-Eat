@@ -72,7 +72,9 @@ const Combobox: Component<
             class="w-full bg-inherit outline-none placeholder:text-slate-400"
             aria-label={props["aria-label"]}
           />
-          <ChevronDownIcon />
+          <Kobalte.Icon>
+            <ChevronDownIcon class="size-5" />
+          </Kobalte.Icon>
           <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
         </div>
       </Kobalte.Control>

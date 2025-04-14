@@ -85,9 +85,11 @@ const recipes = new Hono()
 
       const id = Number(c.req.param('id'));
       const { recipeName, ingredients, instructions } = c.req.valid('json');
-      // await updateRecipe({ recipeId: id, recipeName });
-
-      console.log(ingredients);
+      await updateRecipe({
+        recipeId: id,
+        recipeName,
+        newIngredients: ingredients,
+      });
 
       return c.json({ message: 'Recipe successfully updated' }, 200);
     }

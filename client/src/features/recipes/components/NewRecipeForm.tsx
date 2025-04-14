@@ -1,4 +1,10 @@
-import { Component, createSignal, For } from "solid-js";
+import {
+  Component,
+  createSignal,
+  ErrorBoundary,
+  For,
+  Suspense,
+} from "solid-js";
 import { createMutation } from "@tanstack/solid-query";
 import { createForm, insert, remove, required } from "@modular-forms/solid";
 
@@ -53,91 +59,95 @@ const NewRecipeForm: Component<{
   };
 
   return (
-    <Form
-      class="flex flex-col items-center gap-12 p-8"
-      onSubmit={(values) => handleSubmit(values as SubmittedRecipeForm)}
-    >
-      <FileUpload
-        label="Recipe image (optional)"
-        onFileAccept={handleRecipeImageUpload}
-      />
-
-      <div class="w-full space-y-10">
-        <Field
-          name="name"
-          validate={[required("Please enter a name for the recipe")]}
+    <ErrorBoundary fallback={<div>An error occurred...</div>}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Form
+          class="flex flex-col items-center gap-12 p-8"
+          onSubmit={(values) => handleSubmit(values as SubmittedRecipeForm)}
         >
-          {(field, props) => (
-            <TextField
-              {...props}
-              type="text"
-              label="Recipe name"
-              value={field.value}
-              error={field.error}
-              disabled={form.submitting}
-            />
-          )}
-        </Field>
+          <FileUpload
+            label="Recipe image (optional)"
+            onFileAccept={handleRecipeImageUpload}
+          />
 
-        <SectionHeader label="Ingredients" />
-        <RecipeInputIngredients form={form} />
+          <div class="w-full space-y-10">
+            <Field
+              name="name"
+              validate={[required("Please enter a name for the recipe")]}
+            >
+              {(field, props) => (
+                <TextField
+                  {...props}
+                  type="text"
+                  label="Recipe name"
+                  value={field.value}
+                  error={field.error}
+                  disabled={form.submitting}
+                />
+              )}
+            </Field>
 
-        <FieldArray
-          name="instructions"
-          validate={[required("Please add Instructions")]}
-        >
-          {(fieldArray) => (
-            <div class="flex flex-col">
-              <SectionHeader label="Instructions" />
-              <div class="space-y-8">
-                <For each={fieldArray.items}>
-                  {(_, index) => (
-                    <div class="my-2 flex items-center gap-3">
-                      <Field
-                        name={`${fieldArray.name}.${index()}`}
-                        validate={[required("Field cannot be empty")]}
-                      >
-                        {(field, props) => (
-                          <TextField
-                            {...props}
-                            type="text"
-                            label={`Instruction ${index() + 1}`}
-                            value={field.value}
-                            error={field.error}
-                            disabled={form.submitting}
+            <SectionHeader label="Ingredients" />
+            <RecipeInputIngredients form={form} />
+
+            <FieldArray
+              name="instructions"
+              validate={[required("Please add Instructions")]}
+            >
+              {(fieldArray) => (
+                <div class="flex flex-col">
+                  <SectionHeader label="Instructions" />
+                  <div class="space-y-8">
+                    <For each={fieldArray.items}>
+                      {(_, index) => (
+                        <div class="my-2 flex items-center gap-3">
+                          <Field
+                            name={`${fieldArray.name}.${index()}`}
+                            validate={[required("Field cannot be empty")]}
+                          >
+                            {(field, props) => (
+                              <TextField
+                                {...props}
+                                type="text"
+                                label={`Instruction ${index() + 1}`}
+                                value={field.value}
+                                error={field.error}
+                                disabled={form.submitting}
+                              />
+                            )}
+                          </Field>
+                          <DeleteFieldButton
+                            ariaLabel={`Delete instruction ${index()}`}
+                            onClick={() =>
+                              remove(form, fieldArray.name, { at: index() })
+                            }
+                            disabled={index() === 0}
                           />
-                        )}
-                      </Field>
-                      <DeleteFieldButton
-                        ariaLabel={`Delete instruction ${index()}`}
-                        onClick={() =>
-                          remove(form, fieldArray.name, { at: index() })
-                        }
-                        disabled={index() === 0}
-                      />
-                    </div>
-                  )}
-                </For>
-              </div>
-              <InputError errorMessage={fieldArray.error} />
-              <AddFieldButton
-                onClick={() => insert(form, "instructions", { value: "" })}
-                disabled={form.submitting}
-              >
-                Add Instructions
-              </AddFieldButton>
-            </div>
-          )}
-        </FieldArray>
-      </div>
+                        </div>
+                      )}
+                    </For>
+                  </div>
+                  <InputError errorMessage={fieldArray.error} />
+                  <AddFieldButton
+                    onClick={() => insert(form, "instructions", { value: "" })}
+                    disabled={form.submitting}
+                  >
+                    Add Instructions
+                  </AddFieldButton>
+                </div>
+              )}
+            </FieldArray>
+          </div>
 
-      <Button
-        fullWidth
-        type="submit"
-      >
-        Submit
-      </Button>
-    </Form>
+          <Button
+            fullWidth
+            type="submit"
+          >
+            Submit
+          </Button>
+        </Form>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
