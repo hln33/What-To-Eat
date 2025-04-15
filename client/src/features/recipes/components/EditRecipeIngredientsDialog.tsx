@@ -37,7 +37,7 @@ const EditIngredientsDialog: Component<{
           >
             <PencilIcon
               class="text-slate-300"
-              aria-label="Edit recipe"
+              aria-label="Edit recipe ingredients"
             />
           </Button>
         )}

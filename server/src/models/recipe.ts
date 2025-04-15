@@ -168,6 +168,7 @@ export const updateRecipe = async (values: {
   recipeId: number;
   recipeName: string;
   newIngredients: Ingredient[];
+  newInstructions: string[];
 }) => {
   await db
     .update(recipeTable)
@@ -176,7 +177,7 @@ export const updateRecipe = async (values: {
 
   /**
    * Update ingredients by simply deleting them all and inserting them again.
-   * There will not be many ingredients for a recipe anyways so the
+   * There will not be many ingredients for a recipe so the
    * computation cost is low and the code is simple.
    */
   await db
@@ -211,6 +212,20 @@ export const updateRecipe = async (values: {
       ingredientId,
       amount: newIngredient.amount,
       unit: newIngredient.unit,
+    });
+  }
+
+  /**
+   * Update instructions by simply deleting them all and inserting them again.
+   * There will not be many instructions for a recipe so the
+   * computation cost is low and the code is simple.
+   */
+  await db.delete(stepTable).where(eq(stepTable.recipeId, values.recipeId));
+  for (const [index, newInstruction] of values.newInstructions.entries()) {
+    await db.insert(stepTable).values({
+      recipeId: values.recipeId,
+      stepNumber: index,
+      instruction: newInstruction,
     });
   }
 };

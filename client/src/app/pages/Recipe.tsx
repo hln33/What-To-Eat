@@ -18,7 +18,10 @@ import { getRecipe, updateRecipe } from "@/features/recipes/api";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditIngredientsDialog, {
   EditIngredientsFormValues,
-} from "@/features/recipes/components/EditRecipeDialog";
+} from "@/features/recipes/components/EditRecipeIngredientsDialog";
+import EditInstructionsDialog, {
+  EditInstructionsFormValues,
+} from "@/features/recipes/components/EditRecipeInstructionsDialog";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
@@ -53,9 +56,30 @@ const RecipePage: Component = () => {
         ingredients: values.ingredients,
       },
     };
-    console.log(recipeWithNewIngredients);
     updateRecipeMutation.mutate(recipeWithNewIngredients, {
       onSuccess: () => toast.success("Recipe ingredients updated."),
+      onError: () =>
+        toast.error("Failed to update recipe ingredients. Please try again."),
+    });
+  };
+
+  const onEditInstructionsSubmit = (values: EditInstructionsFormValues) => {
+    if (!recipeQuery.data) {
+      console.error("Nothing to edit; no recipe loaded.");
+      return;
+    }
+
+    const recipeWithNewInstructions = {
+      recipeId: params.id,
+      recipe: {
+        ...recipeQuery.data,
+        instructions: values.instructions,
+      },
+    };
+    updateRecipeMutation.mutate(recipeWithNewInstructions, {
+      onSuccess: () => toast.success("Recipe instructions updated."),
+      onError: () =>
+        toast.error("Failed to update recipe instructions. Please try again."),
     });
   };
 
@@ -129,7 +153,15 @@ const RecipePage: Component = () => {
             </section>
 
             <section class="space-y-3">
-              <h3 class="text-3xl">Instructions</h3>
+              <div class="flex items-center gap-2">
+                <h3 class="text-3xl">Instructions</h3>
+                <Show when={recipeQuery.data?.ingredients}>
+                  <EditInstructionsDialog
+                    initialInstructions={recipeQuery.data!.instructions}
+                    onSubmit={onEditInstructionsSubmit}
+                  />
+                </Show>
+              </div>
               <ul class="list-inside list-decimal space-y-5 text-slate-100">
                 <Index each={recipeQuery.data?.instructions}>
                   {(instruction) => <li>{instruction()}</li>}

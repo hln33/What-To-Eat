@@ -37,7 +37,7 @@ const DialogContent: ParentComponent<{ title: string }> = (props) => {
       <Kobalte.Overlay class="fixed inset-0 z-40 bg-black/60">
         <div class="absolute inset-0 flex items-center justify-center">
           <Kobalte.Content
-            class="relative max-h-screen overflow-y-auto rounded-md bg-slate-700 px-4 py-6 text-white"
+            class="relative max-h-screen min-w-64 overflow-y-auto rounded-md bg-slate-700 px-4 py-6 text-white"
             onMouseDown={(e) => {
               // combobox listboxes inside dialogs were not able to be clicked on for some reason
               // this is a workaround.

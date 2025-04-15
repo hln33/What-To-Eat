@@ -2,7 +2,7 @@ import { int, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { drizzle } from 'drizzle-orm/libsql';
 
 /**
- * To apply db changes, run `npx drizzle-kit push`
+ * To apply db changes or create a new `.db` file, run `npx drizzle-kit push`
  */
 export const db = drizzle(process.env.DB_FILE_NAME!);
 

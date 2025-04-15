@@ -8,7 +8,6 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
 
 export const getRecipe = async (id: string): Promise<Recipe> => {
   const res = await api.recipes[":id"].$get({ param: { id } });
-
   if (!res.ok) {
     throw new Error(`Recipe with id ${id} does not exist`);
   }
@@ -30,17 +29,14 @@ export const postNewRecipe = async ({
   ingredients,
   instructions,
 }: SubmittedRecipeForm): Promise<Recipe> => {
-  const res = await api.recipes.$post(
-    {
-      json: {
-        recipeName: name,
-        ingredients,
-        instructions,
-        uploadedImageName,
-      },
+  const res = await api.recipes.$post({
+    json: {
+      recipeName: name,
+      ingredients,
+      instructions,
+      uploadedImageName,
     },
-    { init: { credentials: "include" } },
-  );
+  });
   return res.json();
 };
 
@@ -51,22 +47,25 @@ export const updateRecipe = async ({
   recipeId: string;
   recipe: Recipe;
 }) => {
-  await api.recipes[":id"].$put(
-    {
-      param: { id: recipeId },
-      json: {
-        recipeName: recipe.name,
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
-      },
+  const res = await api.recipes[":id"].$put({
+    param: { id: recipeId },
+    json: {
+      recipeName: recipe.name,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
     },
-    // { init: { credentials: "include" } },
-  );
+  });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
 };
 
 export const deleteRecipe = async (id: string) => {
   const res = await api.recipes[":id"].$delete({
     param: { id },
   });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
   return res.json();
 };

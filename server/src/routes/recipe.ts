@@ -89,6 +89,7 @@ const recipes = new Hono()
         recipeId: id,
         recipeName,
         newIngredients: ingredients,
+        newInstructions: instructions,
       });
 
       return c.json({ message: 'Recipe successfully updated' }, 200);

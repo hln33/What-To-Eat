@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from "vitest";
 import { render, screen, waitFor, within } from "@solidjs/testing-library";
 import userEvent, { UserEvent } from "@testing-library/user-event";
 import ProviderWrapper from "@/testing/ProviderWrapper";
-import EditIngredientsDialog from "./EditRecipeDialog";
+import EditIngredientsDialog from "./EditRecipeIngredientsDialog";
 
 describe("Edit Recipe Dialog", () => {
   /**
@@ -87,7 +87,9 @@ describe("Edit Recipe Dialog", () => {
       },
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Edit recipe" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Edit recipe ingredients" }),
+    );
 
     const firstIngredient = screen.getByRole("group", { name: "Ingredient 1" });
     await testIngredientAmountInput(user, firstIngredient, 100, 50);
