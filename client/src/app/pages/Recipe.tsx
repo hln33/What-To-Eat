@@ -7,7 +7,11 @@ import {
   type Component,
 } from "solid-js";
 import { A, useParams } from "@solidjs/router";
-import { createMutation, createQuery } from "@tanstack/solid-query";
+import {
+  createMutation,
+  createQuery,
+  useQueryClient,
+} from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 
 import { getRecipe, updateRecipe } from "@/features/recipes/api";
@@ -18,19 +22,22 @@ import EditIngredientsDialog, {
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
+import { toast } from "@/components/ui/Toast";
 
 const RecipePage: Component = () => {
+  const queryClient = useQueryClient();
   const params = useParams();
+
+  const [rating, setRating] = createSignal(3);
 
   const recipeQuery = createQuery(() => ({
     queryKey: ["recipe", params.id],
     queryFn: () => getRecipe(params.id),
   }));
-
-  const [rating, setRating] = createSignal(3);
-
   const updateRecipeMutation = createMutation(() => ({
     mutationFn: updateRecipe,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["recipe", params.id] }),
   }));
 
   const onEditIngredientsSubmit = (values: EditIngredientsFormValues) => {
@@ -39,9 +46,16 @@ const RecipePage: Component = () => {
       return;
     }
 
-    updateRecipeMutation.mutate({
+    const recipeWithNewIngredients = {
       recipeId: params.id,
-      recipe: { ...recipeQuery.data, ingredients: values.ingredients },
+      recipe: {
+        ...recipeQuery.data,
+        ingredients: values.ingredients,
+      },
+    };
+    console.log(recipeWithNewIngredients);
+    updateRecipeMutation.mutate(recipeWithNewIngredients, {
+      onSuccess: () => toast.success("Recipe ingredients updated."),
     });
   };
 

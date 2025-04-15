@@ -47,9 +47,10 @@ const EditIngredientsDialog: Component<{
         <ErrorBoundary fallback={<div>An error occurred</div>}>
           <Suspense fallback={<div>...</div>}>
             <Form
-              onSubmit={(values) =>
-                props.onSubmit(values as EditIngredientsFormValues)
-              }
+              onSubmit={(values) => {
+                props.onSubmit(values as EditIngredientsFormValues);
+                setOpen(false);
+              }}
             >
               <RecipeInputIngredients form={form} />
               <div class="mt-8 flex justify-end gap-4">
