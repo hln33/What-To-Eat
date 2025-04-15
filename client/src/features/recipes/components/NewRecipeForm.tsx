@@ -1,21 +1,14 @@
-import {
-  Component,
-  createSignal,
-  ErrorBoundary,
-  For,
-  Suspense,
-} from "solid-js";
+import { Component, createSignal, ErrorBoundary, Suspense } from "solid-js";
 import { createMutation } from "@tanstack/solid-query";
-import { createForm, insert, remove, required } from "@modular-forms/solid";
+import { createForm, required } from "@modular-forms/solid";
 
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
-import InputError from "@/components/InputError";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../types";
 import { postRecipeImage } from "../api";
-import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 import RecipeInputIngredients from "./RecipeInputIngredients";
+import RecipeInputInstructions from "./RecipeInputInstructions";
 
 const SectionHeader: Component<{ label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -24,7 +17,7 @@ const SectionHeader: Component<{ label: string }> = (props) => (
 const NewRecipeForm: Component<{
   onSubmit: (recipe: SubmittedRecipeForm) => void;
 }> = (props) => {
-  const [form, { Form, Field, FieldArray }] = createForm<RecipeForm>({
+  const [form, { Form, Field }] = createForm<RecipeForm>({
     initialValues: {
       ingredients: [{ amount: 0, unit: undefined, name: "" }],
       instructions: [""],
@@ -70,7 +63,7 @@ const NewRecipeForm: Component<{
             onFileAccept={handleRecipeImageUpload}
           />
 
-          <div class="w-full space-y-10">
+          <div class="w-full space-y-20">
             <Field
               name="name"
               validate={[required("Please enter a name for the recipe")]}
@@ -87,56 +80,15 @@ const NewRecipeForm: Component<{
               )}
             </Field>
 
-            <SectionHeader label="Ingredients" />
-            <RecipeInputIngredients form={form} />
+            <div>
+              <SectionHeader label="Ingredients" />
+              <RecipeInputIngredients form={form} />
+            </div>
 
-            <FieldArray
-              name="instructions"
-              validate={[required("Please add Instructions")]}
-            >
-              {(fieldArray) => (
-                <div class="flex flex-col">
-                  <SectionHeader label="Instructions" />
-                  <div class="space-y-8">
-                    <For each={fieldArray.items}>
-                      {(_, index) => (
-                        <div class="my-2 flex items-center gap-3">
-                          <Field
-                            name={`${fieldArray.name}.${index()}`}
-                            validate={[required("Field cannot be empty")]}
-                          >
-                            {(field, props) => (
-                              <TextField
-                                {...props}
-                                type="text"
-                                label={`Instruction ${index() + 1}`}
-                                value={field.value}
-                                error={field.error}
-                                disabled={form.submitting}
-                              />
-                            )}
-                          </Field>
-                          <DeleteFieldButton
-                            ariaLabel={`Delete instruction ${index()}`}
-                            onClick={() =>
-                              remove(form, fieldArray.name, { at: index() })
-                            }
-                            disabled={index() === 0}
-                          />
-                        </div>
-                      )}
-                    </For>
-                  </div>
-                  <InputError errorMessage={fieldArray.error} />
-                  <AddFieldButton
-                    onClick={() => insert(form, "instructions", { value: "" })}
-                    disabled={form.submitting}
-                  >
-                    Add Instructions
-                  </AddFieldButton>
-                </div>
-              )}
-            </FieldArray>
+            <div>
+              <SectionHeader label="Instructions" />
+              <RecipeInputInstructions form={form} />
+            </div>
           </div>
 
           <Button
