@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-import { A, useNavigate } from "@solidjs/router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/solid-router";
 import { createMutation } from "@tanstack/solid-query";
 import {
   createForm,
@@ -18,7 +18,7 @@ type SignupForm = {
   password: string;
 };
 
-export const SignupPage = () => {
+export const Signup = () => {
   const navigate = useNavigate();
   const [form, { Form, Field }] = createForm<SignupForm>();
 
@@ -28,7 +28,7 @@ export const SignupPage = () => {
 
   const handleSignup: SubmitHandler<SignupForm> = async (credentials) => {
     createUser.mutate(credentials, {
-      onSuccess: () => navigate("/"),
+      onSuccess: () => navigate({ to: "/" }),
     });
   };
 
@@ -84,13 +84,17 @@ export const SignupPage = () => {
         </Button>
       </Form>
 
-      <A
+      <Link
+        to="/Login"
         class="block text-sm"
-        href="/login"
       >
         Already have an account?{" "}
         <span class="font-semibold underline">sign in</span>
-      </A>
+      </Link>
     </div>
   );
 };
+
+export const Route = createFileRoute("/Signup")({
+  component: Signup,
+});

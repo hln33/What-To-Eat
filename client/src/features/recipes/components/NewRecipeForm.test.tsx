@@ -1,8 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
-import { render, screen, waitFor, within } from "@solidjs/testing-library";
+import { screen, waitFor, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
-import ProviderWrapper from "@/testing/ProviderWrapper";
+import customRender from "@/testing/customRender";
 import NewRecipeForm from "./NewRecipeForm";
 
 describe("New Recipe Form", () => {
@@ -28,9 +28,7 @@ describe("New Recipe Form", () => {
   test("Can submit a new recipe", async () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
-    render(() => <NewRecipeForm onSubmit={handleSubmit} />, {
-      wrapper: ProviderWrapper,
-    });
+    customRender(() => <NewRecipeForm onSubmit={handleSubmit} />);
 
     await user.type(
       await screen.findByRole("textbox", {
@@ -104,9 +102,7 @@ describe("New Recipe Form", () => {
   test("Displays validation errors", async () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
-    render(() => <NewRecipeForm onSubmit={handleSubmit} />, {
-      wrapper: ProviderWrapper,
-    });
+    customRender(() => <NewRecipeForm onSubmit={handleSubmit} />);
 
     await user.click(await screen.findByRole("button", { name: "Submit" }));
 

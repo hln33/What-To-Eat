@@ -1,13 +1,13 @@
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { http, HttpResponse } from "msw";
-import { render, screen } from "@solidjs/testing-library";
+import { screen, waitFor } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
 
 import { MOCK_SERVER_ORIGIN, mockServer } from "@/testing/mockServer";
-import ProviderWrapper from "@/testing/ProviderWrapper";
-import LoginPage from "./Login";
+import customRender from "@/testing/customRender";
+import LoginForm from "./LoginForm";
 
-describe("Login Page", () => {
+describe("Login Form", () => {
   beforeEach(async () => {
     mockServer.use(
       http.get(`${MOCK_SERVER_ORIGIN}/users/session`, () => {
@@ -19,15 +19,21 @@ describe("Login Page", () => {
         );
       }),
     );
-
-    render(() => <LoginPage />, {
-      wrapper: ProviderWrapper,
-    });
-    await screen.findByRole("link", { name: "Home" });
-    await screen.findByRole("link", { name: "Login" });
   });
 
+  const setup = async () => {
+    const onSubmit = vi.fn();
+    customRender(() => <LoginForm onSubmit={onSubmit} />);
+    await screen.findByRole("button", { name: "Login" });
+
+    return {
+      onSubmit,
+    };
+  };
+
   test("allows user to login", async () => {
+    const { onSubmit } = await setup();
+
     await userEvent.type(
       screen.getByRole("textbox", { name: "User Name" }),
       "john smith",
@@ -38,10 +44,16 @@ describe("Login Page", () => {
     );
     await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
-    await screen.findByRole("link", { name: "Logout" });
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith({
+        username: "john smith",
+        password: "mysupersecretpassword123",
+      }),
+    );
   });
 
   test("enforces validation errors", async () => {
+    await setup();
     await userEvent.click(screen.getByRole("button", { name: "Login" }));
     expect(screen.getByRole("textbox", { name: "User Name" })).not.toBeValid();
     expect(screen.getByLabelText("Password")).not.toBeValid();
@@ -53,8 +65,5 @@ describe("Login Page", () => {
     await userEvent.type(screen.getByLabelText("Password"), "tooshort");
     expect(screen.getByRole("textbox", { name: "User Name" })).toBeValid();
     expect(screen.getByLabelText("Password")).toBeValid();
-
-    await userEvent.click(screen.getByRole("button", { name: "Login" }));
-    await screen.findByRole("link", { name: "Logout" });
   });
 });

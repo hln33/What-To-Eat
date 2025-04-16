@@ -1,5 +1,5 @@
 import { Component, createSignal } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "@tanstack/solid-router";
 import { type DialogTriggerProps } from "@kobalte/core/dialog";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
@@ -17,7 +17,7 @@ const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
     deleteRecipe.mutate(props.recipeId, {
       onSuccess: () => {
         toast.success("Recipe deleted.");
-        navigate("/");
+        navigate({ to: "/" });
       },
       onError: () => {
         toast.error("Failed to delete recipe.");

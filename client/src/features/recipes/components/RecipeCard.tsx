@@ -1,5 +1,5 @@
 import { Component, Match, Show, Switch } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate } from "@tanstack/solid-router";
 import ImageIcon from "~icons/lucide/image";
 import UserIcon from "~icons/lucide/circle-user-round";
 import PeopleIcon from "~icons/lucide/users";
@@ -32,7 +32,12 @@ const RecipeCard: Component<{
   return (
     <div
       class="group flex h-fit w-full cursor-pointer gap-4 rounded border border-slate-500 bg-slate-600 p-4 shadow-xl hover:bg-slate-800"
-      onClick={() => navigate(`/recipe/${props.recipe.id}`)}
+      onClick={() =>
+        navigate({
+          to: "/recipes/$recipeId",
+          params: { recipeId: props.recipe.id.toString() },
+        })
+      }
     >
       <div class="flex size-32 shrink-0 items-center justify-center rounded bg-slate-400 group-hover:bg-slate-600">
         <Show

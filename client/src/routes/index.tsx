@@ -1,19 +1,18 @@
+import { createFileRoute, Link } from "@tanstack/solid-router";
+
 import {
   createSignal,
   ErrorBoundary,
   Suspense,
   type Component,
 } from "solid-js";
-import { useNavigate } from "@solidjs/router";
 
 import { createIngredientNamesQuery } from "@/features/ingredients/queries";
 import Recipes from "@/features/recipes/components/Recipes";
 import MultiSelect from "@/components/ui/MultiSelect";
 import Skeleton from "@/components/ui/Skeleton";
-import Button from "@/components/ui/Button";
 
-const HomePage: Component = () => {
-  const navigate = useNavigate();
+const Index: Component = () => {
   const [ingredients, setIngredients] = createSignal<string[]>([]);
 
   const ingredientsQuery = createIngredientNamesQuery();
@@ -21,13 +20,13 @@ const HomePage: Component = () => {
   return (
     <div class="flex flex-col justify-around gap-8">
       <h2 class="text-4xl">Recipes</h2>
-      <Button
-        class="mb-8"
-        fullWidth
-        onClick={() => navigate("recipe/new")}
+
+      <Link
+        to="/recipes/New"
+        class="rounded border p-4 text-3xl"
       >
         New Recipe
-      </Button>
+      </Link>
 
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
         <Suspense fallback={<Skeleton height={40} />}>
@@ -45,4 +44,6 @@ const HomePage: Component = () => {
   );
 };
 
-export default HomePage;
+export const Route = createFileRoute("/")({
+  component: Index,
+});

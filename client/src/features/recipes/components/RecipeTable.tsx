@@ -10,12 +10,12 @@ import {
 } from "@tanstack/solid-table";
 
 import { useUserContext } from "@/contexts/UserContext";
+import Input from "@/components/ui/Input";
 import { getRecipesWithIngredientStatus } from "../utils";
 import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
 import RecipeTableCellStatus from "./RecipeTableCellStatus";
 import RecipeCard from "./RecipeCard";
-import Input from "@/components/ui/Input";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [

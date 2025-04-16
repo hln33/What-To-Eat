@@ -1,15 +1,16 @@
 import { describe, expect, test } from "vitest";
-import { render, screen, waitFor, within } from "@solidjs/testing-library";
+import { screen, waitFor, within } from "@solidjs/testing-library";
 import userEvent from "@testing-library/user-event";
-import ProviderWrapper from "@/testing/ProviderWrapper";
+
+import customRender from "@/testing/customRender";
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
 
 describe("Delete Recipe Dialog", () => {
   const setup = async () => {
-    render(() => <DeleteRecipeDialog recipeId="1" />, {
-      wrapper: ProviderWrapper,
-    });
-    await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+    customRender(() => <DeleteRecipeDialog recipeId="1" />);
+    const dialogTrigger = await screen.findByRole("button", { name: "Delete" });
+
+    await userEvent.click(dialogTrigger);
 
     const dialog = screen.getByRole("dialog");
     screen.getByText(

@@ -6,7 +6,7 @@ import {
   Suspense,
   type Component,
 } from "solid-js";
-import { A, useParams } from "@solidjs/router";
+import { createFileRoute, Link } from "@tanstack/solid-router";
 import {
   createMutation,
   createQuery,
@@ -27,20 +27,20 @@ import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 import { toast } from "@/components/ui/Toast";
 
-const RecipePage: Component = () => {
+const Recipe: Component = () => {
   const queryClient = useQueryClient();
-  const params = useParams();
+  const params = Route.useParams()();
 
   const [rating, setRating] = createSignal(3);
 
   const recipeQuery = createQuery(() => ({
-    queryKey: ["recipe", params.id],
-    queryFn: () => getRecipe(params.id),
+    queryKey: ["recipe", params.recipeId],
+    queryFn: () => getRecipe(params.recipeId),
   }));
   const updateRecipeMutation = createMutation(() => ({
     mutationFn: updateRecipe,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["recipe", params.id] }),
+      queryClient.invalidateQueries({ queryKey: ["recipe", params.recipeId] }),
   }));
 
   const onEditIngredientsSubmit = (values: EditIngredientsFormValues) => {
@@ -50,7 +50,7 @@ const RecipePage: Component = () => {
     }
 
     const recipeWithNewIngredients = {
-      recipeId: params.id,
+      recipeId: params.recipeId,
       recipe: {
         ...recipeQuery.data,
         ingredients: values.ingredients,
@@ -70,7 +70,7 @@ const RecipePage: Component = () => {
     }
 
     const recipeWithNewInstructions = {
-      recipeId: params.id,
+      recipeId: params.recipeId,
       recipe: {
         ...recipeQuery.data,
         instructions: values.instructions,
@@ -86,13 +86,13 @@ const RecipePage: Component = () => {
   return (
     <div class="space-y-10">
       <nav class="flex items-center justify-between">
-        <A
+        <Link
+          to="/"
           class="text-lg underline"
-          href="/"
         >
           Go Back
-        </A>
-        <DeleteRecipeDialog recipeId={params.id} />
+        </Link>
+        <DeleteRecipeDialog recipeId={params.recipeId} />
       </nav>
 
       <ErrorBoundary fallback={<div>{recipeQuery.error?.message}</div>}>
@@ -175,4 +175,6 @@ const RecipePage: Component = () => {
   );
 };
 
-export default RecipePage;
+export const Route = createFileRoute("/recipes/$recipeId")({
+  component: Recipe,
+});

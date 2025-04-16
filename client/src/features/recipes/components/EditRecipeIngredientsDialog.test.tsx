@@ -1,7 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
-import { render, screen, waitFor, within } from "@solidjs/testing-library";
+import { screen, waitFor, within } from "@solidjs/testing-library";
 import userEvent, { UserEvent } from "@testing-library/user-event";
-import ProviderWrapper from "@/testing/ProviderWrapper";
+
+import customRender from "@/testing/customRender";
 import EditIngredientsDialog from "./EditRecipeIngredientsDialog";
 
 describe("Edit Recipe Dialog", () => {
@@ -72,24 +73,21 @@ describe("Edit Recipe Dialog", () => {
   test("is able to send a request to edit a recipe", async () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
-    render(
-      () => (
-        <EditIngredientsDialog
-          initialIngredients={[
-            { amount: 100, unit: "g", name: "apples" },
-            { amount: 75, unit: "lb", name: "eggs" },
-          ]}
-          onSubmit={handleSubmit}
-        />
-      ),
-      {
-        wrapper: ProviderWrapper,
-      },
-    );
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Edit recipe ingredients" }),
-    );
+    customRender(() => (
+      <EditIngredientsDialog
+        initialIngredients={[
+          { amount: 100, unit: "g", name: "apples" },
+          { amount: 75, unit: "lb", name: "eggs" },
+        ]}
+        onSubmit={handleSubmit}
+      />
+    ));
+    const dialogTrigger = await screen.findByRole("button", {
+      name: "Edit recipe ingredients",
+    });
+
+    await userEvent.click(dialogTrigger);
 
     const firstIngredient = screen.getByRole("group", { name: "Ingredient 1" });
     await testIngredientAmountInput(user, firstIngredient, 100, 50);
