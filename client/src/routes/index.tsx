@@ -22,7 +22,7 @@ const Index: Component = () => {
       <h2 class="text-4xl">Recipes</h2>
 
       <Link
-        to="/recipes/New"
+        to="/recipes/new"
         class="rounded border p-4 text-3xl"
       >
         New Recipe
@@ -33,7 +33,7 @@ const Index: Component = () => {
           <MultiSelect
             controlled
             label="Your Ingredients"
-            placeholder="Search ingredients..."
+            placeholder="Pick or type ingredients"
             options={ingredientsQuery.data ?? []}
             onChange={setIngredients}
           />

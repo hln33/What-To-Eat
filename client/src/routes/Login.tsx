@@ -30,7 +30,7 @@ const Login = () => {
 
       <LoginForm onSubmit={handleLogin} />
       <Link
-        to="/Signup"
+        to="/signup"
         class="block text-sm"
       >
         Create an account
@@ -39,6 +39,6 @@ const Login = () => {
   );
 };
 
-export const Route = createFileRoute("/Login")({
+export const Route = createFileRoute("/login")({
   component: Login,
 });

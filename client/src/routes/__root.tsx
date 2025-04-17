@@ -48,7 +48,7 @@ export const RootComponent: ParentComponent = () => {
 
             <Show
               when={user.info.isLoggedIn}
-              fallback={<Link to="/Login">Login</Link>}
+              fallback={<Link to="/login">Login</Link>}
             >
               <Button
                 variant="subtle"

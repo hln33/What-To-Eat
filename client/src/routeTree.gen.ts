@@ -11,23 +11,23 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignupImport } from './routes/Signup'
-import { Route as LoginImport } from './routes/Login'
+import { Route as SignupImport } from './routes/signup'
+import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
-import { Route as RecipesNewImport } from './routes/recipes/New'
+import { Route as RecipesNewImport } from './routes/recipes/new'
 import { Route as RecipesRecipeIdImport } from './routes/recipes/$recipeId'
 
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({
-  id: '/Signup',
-  path: '/Signup',
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRoute,
 } as any)
 
 const LoginRoute = LoginImport.update({
-  id: '/Login',
-  path: '/Login',
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -38,8 +38,8 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const RecipesNewRoute = RecipesNewImport.update({
-  id: '/recipes/New',
-  path: '/recipes/New',
+  id: '/recipes/new',
+  path: '/recipes/new',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,17 +60,17 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/Login': {
-      id: '/Login'
-      path: '/Login'
-      fullPath: '/Login'
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/Signup': {
-      id: '/Signup'
-      path: '/Signup'
-      fullPath: '/Signup'
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
@@ -81,10 +81,10 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof RecipesRecipeIdImport
       parentRoute: typeof rootRoute
     }
-    '/recipes/New': {
-      id: '/recipes/New'
-      path: '/recipes/New'
-      fullPath: '/recipes/New'
+    '/recipes/new': {
+      id: '/recipes/new'
+      path: '/recipes/new'
+      fullPath: '/recipes/new'
       preLoaderRoute: typeof RecipesNewImport
       parentRoute: typeof rootRoute
     }
@@ -95,41 +95,41 @@ declare module '@tanstack/solid-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/Login': typeof LoginRoute
-  '/Signup': typeof SignupRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
-  '/recipes/New': typeof RecipesNewRoute
+  '/recipes/new': typeof RecipesNewRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/Login': typeof LoginRoute
-  '/Signup': typeof SignupRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
-  '/recipes/New': typeof RecipesNewRoute
+  '/recipes/new': typeof RecipesNewRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/Login': typeof LoginRoute
-  '/Signup': typeof SignupRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
-  '/recipes/New': typeof RecipesNewRoute
+  '/recipes/new': typeof RecipesNewRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/Login' | '/Signup' | '/recipes/$recipeId' | '/recipes/New'
+  fullPaths: '/' | '/login' | '/signup' | '/recipes/$recipeId' | '/recipes/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Login' | '/Signup' | '/recipes/$recipeId' | '/recipes/New'
+  to: '/' | '/login' | '/signup' | '/recipes/$recipeId' | '/recipes/new'
   id:
     | '__root__'
     | '/'
-    | '/Login'
-    | '/Signup'
+    | '/login'
+    | '/signup'
     | '/recipes/$recipeId'
-    | '/recipes/New'
+    | '/recipes/new'
   fileRoutesById: FileRoutesById
 }
 
@@ -160,26 +160,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/Login",
-        "/Signup",
+        "/login",
+        "/signup",
         "/recipes/$recipeId",
-        "/recipes/New"
+        "/recipes/new"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/Login": {
-      "filePath": "Login.tsx"
+    "/login": {
+      "filePath": "login.tsx"
     },
-    "/Signup": {
-      "filePath": "Signup.tsx"
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/recipes/$recipeId": {
       "filePath": "recipes/$recipeId.tsx"
     },
-    "/recipes/New": {
-      "filePath": "recipes/New.tsx"
+    "/recipes/new": {
+      "filePath": "recipes/new.tsx"
     }
   }
 }

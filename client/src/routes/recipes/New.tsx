@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from "@tanstack/solid-router";
-
 import { createMutation } from "@tanstack/solid-query";
 
 import { postNewRecipe } from "@/features/recipes/api";
@@ -25,6 +24,6 @@ const NewRecipe = () => {
   return <NewRecipeForm onSubmit={handleNewRecipeSubmit} />;
 };
 
-export const Route = createFileRoute("/recipes/New")({
+export const Route = createFileRoute("/recipes/new")({
   component: NewRecipe,
 });

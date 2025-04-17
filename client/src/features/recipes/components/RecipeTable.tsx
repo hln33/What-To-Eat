@@ -8,38 +8,28 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/solid-table";
+import SearchIcon from "~icons/lucide/search";
 
 import { useUserContext } from "@/contexts/UserContext";
 import Input from "@/components/ui/Input";
 import { getRecipesWithIngredientStatus } from "../utils";
 import { Recipe, RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
-import RecipeTableCellStatus from "./RecipeTableCellStatus";
 import RecipeCard from "./RecipeCard";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [
   columnHelper.accessor("name", {
     header: () => <div>Name</div>,
-    cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("ingredients", {
     header: () => <div>Ingredients</div>,
-    cell: (info) => (
-      <ul class="list-outside list-disc">
-        <For each={info.getValue()}>
-          {(ingredient) => <li>{ingredient.name}</li>}
-        </For>
-      </ul>
-    ),
   }),
   columnHelper.accessor("ingredientStatus", {
     header: () => <div>Status</div>,
-    cell: (info) => <RecipeTableCellStatus {...info} />,
   }),
   columnHelper.accessor("creator", {
     header: () => <div>Creator</div>,
-    cell: (info) => <div>{info.getValue()}</div>,
   }),
 ];
 
@@ -95,7 +85,7 @@ const RecipeTable: Component<{
       </Show>
 
       <Input
-        placeholder="Search recipes..."
+        placeholder="Search recipes"
         value={
           (columnFilters().find((filter) => filter.id === "name")
             ?.value as string) ?? ""
@@ -107,6 +97,7 @@ const RecipeTable: Component<{
               .concat({ id: "name", value: e.currentTarget.value }),
           )
         }
+        leftSection={<SearchIcon />}
       />
 
       <section class="flex flex-col items-center gap-4">
@@ -120,49 +111,6 @@ const RecipeTable: Component<{
         </For>
       </section>
 
-      {/* <div class="flex flex-col rounded border border-gray-600 shadow-xl">
-        <table class="border-collapse rounded-t-full text-left capitalize">
-          <thead>
-            <For each={table().getHeaderGroups()}>
-              {(headerGroup) => (
-                <tr>
-                  <For each={headerGroup.headers}>
-                    {(header) => (
-                      <th class="border-b-2 border-gray-600 p-3">
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                      </th>
-                    )}
-                  </For>
-                </tr>
-              )}
-            </For>
-          </thead>
-          <tbody>
-            <For each={table().getRowModel().rows}>
-              {(row) => (
-                <tr
-                  class="cursor-pointer align-top hover:bg-zinc-500"
-                  onClick={() => navigate(`/recipe/${row.original.id}`)}
-                >
-                  <For each={row.getVisibleCells()}>
-                    {(cell) => (
-                      <td class="relative border-b border-gray-600 p-3">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    )}
-                  </For>
-                </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
-        </div> */}
       <RecipeTableFooter
         class="border-gray-600 p-2"
         table={table()}

@@ -85,7 +85,7 @@ export const Signup = () => {
       </Form>
 
       <Link
-        to="/Login"
+        to="/login"
         class="block text-sm"
       >
         Already have an account?{" "}
@@ -95,6 +95,6 @@ export const Signup = () => {
   );
 };
 
-export const Route = createFileRoute("/Signup")({
+export const Route = createFileRoute("/signup")({
   component: Signup,
 });

@@ -21,6 +21,7 @@ const MultiSelect: Component<
     options: string[];
     placeholder?: string;
     error?: string;
+    leftSection?: JSX.Element;
   } & (UncontrolledProps | ControlledProps) &
     Omit<JSX.SelectHTMLAttributes<HTMLSelectElement>, "onChange">
 > = (props) => {

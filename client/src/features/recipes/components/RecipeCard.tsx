@@ -31,7 +31,7 @@ const RecipeCard: Component<{
 
   return (
     <div
-      class="group flex h-fit w-full cursor-pointer gap-4 rounded border border-slate-500 bg-slate-600 p-4 shadow-xl hover:bg-slate-800"
+      class="flex h-fit w-full cursor-pointer gap-4 rounded border border-slate-500 bg-slate-700 p-4 shadow-xl hover:bg-slate-600"
       onClick={() =>
         navigate({
           to: "/recipes/$recipeId",
@@ -39,7 +39,7 @@ const RecipeCard: Component<{
         })
       }
     >
-      <div class="flex size-32 shrink-0 items-center justify-center rounded bg-slate-400 group-hover:bg-slate-600">
+      <div class="flex size-32 shrink-0 items-center justify-center rounded">
         <Show
           when={props.recipe.imageUrl !== null}
           fallback={<ImageIcon class="size-28 text-slate-200" />}
@@ -59,16 +59,6 @@ const RecipeCard: Component<{
             {props.recipe.name}
           </div>
           <div class="h-fit rounded-full border px-2 py-1 text-sm">Easy</div>
-        </div>
-
-        <div class="text-md flex gap-6">
-          <span class="flex items-center gap-2">
-            <ClockIcon />
-            25 mins
-          </span>
-          <span class="flex items-center gap-2">
-            <PeopleIcon /> 4 servings
-          </span>
         </div>
 
         <Switch fallback={<>unknown ingredient status: {ingredientStatus()}</>}>
@@ -91,8 +81,18 @@ const RecipeCard: Component<{
           </Match>
         </Switch>
 
+        <div class="text-md flex gap-6">
+          <span class="flex items-center gap-2">
+            <ClockIcon class="text-slate-400" />
+            25 mins
+          </span>
+          <span class="flex items-center gap-2">
+            <PeopleIcon class="text-slate-400" /> 4 servings
+          </span>
+        </div>
+
         <div class="flex items-center gap-2 font-extralight">
-          <UserIcon />
+          <UserIcon class="text-slate-400" />
           {props.recipe.creator}
         </div>
       </div>
