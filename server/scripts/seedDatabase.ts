@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import * as fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import {
   recipeTable,
@@ -17,7 +18,7 @@ import { createUser } from '../src/models/user.ts';
  * Run `npx tsx scripts/seedDatabase.ts`
  * Also make sure you are in the `server` directory
  */
-const seedDatabase = async () => {
+export const seedDatabase = async () => {
   const adminUser = await createUser('admin', 'admin');
 
   const pathToJSONFile = path.join(import.meta.dirname, 'recipeData.json');
@@ -48,4 +49,6 @@ const seedDatabase = async () => {
   console.log(users);
 };
 
-seedDatabase();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  seedDatabase();
+}

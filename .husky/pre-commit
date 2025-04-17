@@ -1,1 +1,2 @@
 npm run test:ci --prefix client
+npm run test:ci --prefix server
