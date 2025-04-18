@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { Field, FormStore, required } from "@modular-forms/solid";
 
 import TextField from "@/components/ui/TextField";
-import { RecipeForm } from "../types";
+import { RecipeForm } from "../../types";
 
 const RecipeInputName: Component<{ form: FormStore<RecipeForm> }> = (props) => {
   return (

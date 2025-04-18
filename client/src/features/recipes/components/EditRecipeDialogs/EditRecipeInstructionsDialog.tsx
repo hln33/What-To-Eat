@@ -6,7 +6,7 @@ import PencilIcon from "~icons/lucide/pencil";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
 import { RecipeForm, SubmittedRecipeForm } from "../../types";
-import RecipeInputInstructions from "../RecipeInputInstructions";
+import RecipeInputInstructions from "../Forms/RecipeInputInstructions";
 import { EditRecipeDialogActions } from "./EditRecipeDialogActions";
 
 type EditInstructionsFormValues = Pick<SubmittedRecipeForm, "instructions">;

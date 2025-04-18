@@ -4,8 +4,8 @@ import { createForm } from "@modular-forms/solid";
 
 import Button from "@/components/ui/Button";
 import FileUpload from "@/components/ui/FileUpload";
-import { RecipeForm, SubmittedRecipeForm } from "../types";
-import { postRecipeImage } from "../api";
+import { RecipeForm, SubmittedRecipeForm } from "../../types";
+import { postRecipeImage } from "../../api";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 import RecipeInputInstructions from "./RecipeInputInstructions";
 import RecipeInputName from "./RecipeInputName";
@@ -55,7 +55,7 @@ const NewRecipeForm: Component<{
     <ErrorBoundary fallback={<div>An error occurred...</div>}>
       <Suspense fallback={<div>Loading...</div>}>
         <Form
-          class="flex flex-col items-center gap-12 p-8"
+          class="flex flex-col items-center gap-12"
           onSubmit={(values) => handleSubmit(values as SubmittedRecipeForm)}
         >
           <FileUpload

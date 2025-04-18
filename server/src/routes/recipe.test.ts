@@ -6,7 +6,6 @@ import { app } from '../index.ts';
 
 const getRandomRecipe = async () => {
   const [res] = await db.select().from(recipeTable).limit(1);
-  console.log(res);
   return res;
 };
 

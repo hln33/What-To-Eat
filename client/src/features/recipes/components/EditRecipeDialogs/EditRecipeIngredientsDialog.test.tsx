@@ -101,7 +101,7 @@ describe("Edit Recipe Dialog", () => {
     await testIngredientUnitInput(user, secondIngredient, "lb", "oz");
     await testIngredientNameInput(user, secondIngredient, "eggs", "salt");
 
-    await user.click(screen.getByRole("button", { name: "Add Ingredient" }));
+    await user.click(screen.getByRole("button", { name: "Add ingredient" }));
 
     const thirdIngredient = screen.getByRole("group", {
       name: "Ingredient 3",

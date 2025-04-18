@@ -12,6 +12,7 @@ import { registerUser } from "@/features/users/api";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import PasswordInput from "@/components/PasswordInput";
+import { toast } from "@/components/ui/Toast";
 
 type SignupForm = {
   username: string;
@@ -28,7 +29,10 @@ export const Signup = () => {
 
   const handleSignup: SubmitHandler<SignupForm> = async (credentials) => {
     createUser.mutate(credentials, {
-      onSuccess: () => navigate({ to: "/" }),
+      onSuccess: () => {
+        toast.success("You have successfully signed up! Please log in.");
+        navigate({ to: "/login" });
+      },
     });
   };
 

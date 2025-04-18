@@ -14,7 +14,7 @@ import InputError from "@/components/InputError";
 import Combobox from "@/components/ui/Combobox";
 import Select from "@/components/ui/Select";
 import TextField from "@/components/ui/TextField";
-import { RecipeForm } from "../types";
+import { RecipeForm } from "../../types";
 import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 
 const RecipeInputIngredients: Component<{
@@ -33,8 +33,8 @@ const RecipeInputIngredients: Component<{
           <div class="space-y-8">
             <For each={fieldArray.items}>
               {(_, index) => (
-                <fieldset class="rounded bg-slate-600 p-4 shadow-lg">
-                  <legend class="rounded border border-slate-400 bg-slate-950 p-2 text-left text-xl">
+                <fieldset class="rounded border border-slate-500 p-4 shadow-lg">
+                  <legend class="rounded px-2 text-left text-xl font-bold">
                     Ingredient {index() + 1}
                   </legend>
                   <div class="my-2 flex items-start gap-3">
@@ -107,6 +107,7 @@ const RecipeInputIngredients: Component<{
           </div>
           <InputError errorMessage={fieldArray.error} />
           <AddFieldButton
+            ariaLabel="Add ingredient"
             onClick={() =>
               insert(props.form, "ingredients", {
                 value: { amount: 0, unit: undefined, name: "" },
@@ -114,7 +115,7 @@ const RecipeInputIngredients: Component<{
             }
             disabled={props.form.submitting}
           >
-            Add Ingredient
+            Ingredient
           </AddFieldButton>
         </div>
       )}

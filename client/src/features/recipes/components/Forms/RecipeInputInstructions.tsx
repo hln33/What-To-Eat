@@ -10,7 +10,7 @@ import {
 
 import InputError from "@/components/InputError";
 import TextField from "@/components/ui/TextField";
-import { RecipeForm } from "../types";
+import { RecipeForm } from "../../types";
 import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 
 const RecipeInputInstructions: Component<{
@@ -57,10 +57,11 @@ const RecipeInputInstructions: Component<{
           </div>
           <InputError errorMessage={fieldArray.error} />
           <AddFieldButton
+            ariaLabel="Add instruction"
             onClick={() => insert(props.form, "instructions", { value: "" })}
             disabled={props.form.submitting}
           >
-            Add Instructions
+            Instruction
           </AddFieldButton>
         </div>
       )}

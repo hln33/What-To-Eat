@@ -31,7 +31,7 @@ const Login = () => {
       <LoginForm onSubmit={handleLogin} />
       <Link
         to="/signup"
-        class="block text-sm"
+        class="block text-sm font-semibold underline"
       >
         Create an account
       </Link>

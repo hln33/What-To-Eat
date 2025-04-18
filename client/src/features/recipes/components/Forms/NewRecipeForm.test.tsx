@@ -50,7 +50,7 @@ describe("New Recipe Form", () => {
     await user.click(screen.getByRole("option", { name: "eggs" }));
     removeListbox("Name Suggestions");
 
-    await user.click(screen.getByRole("button", { name: "Add Ingredient" }));
+    await user.click(screen.getByRole("button", { name: "Add ingredient" }));
 
     const secondIngredientInputs = getIngredientInputs(
       screen.getByRole("group", { name: "Ingredient 2" }),
@@ -62,7 +62,7 @@ describe("New Recipe Form", () => {
     await user.click(screen.getByRole("option", { name: "cheese" }));
 
     const addInstructionButton = screen.getByRole("button", {
-      name: "Add Instructions",
+      name: "Add instruction",
     });
     await user.type(
       screen.getByRole("textbox", { name: "Instruction 1" }),

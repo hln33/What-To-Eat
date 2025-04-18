@@ -3,7 +3,7 @@ import { createMutation } from "@tanstack/solid-query";
 
 import { postNewRecipe } from "@/features/recipes/api";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
-import NewRecipeForm from "@/features/recipes/components/NewRecipeForm";
+import NewRecipeForm from "@/features/recipes/components/Forms/NewRecipeForm";
 
 const NewRecipe = () => {
   const navigate = useNavigate();
