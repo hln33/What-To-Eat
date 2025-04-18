@@ -1,14 +1,14 @@
 import { Component, createSignal, ErrorBoundary, Suspense } from "solid-js";
 import { createMutation } from "@tanstack/solid-query";
-import { createForm, required } from "@modular-forms/solid";
+import { createForm } from "@modular-forms/solid";
 
-import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../types";
 import { postRecipeImage } from "../api";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 import RecipeInputInstructions from "./RecipeInputInstructions";
+import RecipeInputName from "./RecipeInputName";
 
 const SectionHeader: Component<{ label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -17,7 +17,7 @@ const SectionHeader: Component<{ label: string }> = (props) => (
 const NewRecipeForm: Component<{
   onSubmit: (recipe: SubmittedRecipeForm) => void;
 }> = (props) => {
-  const [form, { Form, Field }] = createForm<RecipeForm>({
+  const [form, { Form }] = createForm<RecipeForm>({
     initialValues: {
       ingredients: [{ amount: 0, unit: undefined, name: "" }],
       instructions: [""],
@@ -64,21 +64,7 @@ const NewRecipeForm: Component<{
           />
 
           <div class="w-full space-y-20">
-            <Field
-              name="name"
-              validate={[required("Please enter a name for the recipe")]}
-            >
-              {(field, props) => (
-                <TextField
-                  {...props}
-                  type="text"
-                  label="Recipe name"
-                  value={field.value}
-                  error={field.error}
-                  disabled={form.submitting}
-                />
-              )}
-            </Field>
+            <RecipeInputName form={form} />
 
             <div>
               <SectionHeader label="Ingredients" />

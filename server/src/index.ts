@@ -3,14 +3,14 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 
-import recipes from './routes/recipe.ts';
+import recipeRoutes from './routes/recipe.ts';
 import users from './routes/user.ts';
 import ingredients from './routes/ingredient.ts';
 import images from './routes/images.ts';
 
 const api = new Hono()
   .basePath('/api')
-  .route('/recipes', recipes)
+  .route('/recipes', recipeRoutes)
   .route('/ingredients', ingredients)
   .route('/users', users)
   .route('/images', images);

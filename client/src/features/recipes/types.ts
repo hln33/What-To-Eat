@@ -1,5 +1,6 @@
 export type Recipe = {
   id: number;
+  creatorId: number;
   creator: string;
   imageUrl: string | null;
   name: string;

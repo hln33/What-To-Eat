@@ -16,6 +16,7 @@ type Ingredient = z.infer<typeof ingredientSchema>;
 
 type Recipe = {
   id: number;
+  creatorId: number;
   creator: string;
   imageName: string | null;
   name: string;
@@ -44,6 +45,7 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
       const recipeName = row.recipes.name;
       recipes[recipeId] = {
         id: recipeId,
+        creatorId: row.recipes.userId,
         creator: await getCreatorName(recipeId, recipeName),
         imageName: row.recipes.imageName,
         name: recipeName,
@@ -109,6 +111,7 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
 
   return {
     id: recipe.id,
+    creatorId: recipe.userId,
     creator: await getCreatorName(recipe.id, recipe.name),
     imageName: recipe.imageName,
     name: recipe.name,
@@ -118,16 +121,16 @@ export const getRecipe = async (id: number): Promise<Recipe | null> => {
 };
 
 export const createRecipe = async ({
-  userId,
+  creatorId,
   name,
   imageName,
   ingredients,
   instructions: steps,
-}: Omit<Recipe, 'creator' | 'id'> & { userId: number }): Promise<Recipe> => {
+}: Omit<Recipe, 'creator' | 'id'>): Promise<Recipe> => {
   const [newRecipe] = await db
     .insert(recipeTable)
     .values({
-      userId,
+      userId: creatorId,
       name,
       imageName,
     })

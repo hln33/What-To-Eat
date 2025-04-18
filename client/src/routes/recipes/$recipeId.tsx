@@ -14,24 +14,22 @@ import {
 } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 
+import { useUserContext } from "@/contexts/UserContext";
 import { getRecipe, updateRecipe } from "@/features/recipes/api";
+import { Recipe } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
-import EditIngredientsDialog, {
-  EditIngredientsFormValues,
-} from "@/features/recipes/components/EditRecipeIngredientsDialog";
-import EditInstructionsDialog, {
-  EditInstructionsFormValues,
-} from "@/features/recipes/components/EditRecipeInstructionsDialog";
+import EditRecipeNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeNameDialog";
+import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
+import EditIngredientsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeIngredientsDialog";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 import { toast } from "@/components/ui/Toast";
 
-const Recipe: Component = () => {
+const RecipeView: Component = () => {
   const queryClient = useQueryClient();
   const params = Route.useParams()();
-
-  const [rating, setRating] = createSignal(3);
+  const user = useUserContext();
 
   const recipeQuery = createQuery(() => ({
     queryKey: ["recipe", params.recipeId],
@@ -43,45 +41,34 @@ const Recipe: Component = () => {
       queryClient.invalidateQueries({ queryKey: ["recipe", params.recipeId] }),
   }));
 
-  const onEditIngredientsSubmit = (values: EditIngredientsFormValues) => {
+  const [rating, setRating] = createSignal(3);
+
+  const handleRecipeFieldUpdate = (
+    updatedField: "name" | "ingredients" | "instructions",
+    updatedRecipe: Recipe,
+  ) => {
     if (!recipeQuery.data) {
       console.error("Nothing to edit; no recipe loaded.");
       return;
     }
 
-    const recipeWithNewIngredients = {
+    const recipeWithUpdatedField = {
       recipeId: params.recipeId,
-      recipe: {
-        ...recipeQuery.data,
-        ingredients: values.ingredients,
-      },
+      recipe: updatedRecipe,
     };
-    updateRecipeMutation.mutate(recipeWithNewIngredients, {
-      onSuccess: () => toast.success("Recipe ingredients updated."),
+    updateRecipeMutation.mutate(recipeWithUpdatedField, {
+      onSuccess: () => toast.success(`Recipe ${updatedField} updated.`),
       onError: () =>
-        toast.error("Failed to update recipe ingredients. Please try again."),
+        toast.error(
+          `Failed to update recipe ${updatedField}. Please try again.`,
+        ),
     });
   };
 
-  const onEditInstructionsSubmit = (values: EditInstructionsFormValues) => {
-    if (!recipeQuery.data) {
-      console.error("Nothing to edit; no recipe loaded.");
-      return;
-    }
-
-    const recipeWithNewInstructions = {
-      recipeId: params.recipeId,
-      recipe: {
-        ...recipeQuery.data,
-        instructions: values.instructions,
-      },
-    };
-    updateRecipeMutation.mutate(recipeWithNewInstructions, {
-      onSuccess: () => toast.success("Recipe instructions updated."),
-      onError: () =>
-        toast.error("Failed to update recipe instructions. Please try again."),
-    });
-  };
+  const isAbleToEdit = () =>
+    recipeQuery.data !== undefined &&
+    user.info.isLoggedIn &&
+    parseInt(user.info.id) === recipeQuery.data.creatorId;
 
   return (
     <div class="space-y-10">
@@ -92,7 +79,9 @@ const Recipe: Component = () => {
         >
           Go Back
         </Link>
-        <DeleteRecipeDialog recipeId={params.recipeId} />
+        <Show when={isAbleToEdit()}>
+          <DeleteRecipeDialog recipeId={params.recipeId} />
+        </Show>
       </nav>
 
       <ErrorBoundary fallback={<div>{recipeQuery.error?.message}</div>}>
@@ -121,7 +110,20 @@ const Recipe: Component = () => {
             </Show>
 
             <div class="space-y-5">
-              <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
+              <div class="flex gap-2">
+                <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
+                <Show when={isAbleToEdit()}>
+                  <EditRecipeNameDialog
+                    initialName={recipeQuery.data!.name}
+                    onSubmit={(values) =>
+                      handleRecipeFieldUpdate("name", {
+                        ...recipeQuery.data!,
+                        name: values.name,
+                      })
+                    }
+                  />
+                </Show>
+              </div>
               <div class="text-3xl">By: {recipeQuery.data?.creator}</div>
               <Rating
                 value={rating}
@@ -133,10 +135,15 @@ const Recipe: Component = () => {
             <section class="space-y-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-3xl">Ingredients</h3>
-                <Show when={recipeQuery.data?.ingredients}>
+                <Show when={isAbleToEdit()}>
                   <EditIngredientsDialog
                     initialIngredients={recipeQuery.data!.ingredients}
-                    onSubmit={onEditIngredientsSubmit}
+                    onSubmit={(values) =>
+                      handleRecipeFieldUpdate("ingredients", {
+                        ...recipeQuery.data!,
+                        ingredients: values.ingredients,
+                      })
+                    }
                   />
                 </Show>
               </div>
@@ -155,10 +162,15 @@ const Recipe: Component = () => {
             <section class="space-y-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-3xl">Instructions</h3>
-                <Show when={recipeQuery.data?.ingredients}>
+                <Show when={isAbleToEdit()}>
                   <EditInstructionsDialog
                     initialInstructions={recipeQuery.data!.instructions}
-                    onSubmit={onEditInstructionsSubmit}
+                    onSubmit={(values) =>
+                      handleRecipeFieldUpdate("instructions", {
+                        ...recipeQuery.data!,
+                        instructions: values.instructions,
+                      })
+                    }
                   />
                 </Show>
               </div>
@@ -176,5 +188,5 @@ const Recipe: Component = () => {
 };
 
 export const Route = createFileRoute("/recipes/$recipeId")({
-  component: Recipe,
+  component: RecipeView,
 });

@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
@@ -10,9 +10,10 @@ import {
   getRecipe,
   updateRecipe,
 } from '../models/recipe.ts';
+import { validateSessionToken } from '../models/session.ts';
+import type { User } from '../models/user.ts';
 import { ingredientSchema } from './validators/index.js';
 import { getSessionCookie } from './cookies/index.ts';
-import { validateSessionToken } from '../models/session.ts';
 import { createPresignedUrl } from './imageUtils/index.ts';
 
 const recipeSchema = z.object({
@@ -24,10 +25,30 @@ const recipeSchema = z.object({
     .transform((val) => (Array.isArray(val) ? val : [val])),
 });
 
-const recipes = new Hono()
+const getUserFromSessionCookie = async (c: Context) => {
+  const sessionToken = getSessionCookie(c);
+  const { user } = await validateSessionToken(sessionToken);
+  if (!user) {
+    throw new HTTPException(401, { message: 'Invalid session.' });
+  }
+  return user;
+};
+
+const verifyUserOwnsRecipe = async (user: User, recipeId: number) => {
+  const recipe = await getRecipe(recipeId);
+  if (recipe === null) {
+    throw new HTTPException(404, { message: 'Recipe not found' });
+  }
+  if (recipe.creatorId !== user.id) {
+    throw new HTTPException(403, {
+      message: 'Unauthorized to modify this recipe',
+    });
+  }
+};
+
+const recipeRoutes = new Hono()
   .get('/', async (c) => {
     const recipes = await getAllRecipes();
-
     const recipesWithImages = await Promise.all(
       recipes.map(async (recipe) => ({
         ...recipe,
@@ -37,6 +58,7 @@ const recipes = new Hono()
             : null,
       }))
     );
+
     return c.json(recipesWithImages);
   })
   .get('/:id', async (c) => {
@@ -53,16 +75,12 @@ const recipes = new Hono()
     return c.json({ ...recipe, imageUrl });
   })
   .post('/', zValidator('json', recipeSchema), async (c) => {
-    const sessionToken = getSessionCookie(c);
-    const { user } = await validateSessionToken(sessionToken);
-    if (!user) {
-      throw new HTTPException(401, { message: 'Invalid session.' });
-    }
+    const user = await getUserFromSessionCookie(c);
 
     const { recipeName, uploadedImageName, ingredients, instructions } =
       c.req.valid('json');
     const recipe = await createRecipe({
-      userId: user.id,
+      creatorId: user.id,
       name: recipeName,
       imageName: uploadedImageName ?? null,
       ingredients,
@@ -75,18 +93,14 @@ const recipes = new Hono()
     '/:id',
     zValidator('json', recipeSchema.omit({ uploadedImageName: true })),
     async (c) => {
-      const sessionToken = getSessionCookie(c);
-      const { user } = await validateSessionToken(sessionToken);
-      console.log(user);
+      const user = await getUserFromSessionCookie(c);
 
-      if (!user) {
-        throw new HTTPException(401, { message: 'Invalid session.' });
-      }
+      const recipeId = Number(c.req.param('id'));
+      await verifyUserOwnsRecipe(user, recipeId);
 
-      const id = Number(c.req.param('id'));
       const { recipeName, ingredients, instructions } = c.req.valid('json');
       await updateRecipe({
-        recipeId: id,
+        recipeId,
         recipeName,
         newIngredients: ingredients,
         newInstructions: instructions,
@@ -96,10 +110,13 @@ const recipes = new Hono()
     }
   )
   .delete('/:id', async (c) => {
-    const id = Number(c.req.param('id'));
+    const user = await getUserFromSessionCookie(c);
+
+    const recipeId = Number(c.req.param('id'));
+    await verifyUserOwnsRecipe(user, recipeId);
 
     try {
-      await deleteRecipe(id);
+      await deleteRecipe(recipeId);
     } catch (e) {
       console.error(e);
       throw new HTTPException(422, { message: 'Recipe deletion failed.' });
@@ -108,4 +125,4 @@ const recipes = new Hono()
     return c.json({ message: 'Recipe successfully deleted.' }, 200);
   });
 
-export default recipes;
+export default recipeRoutes;

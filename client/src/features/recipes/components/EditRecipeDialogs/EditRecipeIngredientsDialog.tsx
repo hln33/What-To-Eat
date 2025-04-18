@@ -5,22 +5,20 @@ import PencilIcon from "~icons/lucide/pencil";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
-import { RecipeForm, SubmittedRecipeForm } from "../types";
-import RecipeInputInstructions from "./RecipeInputInstructions";
+import { Ingredient, RecipeForm, SubmittedRecipeForm } from "../../types";
+import RecipeInputIngredients from "../RecipeInputIngredients";
+import { EditRecipeDialogActions } from "./EditRecipeDialogActions";
 
-export type EditInstructionsFormValues = Pick<
-  SubmittedRecipeForm,
-  "instructions"
->;
+type EditIngredientsFormValues = Pick<SubmittedRecipeForm, "ingredients">;
 
-const EditInstructionsDialog: Component<{
-  initialInstructions: string[];
-  onSubmit: (values: EditInstructionsFormValues) => void;
+const EditIngredientsDialog: Component<{
+  initialIngredients: Ingredient[];
+  onSubmit: (values: EditIngredientsFormValues) => void;
 }> = (props) => {
   const [open, setOpen] = createSignal(false);
   const [form, { Form }] = createForm<RecipeForm>({
     initialValues: {
-      instructions: props.initialInstructions,
+      ingredients: props.initialIngredients,
     },
   });
 
@@ -37,37 +35,23 @@ const EditInstructionsDialog: Component<{
           >
             <PencilIcon
               class="text-slate-300"
-              aria-label="Edit recipe instructions"
+              aria-label="Edit recipe ingredients"
             />
           </Button>
         )}
       />
 
-      <DialogContent title="Instructions">
+      <DialogContent title="Ingredients">
         <ErrorBoundary fallback={<div>An error occurred</div>}>
           <Suspense fallback={<div>...</div>}>
             <Form
               onSubmit={(values) => {
-                props.onSubmit(values as EditInstructionsFormValues);
+                props.onSubmit(values as EditIngredientsFormValues);
                 setOpen(false);
               }}
             >
-              <RecipeInputInstructions form={form} />
-              <div class="mt-8 flex justify-end gap-4">
-                <Button
-                  variant="subtle"
-                  onClick={() => setOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  color="blue"
-                  variant="filled"
-                  type="submit"
-                >
-                  Save
-                </Button>
-              </div>
+              <RecipeInputIngredients form={form} />
+              <EditRecipeDialogActions onClose={() => setOpen(false)} />
             </Form>
           </Suspense>
         </ErrorBoundary>
@@ -76,4 +60,4 @@ const EditInstructionsDialog: Component<{
   );
 };
 
-export default EditInstructionsDialog;
+export default EditIngredientsDialog;

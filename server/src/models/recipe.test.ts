@@ -13,9 +13,9 @@ const getUser = async () => {
   return res;
 };
 
-const createTestRecipe = async () =>
-  await createRecipe({
-    userId: (await getUser()).id,
+const createTestRecipe = async () => {
+  return await createRecipe({
+    creatorId: (await getUser()).id,
     name: 'test recipe',
     imageName: 'placeholderImageName',
     ingredients: [
@@ -29,6 +29,7 @@ const createTestRecipe = async () =>
     ],
     instructions: ['boil eggs', 'chop apples', 'enjoy'],
   });
+};
 
 describe('Recipe model', () => {
   test('Able to create recipe', async () => {
@@ -40,6 +41,7 @@ describe('Recipe model', () => {
 
   test('Able to update recipe', async () => {
     const createdRecipe = await createTestRecipe();
+    const newRecipeName = 'salty blueberries';
     const newIngredients = [
       {
         amount: 120,
@@ -52,7 +54,7 @@ describe('Recipe model', () => {
 
     await updateRecipe({
       recipeId: createdRecipe.id,
-      recipeName: createdRecipe.name,
+      recipeName: newRecipeName,
       newIngredients,
       newInstructions,
     });
@@ -60,6 +62,7 @@ describe('Recipe model', () => {
     const fetchedRecipe = await getRecipe(createdRecipe.id);
     expect(fetchedRecipe).toStrictEqual({
       ...createdRecipe,
+      name: newRecipeName,
       ingredients: newIngredients,
       instructions: newInstructions,
     });

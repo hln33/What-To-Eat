@@ -7,11 +7,17 @@ import {
 import { createStore } from "solid-js/store";
 import { createSessionQuery } from "@/queries";
 
-type User = {
-  id: string | null;
-  name: string | null;
-  isLoggedIn: boolean;
-};
+type User =
+  | {
+      id: string;
+      name: string;
+      isLoggedIn: true;
+    }
+  | {
+      id: null;
+      name: null;
+      isLoggedIn: false;
+    };
 
 const UserContext = createContext<{
   info: User;

@@ -26,7 +26,7 @@ export const seedDatabase = async () => {
     fs.readFileSync(pathToJSONFile, 'utf-8')
   )) {
     await createRecipe({
-      userId: adminUser.id,
+      creatorId: adminUser.id,
       imageName: null,
       name,
       ingredients,
