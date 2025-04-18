@@ -5,6 +5,7 @@ export default defineConfig({
     environment: 'node',
     env: loadEnv('test', process.cwd(), ''),
     setupFiles: ['./testing/vitest.setup.ts'],
+    fileParallelism: false,
     sequence: {
       concurrent: false,
     },

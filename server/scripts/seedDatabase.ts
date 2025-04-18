@@ -20,6 +20,7 @@ import { createUser } from '../src/models/user.ts';
  */
 export const seedDatabase = async () => {
   const adminUser = await createUser('admin', 'admin');
+  await createUser('harry', 'password123');
 
   const pathToJSONFile = path.join(import.meta.dirname, 'recipeData.json');
   for (const { name, ingredients, instructions } of JSON.parse(
@@ -41,12 +42,11 @@ export const seedDatabase = async () => {
   const users = await db.select().from(userTable);
 
   console.log('database seeded!');
-  console.log(recipes);
-  console.log(ingredients);
-  console.log(recipesToIngredients);
-  console.log(steps);
-
-  console.log(users);
+  // console.log(recipes);
+  // console.log(ingredients);
+  // console.log(recipesToIngredients);
+  // console.log(steps);
+  // console.log(users);
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

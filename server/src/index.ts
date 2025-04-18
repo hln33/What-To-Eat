@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { fileURLToPath } from 'node:url';
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
@@ -14,14 +15,15 @@ const api = new Hono()
   .route('/ingredients', ingredients)
   .route('/users', users)
   .route('/images', images);
+export const app = new Hono().use(logger()).route('/', api);
 
-const app = new Hono().use(logger()).route('/', api);
-
-const PORT = 3001;
-serve({
-  fetch: app.fetch,
-  port: PORT,
-});
-console.log(`Server is running on http://localhost:${PORT}`);
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const PORT = 3001;
+  serve({
+    fetch: app.fetch,
+    port: PORT,
+  });
+  console.log(`Server is running on http://localhost:${PORT}`);
+}
 
 export type ApiRoutes = typeof api;
