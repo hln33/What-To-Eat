@@ -1,3 +1,5 @@
+import { Ingredient } from "../ingredients/types";
+
 export type Recipe = {
   id: number;
   creatorId: number;
@@ -18,12 +20,6 @@ export type RecipeForm = Omit<Recipe, "ingredients" | "creator" | "id"> & {
 
 export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id"> & {
   uploadedImageName: string | null;
-};
-
-export type Ingredient = {
-  amount: number;
-  unit: "g" | "kg" | "lb" | "oz";
-  name: string;
 };
 
 export type IngredientStatusText = "Ready" | "MissingAll" | "MissingSome";

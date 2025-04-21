@@ -66,7 +66,6 @@ afterEach(async () => {
 
 afterAll(() => {
   console.log('------ Tearing down test database...');
-
   const testDbName = process.env.DB_FILE_NAME!.replace('file:', '');
   const pathToTestDb = path.join(
     fileURLToPath(import.meta.url),

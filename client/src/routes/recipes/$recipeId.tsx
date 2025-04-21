@@ -15,6 +15,7 @@ import {
 import { Separator } from "@kobalte/core/separator";
 
 import { useUserContext } from "@/contexts/UserContext";
+import IngredientUnitSettings from "@/features/ingredients/components/IngredientUnitSettings";
 import { getRecipe, updateRecipe } from "@/features/recipes/api";
 import { Recipe } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
@@ -25,6 +26,7 @@ import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 import { toast } from "@/components/ui/Toast";
+import RecipePageIngredientSection from "@/features/ingredients/components/RecipePageIngredientSection";
 
 const RecipeView: Component = () => {
   const queryClient = useQueryClient();
@@ -132,32 +134,16 @@ const RecipeView: Component = () => {
               <Separator />
             </div>
 
-            <section class="space-y-3">
-              <div class="flex items-center gap-2">
-                <h3 class="text-3xl">Ingredients</h3>
-                <Show when={isAbleToEdit()}>
-                  <EditIngredientsDialog
-                    initialIngredients={recipeQuery.data!.ingredients}
-                    onSubmit={(values) =>
-                      handleRecipeFieldUpdate("ingredients", {
-                        ...recipeQuery.data!,
-                        ingredients: values.ingredients,
-                      })
-                    }
-                  />
-                </Show>
-              </div>
-              <ul class="list-inside list-disc text-slate-100">
-                <Index each={recipeQuery.data?.ingredients}>
-                  {(ingredient) => (
-                    <li>
-                      {ingredient().amount} {ingredient().unit}{" "}
-                      {ingredient().name}
-                    </li>
-                  )}
-                </Index>
-              </ul>
-            </section>
+            <RecipePageIngredientSection
+              ingredients={recipeQuery.data?.ingredients}
+              userOwnsRecipe={isAbleToEdit()}
+              handleIngredientsUpdate={(updatedIngredients) =>
+                handleRecipeFieldUpdate("ingredients", {
+                  ...recipeQuery.data!,
+                  ingredients: updatedIngredients,
+                })
+              }
+            />
 
             <section class="space-y-3">
               <div class="flex items-center gap-2">

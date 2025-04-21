@@ -6,7 +6,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import LoaderCircle from "~icons/lucide/loader-circle";
 
 const buttonVariants = cva(
-  "h-fit max-h-28 w-fit rounded-2xl p-3 text-xl capitalize disabled:pointer-events-none disabled:opacity-50",
+  "h-fit max-h-28 w-fit rounded-xl capitalize disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       color: {
@@ -22,12 +22,21 @@ const buttonVariants = cva(
       fullWidth: {
         true: "w-full",
       },
+      size: {
+        sm: "px-3 py-1 text-base",
+        md: "p-3 text-xl",
+      },
     },
     compoundVariants: [
       {
         color: "red",
         variant: "outline",
         class: "border-red-500",
+      },
+      {
+        color: "default",
+        variant: "outline",
+        class: "border-slate-400",
       },
       {
         color: "red",
@@ -44,6 +53,7 @@ const buttonVariants = cva(
       color: "default",
       variant: "filled",
       fullWidth: false,
+      size: "md",
     },
   },
 );
@@ -69,6 +79,7 @@ const Button = (props: OverrideComponentProps<"button", ButtonProps>) => {
           color: props.color,
           variant: props.variant,
           fullWidth: local.fullWidth,
+          size: props.size,
         }),
         props.class,
       )}
