@@ -26,7 +26,8 @@ const RecipePageIngredientSection: Component<{
   userOwnsRecipe: boolean;
   handleIngredientsUpdate: (updatedIngredients: Ingredient[]) => void;
 }> = (props) => {
-  const [weightUnit, setWeightUnit] = createSignal<IngredientUnit | null>(null);
+  const [finalConversionUnit, setFinalConversionUnit] =
+    createSignal<IngredientUnit | null>(null);
 
   return (
     <section class="space-y-3">
@@ -42,28 +43,19 @@ const RecipePageIngredientSection: Component<{
             />
           </Show>
         </div>
-        <IngredientUnitSettings onWeightUnitChange={setWeightUnit} />
+        <IngredientUnitSettings
+          selectedUnit={finalConversionUnit}
+          onSelectedUnitChange={setFinalConversionUnit}
+        />
       </div>
 
       <ul class="list-inside list-disc text-slate-100">
         <Index each={props.ingredients}>
           {(ingredient) => (
             <li>
-              {weightUnit() === null ? (
-                <>
-                  {ingredient().amount} {ingredient().unit}
-                </>
-              ) : (
-                <>
-                  {convertWeightUnits(
-                    ingredient().amount,
-                    ingredient().unit,
-                    weightUnit()!,
-                  )}{" "}
-                  {weightUnit()!}
-                </>
-              )}{" "}
-              {ingredient().name}
+              {finalConversionUnit() === null
+                ? `${ingredient().amount} ${ingredient().unit} ${ingredient().name}`
+                : `${convertWeightUnits(ingredient().amount, ingredient().unit, finalConversionUnit()!)} ${finalConversionUnit()} ${ingredient().name}`}
             </li>
           )}
         </Index>

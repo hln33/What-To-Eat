@@ -15,13 +15,11 @@ import {
 import { Separator } from "@kobalte/core/separator";
 
 import { useUserContext } from "@/contexts/UserContext";
-import IngredientUnitSettings from "@/features/ingredients/components/IngredientUnitSettings";
 import { getRecipe, updateRecipe } from "@/features/recipes/api";
 import { Recipe } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditRecipeNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeNameDialog";
 import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
-import EditIngredientsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeIngredientsDialog";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";

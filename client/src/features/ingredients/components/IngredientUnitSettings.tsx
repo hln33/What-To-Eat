@@ -1,22 +1,33 @@
-import { Component, createSignal, Match, Switch } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createSignal,
+  Match,
+  Show,
+  Switch,
+} from "solid-js";
 import { DropdownMenuTriggerProps } from "@kobalte/core/dropdown-menu";
 import SettingsIcon from "~icons/lucide/settings";
 
 import Button from "@/components/ui/Button";
 import {
   Dropdown,
+  DropdownCheckboxItem,
   DropdownContent,
   DropdownGroup,
   DropdownGroupLabel,
   DropdownRadioGroup,
   DropdownRadioItem,
+  DropdownSeparator,
   DropdownTrigger,
 } from "@/components/ui/Dropdown";
 import { IngredientUnit, MeasurementSystem } from "../types";
 
 const IngredientUnitSettings: Component<{
-  onWeightUnitChange: (value: IngredientUnit) => void;
+  selectedUnit: Accessor<IngredientUnit | null>;
+  onSelectedUnitChange: (unit: IngredientUnit | null) => void;
 }> = (props) => {
+  const [convertUnits, setConvertUnits] = createSignal(false);
   const [measurementSystem, setMeasurementSystem] =
     createSignal<MeasurementSystem>("imperial");
 
@@ -25,47 +36,78 @@ const IngredientUnitSettings: Component<{
       <DropdownTrigger
         as={(props: DropdownMenuTriggerProps) => (
           <Button
+            {...props}
             size="sm"
             variant="outline"
-            {...props}
+            aria-label="Customize units of measurement"
           >
             <SettingsIcon class="text-slate-300" /> Units
           </Button>
         )}
       />
       <DropdownContent>
-        <DropdownGroup>
-          <DropdownGroupLabel>Measurement System</DropdownGroupLabel>
-          <DropdownRadioGroup
-            value={measurementSystem()}
-            onChange={(value) =>
-              setMeasurementSystem(value as MeasurementSystem)
+        <p class="mb-2 w-52 text-pretty">
+          <span class="block text-lg font-bold">Unit Settings</span>
+          <span class="font-light text-slate-100">
+            Choose your preferred units of measurement.
+          </span>
+        </p>
+        <DropdownCheckboxItem
+          checked={convertUnits()}
+          onChange={(value) => {
+            setConvertUnits(value);
+            if (value === false) {
+              props.onSelectedUnitChange(null);
             }
-          >
-            <DropdownRadioItem value="imperial">Imperial</DropdownRadioItem>
-            <DropdownRadioItem value="metric">Metric</DropdownRadioItem>
-          </DropdownRadioGroup>
-        </DropdownGroup>
+          }}
+        >
+          Convert units
+        </DropdownCheckboxItem>
 
-        <DropdownGroup>
-          <DropdownGroupLabel>Weight Unit</DropdownGroupLabel>
-          <DropdownRadioGroup
-            onChange={(value) =>
-              props.onWeightUnitChange(value as IngredientUnit)
-            }
-          >
-            <Switch fallback={<div>Error: unknown measurement system</div>}>
-              <Match when={measurementSystem() === "imperial"}>
-                <DropdownRadioItem value="g">g</DropdownRadioItem>
-                <DropdownRadioItem value="kg">Kg</DropdownRadioItem>
-              </Match>
-              <Match when={measurementSystem() == "metric"}>
-                <DropdownRadioItem value="lb">lb</DropdownRadioItem>
-                <DropdownRadioItem value="oz">oz</DropdownRadioItem>
-              </Match>
-            </Switch>
-          </DropdownRadioGroup>
-        </DropdownGroup>
+        <Show when={convertUnits() === true}>
+          <DropdownSeparator />
+          <div class="space-y-2">
+            <DropdownGroup>
+              <DropdownGroupLabel>Measurement System</DropdownGroupLabel>
+              <DropdownRadioGroup
+                value={measurementSystem()}
+                onChange={(value) =>
+                  setMeasurementSystem(value as MeasurementSystem)
+                }
+              >
+                <DropdownRadioItem value="imperial">Imperial</DropdownRadioItem>
+                <DropdownRadioItem value="metric">Metric</DropdownRadioItem>
+              </DropdownRadioGroup>
+            </DropdownGroup>
+
+            <DropdownGroup>
+              <DropdownGroupLabel>Weight Unit</DropdownGroupLabel>
+              <DropdownRadioGroup
+                value={props.selectedUnit()!}
+                onChange={(value) =>
+                  props.onSelectedUnitChange(value as IngredientUnit)
+                }
+              >
+                <Switch fallback={<div>Error: unknown measurement system</div>}>
+                  <Match when={measurementSystem() === "metric"}>
+                    <DropdownRadioItem value="g">Grams (g)</DropdownRadioItem>
+                    <DropdownRadioItem value="kg">
+                      Kilograms (kg)
+                    </DropdownRadioItem>
+                  </Match>
+                  <Match when={measurementSystem() === "imperial"}>
+                    <DropdownRadioItem value="lb">
+                      Pounds (lb)
+                    </DropdownRadioItem>
+                    <DropdownRadioItem value="oz">
+                      Ounces (oz)
+                    </DropdownRadioItem>
+                  </Match>
+                </Switch>
+              </DropdownRadioGroup>
+            </DropdownGroup>
+          </div>
+        </Show>
       </DropdownContent>
     </Dropdown>
   );
