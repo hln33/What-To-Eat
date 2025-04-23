@@ -57,6 +57,7 @@ describe('Recipe model', () => {
       recipeName: newRecipeName,
       newIngredients,
       newInstructions,
+      newImageName: null,
     });
 
     const fetchedRecipe = await getRecipe(createdRecipe.id);

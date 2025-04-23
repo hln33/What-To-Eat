@@ -172,11 +172,19 @@ export const updateRecipe = async (values: {
   recipeName: string;
   newIngredients: Ingredient[];
   newInstructions: string[];
+  newImageName: string | null;
 }) => {
   await db
     .update(recipeTable)
     .set({ name: values.recipeName })
     .where(eq(recipeTable.id, values.recipeId));
+
+  if (values.newImageName !== null) {
+    await db
+      .update(recipeTable)
+      .set({ imageName: values.newImageName })
+      .where(eq(recipeTable.id, values.recipeId));
+  }
 
   /**
    * Update ingredients by simply deleting them all and inserting them again.

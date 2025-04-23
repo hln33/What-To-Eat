@@ -45,7 +45,7 @@ export const updateRecipe = async ({
   recipe,
 }: {
   recipeId: string;
-  recipe: Recipe;
+  recipe: SubmittedRecipeForm;
 }) => {
   const res = await api.recipes[":id"].$put({
     param: { id: recipeId },
@@ -53,6 +53,7 @@ export const updateRecipe = async ({
       recipeName: recipe.name,
       ingredients: recipe.ingredients,
       instructions: recipe.instructions,
+      uploadedImageName: recipe.uploadedImageName,
     },
   });
   if (!res.ok) {

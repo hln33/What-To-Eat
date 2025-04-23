@@ -89,26 +89,24 @@ const recipeRoutes = new Hono()
 
     return c.json({ ...recipe, imageUrl: null }, 201);
   })
-  .put(
-    '/:id',
-    zValidator('json', recipeSchema.omit({ uploadedImageName: true })),
-    async (c) => {
-      const user = await getUserFromSessionCookie(c);
+  .put('/:id', zValidator('json', recipeSchema), async (c) => {
+    const user = await getUserFromSessionCookie(c);
 
-      const recipeId = Number(c.req.param('id'));
-      await verifyUserOwnsRecipe(user, recipeId);
+    const recipeId = Number(c.req.param('id'));
+    await verifyUserOwnsRecipe(user, recipeId);
 
-      const { recipeName, ingredients, instructions } = c.req.valid('json');
-      await updateRecipe({
-        recipeId,
-        recipeName,
-        newIngredients: ingredients,
-        newInstructions: instructions,
-      });
+    const { recipeName, ingredients, instructions, uploadedImageName } =
+      c.req.valid('json');
+    await updateRecipe({
+      recipeId,
+      recipeName,
+      newIngredients: ingredients,
+      newInstructions: instructions,
+      newImageName: uploadedImageName,
+    });
 
-      return c.json({ message: 'Recipe successfully updated' }, 200);
-    }
-  )
+    return c.json({ message: 'Recipe successfully updated' }, 200);
+  })
   .delete('/:id', async (c) => {
     const user = await getUserFromSessionCookie(c);
 

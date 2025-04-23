@@ -19,7 +19,7 @@ const FileUpload: Component<{
   return (
     <Kobalte
       class="group flex w-full flex-col items-center gap-2"
-      accept={[".png", ".jpg"]}
+      accept={[".png", ".jpg", ".jpeg"]}
       onFileAccept={props.onFileAccept}
       onFileReject={(data) => console.error(data)}
     >
@@ -28,7 +28,7 @@ const FileUpload: Component<{
       <Kobalte.ItemList class="peer">
         {(_file) => (
           <Kobalte.Item class="relative size-fit">
-            <Kobalte.ItemPreviewImage class="max-w-full" />
+            <Kobalte.ItemPreviewImage class="max-w-full rounded" />
             <Kobalte.ItemDeleteTrigger
               as={(props: FileFieldItemDeleteTriggerProps) => (
                 <Button

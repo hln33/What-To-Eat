@@ -12,7 +12,7 @@ const Image: Component<{
   return (
     <Kobalte class={props.class}>
       <Kobalte.Img
-        class="size-full object-cover"
+        class="size-full rounded object-cover"
         src={props.src}
       />
       <Kobalte.Fallback>

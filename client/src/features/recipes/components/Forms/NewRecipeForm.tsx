@@ -1,11 +1,10 @@
 import { Component, createSignal, ErrorBoundary, Suspense } from "solid-js";
-import { createMutation } from "@tanstack/solid-query";
 import { createForm } from "@modular-forms/solid";
 
 import Button from "@/components/ui/Button";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../../types";
-import { postRecipeImage } from "../../api";
+import { createUploadImageMutation } from "../../mutations";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 import RecipeInputInstructions from "./RecipeInputInstructions";
 import RecipeInputName from "./RecipeInputName";
@@ -27,19 +26,13 @@ const NewRecipeForm: Component<{
     null,
   );
 
-  /**
-   * Upload image to a separate API endpoint for UX/DX purposes
-   * https://stackoverflow.com/questions/33279153/rest-api-file-ie-images-processing-best-practices
-   */
-  const uploadImage = createMutation(() => ({
-    mutationFn: postRecipeImage,
-  }));
+  const uploadImageMutation = createUploadImageMutation();
   const handleRecipeImageUpload = (file: File[]) => {
     if (file.length !== 1) {
       console.error("Only expected 1 file, but got:", file.length);
       return;
     }
-    uploadImage.mutate(file[0], {
+    uploadImageMutation.mutate(file[0], {
       onSuccess: (data) => setUploadedImageName(data.imageName),
     });
   };

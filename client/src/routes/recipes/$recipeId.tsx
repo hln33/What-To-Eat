@@ -13,18 +13,20 @@ import {
   useQueryClient,
 } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
+import StockImageIcon from "~icons/lucide/image";
 
 import { useUserContext } from "@/contexts/UserContext";
 import { getRecipe, updateRecipe } from "@/features/recipes/api";
-import { Recipe } from "@/features/recipes/types";
+import { SubmittedRecipeForm } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditRecipeNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeNameDialog";
 import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
+import EditRecipeImageDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeImageDialog";
+import RecipePageIngredientSection from "@/features/ingredients/components/RecipePageIngredientSection";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 import { toast } from "@/components/ui/Toast";
-import RecipePageIngredientSection from "@/features/ingredients/components/RecipePageIngredientSection";
 
 const RecipeView: Component = () => {
   const queryClient = useQueryClient();
@@ -44,8 +46,8 @@ const RecipeView: Component = () => {
   const [rating, setRating] = createSignal(3);
 
   const handleRecipeFieldUpdate = (
-    updatedField: "name" | "ingredients" | "instructions",
-    updatedRecipe: Recipe,
+    updatedField: "image" | "name" | "ingredients" | "instructions",
+    updatedRecipe: SubmittedRecipeForm,
   ) => {
     if (!recipeQuery.data) {
       console.error("Nothing to edit; no recipe loaded.");
@@ -64,6 +66,11 @@ const RecipeView: Component = () => {
         ),
     });
   };
+
+  const recipeTemplate = (): SubmittedRecipeForm => ({
+    ...recipeQuery.data!,
+    uploadedImageName: null,
+  });
 
   const isAbleToEdit = () =>
     recipeQuery.data !== undefined &&
@@ -95,35 +102,60 @@ const RecipeView: Component = () => {
           }
         >
           <section class="flex flex-col space-y-8 text-left">
-            <Show
-              when={
-                recipeQuery.data !== undefined &&
-                recipeQuery.data.imageUrl !== null
-              }
-            >
-              <Image
-                class="h-72 w-96 self-center"
-                src={recipeQuery.data!.imageUrl!}
-                fallbackWidth={380}
-                fallbackHeight={250}
-              />
-            </Show>
-
             <div class="space-y-5">
-              <div class="flex gap-2">
-                <h2 class="text-5xl">{recipeQuery.data?.name}</h2>
-                <Show when={isAbleToEdit()}>
-                  <EditRecipeNameDialog
-                    initialName={recipeQuery.data!.name}
-                    onSubmit={(values) =>
-                      handleRecipeFieldUpdate("name", {
-                        ...recipeQuery.data!,
-                        name: values.name,
-                      })
-                    }
-                  />
-                </Show>
+              <div class="relative -ml-5 flex h-72 w-screen">
+                <div class="absolute z-10 size-full">
+                  <div class="size-full opacity-50">
+                    <Show
+                      when={
+                        recipeQuery.data !== undefined &&
+                        recipeQuery.data.imageUrl !== null
+                      }
+                      fallback={
+                        <div class="flex size-full items-center justify-center bg-slate-500 pb-12">
+                          <StockImageIcon class="size-40" />
+                        </div>
+                      }
+                    >
+                      <Image
+                        src={recipeQuery.data!.imageUrl!}
+                        fallbackWidth={900}
+                        fallbackHeight={280}
+                      />
+                    </Show>
+                  </div>
+                  <Show when={isAbleToEdit()}>
+                    <div class="absolute right-2 top-2">
+                      <EditRecipeImageDialog
+                        onImageSave={(uploadedImageName) => {
+                          handleRecipeFieldUpdate("image", {
+                            ...recipeTemplate(),
+                            uploadedImageName,
+                          });
+                        }}
+                      />
+                    </div>
+                  </Show>
+                </div>
+
+                <div class="z-20 flex self-end p-4">
+                  <h2 class="text-5xl drop-shadow-2xl">
+                    {recipeQuery.data?.name}
+                  </h2>
+                  <Show when={isAbleToEdit()}>
+                    <EditRecipeNameDialog
+                      initialName={recipeQuery.data!.name}
+                      onSubmit={(values) =>
+                        handleRecipeFieldUpdate("name", {
+                          ...recipeTemplate(),
+                          name: values.name,
+                        })
+                      }
+                    />
+                  </Show>
+                </div>
               </div>
+
               <div class="text-3xl">By: {recipeQuery.data?.creator}</div>
               <Rating
                 value={rating}
@@ -137,7 +169,7 @@ const RecipeView: Component = () => {
               userOwnsRecipe={isAbleToEdit()}
               handleIngredientsUpdate={(updatedIngredients) =>
                 handleRecipeFieldUpdate("ingredients", {
-                  ...recipeQuery.data!,
+                  ...recipeTemplate(),
                   ingredients: updatedIngredients,
                 })
               }
@@ -151,7 +183,7 @@ const RecipeView: Component = () => {
                     initialInstructions={recipeQuery.data!.instructions}
                     onSubmit={(values) =>
                       handleRecipeFieldUpdate("instructions", {
-                        ...recipeQuery.data!,
+                        ...recipeTemplate(),
                         instructions: values.instructions,
                       })
                     }

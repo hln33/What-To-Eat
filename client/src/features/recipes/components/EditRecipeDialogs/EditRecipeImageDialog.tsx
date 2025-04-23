@@ -3,25 +3,39 @@ import { createForm } from "@modular-forms/solid";
 import { DialogTriggerProps } from "@kobalte/core/dialog";
 import PencilIcon from "~icons/lucide/pencil";
 
-import { Ingredient } from "@/features/ingredients/types";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
-import { RecipeForm, SubmittedRecipeForm } from "../../types";
-import RecipeInputIngredients from "../Forms/RecipeInputIngredients";
+import FileUpload from "@/components/ui/FileUpload";
 import { EditRecipeDialogActions } from "./EditRecipeDialogActions";
+import { createUploadImageMutation } from "../../mutations";
 
-type EditIngredientsFormValues = Pick<SubmittedRecipeForm, "ingredients">;
-
-const EditIngredientsDialog: Component<{
-  initialIngredients: Ingredient[];
-  onSubmit: (values: EditIngredientsFormValues) => void;
+const EditRecipeImageDialog: Component<{
+  onImageSave: (uploadedImageName: string) => void;
 }> = (props) => {
+  const [, { Form }] = createForm();
   const [open, setOpen] = createSignal(false);
-  const [form, { Form }] = createForm<RecipeForm>({
-    initialValues: {
-      ingredients: props.initialIngredients,
-    },
-  });
+  const [uploadedImageName, setUploadedImageName] = createSignal<string | null>(
+    null,
+  );
+
+  const handleSubmit = () => {
+    if (uploadedImageName() === null) {
+      console.error("cannot submit form with no image uploaded");
+      return;
+    }
+    props.onImageSave(uploadedImageName()!);
+  };
+
+  const uploadImageMutation = createUploadImageMutation();
+  const handleFileAccept = (files: File[]) => {
+    if (files.length > 1) {
+      console.error("only expected one file.");
+      return;
+    }
+    uploadImageMutation.mutate(files[0], {
+      onSuccess: (data) => setUploadedImageName(data.imageName),
+    });
+  };
 
   return (
     <Dialog
@@ -42,16 +56,19 @@ const EditIngredientsDialog: Component<{
         )}
       />
 
-      <DialogContent title="Ingredients">
+      <DialogContent title="Recipe Image">
         <ErrorBoundary fallback={<div>An error occurred</div>}>
           <Suspense fallback={<div>...</div>}>
             <Form
-              onSubmit={(values) => {
-                props.onSubmit(values as EditIngredientsFormValues);
+              onSubmit={() => {
+                handleSubmit();
                 setOpen(false);
               }}
             >
-              <RecipeInputIngredients form={form} />
+              <FileUpload
+                label="Image upload"
+                onFileAccept={handleFileAccept}
+              />
               <EditRecipeDialogActions onClose={() => setOpen(false)} />
             </Form>
           </Suspense>
@@ -61,4 +78,4 @@ const EditIngredientsDialog: Component<{
   );
 };
 
-export default EditIngredientsDialog;
+export default EditRecipeImageDialog;
