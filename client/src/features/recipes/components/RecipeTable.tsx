@@ -100,7 +100,7 @@ const RecipeTable: Component<{
         leftSection={<SearchIcon />}
       />
 
-      <section class="flex flex-col items-center gap-4">
+      <section class="flex flex-col items-center divide-y-2">
         <For each={table().getRowModel().rows}>
           {(row) => (
             <RecipeCard

@@ -1,5 +1,4 @@
 import { Component, createSignal, ErrorBoundary, Suspense } from "solid-js";
-import { createForm } from "@modular-forms/solid";
 import { DialogTriggerProps } from "@kobalte/core/dialog";
 import PencilIcon from "~icons/lucide/pencil";
 
@@ -12,7 +11,6 @@ import { createUploadImageMutation } from "../../mutations";
 const EditRecipeImageDialog: Component<{
   onImageSave: (uploadedImageName: string) => void;
 }> = (props) => {
-  const [, { Form }] = createForm();
   const [open, setOpen] = createSignal(false);
   const [uploadedImageName, setUploadedImageName] = createSignal<string | null>(
     null,
@@ -20,10 +18,10 @@ const EditRecipeImageDialog: Component<{
 
   const handleSubmit = () => {
     if (uploadedImageName() === null) {
-      console.error("cannot submit form with no image uploaded");
-      return;
+      console.warn("form submitted with no image");
+    } else {
+      props.onImageSave(uploadedImageName()!);
     }
-    props.onImageSave(uploadedImageName()!);
   };
 
   const uploadImageMutation = createUploadImageMutation();
@@ -50,7 +48,7 @@ const EditRecipeImageDialog: Component<{
           >
             <PencilIcon
               class="text-slate-300"
-              aria-label="Edit recipe ingredients"
+              aria-label="Edit recipe image"
             />
           </Button>
         )}
@@ -59,8 +57,9 @@ const EditRecipeImageDialog: Component<{
       <DialogContent title="Recipe Image">
         <ErrorBoundary fallback={<div>An error occurred</div>}>
           <Suspense fallback={<div>...</div>}>
-            <Form
-              onSubmit={() => {
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
                 handleSubmit();
                 setOpen(false);
               }}
@@ -70,7 +69,7 @@ const EditRecipeImageDialog: Component<{
                 onFileAccept={handleFileAccept}
               />
               <EditRecipeDialogActions onClose={() => setOpen(false)} />
-            </Form>
+            </form>
           </Suspense>
         </ErrorBoundary>
       </DialogContent>

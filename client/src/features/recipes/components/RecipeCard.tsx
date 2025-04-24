@@ -31,7 +31,7 @@ const RecipeCard: Component<{
 
   return (
     <div
-      class="flex h-fit w-full cursor-pointer gap-4 rounded border border-slate-500 bg-slate-700 p-4 shadow-xl hover:bg-slate-600"
+      class="flex h-fit w-full cursor-pointer gap-4 border-slate-500 p-4 hover:bg-slate-600"
       onClick={() =>
         navigate({
           to: "/recipes/$recipeId",
@@ -42,13 +42,15 @@ const RecipeCard: Component<{
       <div class="flex size-32 shrink-0 items-center justify-center rounded">
         <Show
           when={props.recipe.imageUrl !== null}
-          fallback={<ImageIcon class="size-28 text-slate-200" />}
+          fallback={
+            <ImageIcon class="size-full rounded border-slate-400 text-slate-400" />
+          }
         >
           <Image
             class="size-full"
             src={props.recipe.imageUrl!}
-            fallbackHeight={32}
-            fallbackWidth={32}
+            fallbackHeight={128}
+            fallbackWidth={128}
           />
         </Show>
       </div>
