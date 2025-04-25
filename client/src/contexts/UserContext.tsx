@@ -5,7 +5,7 @@ import {
   useContext,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-import { createSessionQuery } from "@/queries";
+import { createUserSessionQuery } from "@/features/users/queries";
 
 type User =
   | {
@@ -32,7 +32,7 @@ export const UserContextProvider: ParentComponent = (props) => {
     isLoggedIn: false,
   });
 
-  const sessionQuery = createSessionQuery();
+  const sessionQuery = createUserSessionQuery();
   createEffect(() => {
     if (sessionQuery.data === undefined) {
       return;

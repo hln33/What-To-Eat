@@ -7,21 +7,11 @@ import {
   type Component,
 } from "solid-js";
 import { createFileRoute, Link } from "@tanstack/solid-router";
-import {
-  createMutation,
-  createQuery,
-  useQueryClient,
-} from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 import StockImageIcon from "~icons/lucide/image";
 import HeartIcon from "~icons/lucide/heart";
 
 import { useUserContext } from "@/contexts/UserContext";
-import {
-  addRecipeToFavorites,
-  getFavoritedRecipes,
-  removeRecipeFromFavorites,
-} from "@/features/users/api";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
@@ -36,31 +26,22 @@ import {
   createRecipeQuery,
   createUpdateRecipeMutation,
 } from "@/features/recipes/queries";
+import {
+  createUserFavoriteRecipeMutation,
+  createUserFavoriteRecipesQuery,
+  createUserUnfavoriteRecipeMutation,
+} from "@/features/users/queries";
 
 const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
   const user = useUserContext();
-  const queryClient = useQueryClient();
 
-  const favoritedRecipesQuery = createQuery(() => ({
-    queryKey: ["user", user.info.id],
-    queryFn: () => getFavoritedRecipes(user.info.id!),
-    enabled: user.info.isLoggedIn,
-  }));
-
-  const favoriteRecipeMutation = createMutation(() => ({
-    mutationFn: addRecipeToFavorites,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["user", user.info.id] }),
-  }));
-  const unfavoriteRecipeMutation = createMutation(() => ({
-    mutationFn: removeRecipeFromFavorites,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["user", user.info.id] }),
-  }));
+  const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
+  const favoriteRecipeMutation = createUserFavoriteRecipeMutation();
+  const unfavoriteRecipeMutation = createUserUnfavoriteRecipeMutation();
 
   const isRecipeFavorited = (): boolean => {
-    if (favoritedRecipesQuery.data !== undefined) {
-      return favoritedRecipesQuery.data
+    if (favoriteRecipesQuery.data !== undefined) {
+      return favoriteRecipesQuery.data
         .map((entry) => entry.recipeId)
         .includes(parseInt(props.recipeId));
     }

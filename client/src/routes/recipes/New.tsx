@@ -1,16 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/solid-router";
-import { createMutation } from "@tanstack/solid-query";
 
-import { postNewRecipe } from "@/features/recipes/api";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
 import NewRecipeForm from "@/features/recipes/components/Forms/NewRecipeForm";
+import { createAddRecipeMutation } from "@/features/recipes/queries";
 
 const NewRecipe = () => {
   const navigate = useNavigate();
 
-  const createRecipe = createMutation(() => ({
-    mutationFn: postNewRecipe,
-  }));
+  const createRecipe = createAddRecipeMutation();
   const handleNewRecipeSubmit = async (values: SubmittedRecipeForm) => {
     createRecipe.mutate(values, {
       onSuccess: (recipe) =>

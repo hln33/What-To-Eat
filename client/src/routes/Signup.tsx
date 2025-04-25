@@ -1,6 +1,5 @@
 import { Show } from "solid-js";
 import { createFileRoute, Link, useNavigate } from "@tanstack/solid-router";
-import { createMutation } from "@tanstack/solid-query";
 import {
   createForm,
   minLength,
@@ -8,11 +7,11 @@ import {
   SubmitHandler,
 } from "@modular-forms/solid";
 
-import { registerUser } from "@/features/users/api";
 import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
 import PasswordInput from "@/components/PasswordInput";
 import { toast } from "@/components/ui/Toast";
+import { createUserRegisterMutation } from "@/features/users/queries";
 
 type SignupForm = {
   username: string;
@@ -23,12 +22,10 @@ export const Signup = () => {
   const navigate = useNavigate();
   const [form, { Form, Field }] = createForm<SignupForm>();
 
-  const createUser = createMutation(() => ({
-    mutationFn: registerUser,
-  }));
+  const registerUserMutation = createUserRegisterMutation();
 
   const handleSignup: SubmitHandler<SignupForm> = async (credentials) => {
-    createUser.mutate(credentials, {
+    registerUserMutation.mutate(credentials, {
       onSuccess: () => {
         toast.success("You have successfully signed up! Please log in.");
         navigate({ to: "/login" });
@@ -40,8 +37,8 @@ export const Signup = () => {
     <div class="space-y-5">
       <div class="text-lg">Sign up to \App Name\</div>
 
-      <Show when={createUser.isError}>
-        <div class="text-red-500">{createUser.error?.message}</div>
+      <Show when={registerUserMutation.isError}>
+        <div class="text-red-500">{registerUserMutation.error?.message}</div>
       </Show>
 
       <Form

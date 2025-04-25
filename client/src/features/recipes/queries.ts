@@ -7,12 +7,14 @@ import {
   deleteRecipe,
   getAllRecipes,
   getRecipe,
+  postNewRecipe,
   postRecipeImage,
   updateRecipe,
 } from "./api";
 
 const recipeKeys = {
   all: ["recipes"] as const,
+  list: () => [...recipeKeys.all, "list"],
   detail: (id: string) => [...recipeKeys.all, id] as const,
 };
 
@@ -30,6 +32,16 @@ export const createRecipeQuery = (id: string) => {
   }));
 };
 
+export const createAddRecipeMutation = () => {
+  const queryClient = useQueryClient();
+
+  return createMutation(() => ({
+    mutationFn: postNewRecipe,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: recipeKeys.list() }),
+  }));
+};
+
 export const createUpdateRecipeMutation = (id: string) => {
   const queryClient = useQueryClient();
 
@@ -41,8 +53,12 @@ export const createUpdateRecipeMutation = (id: string) => {
 };
 
 export const createDeleteRecipeMutation = () => {
+  const queryClient = useQueryClient();
+
   return createMutation(() => ({
     mutationFn: deleteRecipe,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: recipeKeys.list() }),
   }));
 };
 

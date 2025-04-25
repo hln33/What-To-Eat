@@ -5,11 +5,12 @@ import {
   createRootRoute,
   useNavigate,
 } from "@tanstack/solid-router";
-import { createMutation } from "@tanstack/solid-query";
 
-import { createSessionQuery } from "@/queries";
 import { useUserContext } from "@/contexts/UserContext";
-import { logout } from "@/features/users/api";
+import {
+  createUserLogoutMutation,
+  createUserSessionQuery,
+} from "@/features/users/queries";
 import Skeleton from "@/components/ui/Skeleton";
 import { ToastRegion } from "@/components/ui/Toast";
 import Button from "@/components/ui/Button";
@@ -18,11 +19,8 @@ export const RootComponent: ParentComponent = () => {
   const navigate = useNavigate();
   const user = useUserContext();
 
-  const sessionQuery = createSessionQuery();
-  const logoutMutation = createMutation(() => ({
-    mutationFn: logout,
-    onSuccess: () => user.logout(),
-  }));
+  const sessionQuery = createUserSessionQuery();
+  const logoutMutation = createUserLogoutMutation();
 
   return (
     <div class="h-fit min-h-screen bg-gray-800 text-center text-white">
