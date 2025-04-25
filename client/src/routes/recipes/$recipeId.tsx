@@ -19,9 +19,8 @@ import { useUserContext } from "@/contexts/UserContext";
 import { getRecipe, updateRecipe } from "@/features/recipes/api";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
-import EditRecipeNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeNameDialog";
 import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
-import EditRecipeImageDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeImageDialog";
+import EditRecipeImageAndNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeImageAndNameDialog";
 import RecipePageIngredientSection from "@/features/ingredients/components/RecipePageIngredientSection";
 import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
@@ -46,7 +45,7 @@ const RecipeView: Component = () => {
   const [rating, setRating] = createSignal(3);
 
   const handleRecipeFieldUpdate = (
-    updatedField: "image" | "name" | "ingredients" | "instructions",
+    updatedField: "image" | "name" | "ingredients" | "instructions" | null,
     updatedRecipe: SubmittedRecipeForm,
   ) => {
     if (!recipeQuery.data) {
@@ -59,10 +58,17 @@ const RecipeView: Component = () => {
       recipe: updatedRecipe,
     };
     updateRecipeMutation.mutate(recipeWithUpdatedField, {
-      onSuccess: () => toast.success(`Recipe ${updatedField} updated.`),
+      onSuccess: () =>
+        toast.success(
+          updatedField === null
+            ? "Recipe updated."
+            : `Recipe ${updatedField} updated.`,
+        ),
       onError: () =>
         toast.error(
-          `Failed to update recipe ${updatedField}. Please try again.`,
+          updatedField === null
+            ? "Failed to update recipe. Please try again."
+            : `Failed to update recipe ${updatedField}. Please try again.`,
         ),
     });
   };
@@ -126,11 +132,13 @@ const RecipeView: Component = () => {
                   </div>
                   <Show when={isAbleToEdit()}>
                     <div class="absolute right-2 top-2">
-                      <EditRecipeImageDialog
-                        onImageSave={(uploadedImageName) => {
-                          handleRecipeFieldUpdate("image", {
+                      <EditRecipeImageAndNameDialog
+                        initialName={recipeQuery.data!.name}
+                        onSubmit={(values) => {
+                          handleRecipeFieldUpdate(null, {
                             ...recipeTemplate(),
-                            uploadedImageName,
+                            name: values.name,
+                            uploadedImageName: values.uploadedImageName,
                           });
                         }}
                       />
@@ -138,22 +146,9 @@ const RecipeView: Component = () => {
                   </Show>
                 </div>
 
-                <div class="z-20 flex self-end p-4">
-                  <h2 class="text-5xl drop-shadow-2xl">
-                    {recipeQuery.data?.name}
-                  </h2>
-                  <Show when={isAbleToEdit()}>
-                    <EditRecipeNameDialog
-                      initialName={recipeQuery.data!.name}
-                      onSubmit={(values) =>
-                        handleRecipeFieldUpdate("name", {
-                          ...recipeTemplate(),
-                          name: values.name,
-                        })
-                      }
-                    />
-                  </Show>
-                </div>
+                <h2 class="z-20 flex self-end p-4 text-5xl drop-shadow-2xl">
+                  {recipeQuery.data?.name}
+                </h2>
               </div>
 
               <div>

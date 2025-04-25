@@ -40,7 +40,6 @@ const NewRecipeForm: Component<{
   };
 
   const handleSubmit = (values: SubmittedRecipeForm) => {
-    console.log(values);
     props.onSubmit({
       ...values,
       uploadedImageName: uploadedImageName(),
