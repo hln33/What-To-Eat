@@ -18,6 +18,7 @@ const createTestRecipe = async () => {
     creatorId: (await getUser()).id,
     name: 'test recipe',
     imageName: 'placeholderImageName',
+    servings: 5,
     ingredients: [
       {
         amount: 100,

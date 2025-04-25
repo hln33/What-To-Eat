@@ -23,12 +23,12 @@ const TextField: Component<TextInputProps> = (props) => {
 
   return (
     <Kobalte
-      class={twMerge("flex w-full flex-col items-start gap-1", props.class)}
+      class={twMerge("flex w-full flex-col items-start", props.class)}
       {...rootProps}
       validationState={props.error ? "invalid" : "valid"}
     >
       <Show when={props.label}>
-        <Kobalte.Label class="text-xl">
+        <Kobalte.Label class="mb-1 text-xl">
           {rootProps.required ? (
             <RequiredInputLabel label={props.label!} />
           ) : (
@@ -39,7 +39,7 @@ const TextField: Component<TextInputProps> = (props) => {
 
       <div class="relative w-full">
         <Kobalte.Input
-          class="w-full rounded-md p-3 text-black ui-invalid:border-2 ui-invalid:border-red-500 ui-disabled:bg-slate-500"
+          class="h-12 w-full rounded-md p-3 text-black ui-invalid:border-2 ui-invalid:border-red-500 ui-disabled:bg-slate-500"
           {...inputProps}
           type={props.type}
         />

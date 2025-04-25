@@ -1,12 +1,16 @@
 import { api } from "@/api";
-import { Recipe, SubmittedRecipeForm } from "./types";
+import { SubmittedRecipeForm } from "./types";
+import { Recipe } from "@server/src/models/recipe";
 
 export const getAllRecipes = async (): Promise<Recipe[]> => {
   const res = await api.recipes.$get();
   return res.json();
 };
 
-export const getRecipe = async (id: string): Promise<Recipe> => {
+type RecipeWithPresignedImageUrl = Recipe & { imageUrl: string | null };
+export const getRecipe = async (
+  id: string,
+): Promise<RecipeWithPresignedImageUrl> => {
   const res = await api.recipes[":id"].$get({ param: { id } });
   if (!res.ok) {
     throw new Error(`Recipe with id ${id} does not exist`);
@@ -28,10 +32,12 @@ export const postNewRecipe = async ({
   uploadedImageName,
   ingredients,
   instructions,
+  servings,
 }: SubmittedRecipeForm): Promise<Recipe> => {
   const res = await api.recipes.$post({
     json: {
       recipeName: name,
+      servings,
       ingredients,
       instructions,
       uploadedImageName,
@@ -51,6 +57,7 @@ export const updateRecipe = async ({
     param: { id: recipeId },
     json: {
       recipeName: recipe.name,
+      servings: recipe.servings,
       ingredients: recipe.ingredients,
       instructions: recipe.instructions,
       uploadedImageName: recipe.uploadedImageName,

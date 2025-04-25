@@ -23,6 +23,7 @@ const recipeSchema = z.object({
   instructions: z
     .union([z.string(), z.string().array()])
     .transform((val) => (Array.isArray(val) ? val : [val])),
+  servings: z.number().positive(),
 });
 
 const getUserFromSessionCookie = async (c: Context) => {
@@ -77,12 +78,18 @@ const recipeRoutes = new Hono()
   .post('/', zValidator('json', recipeSchema), async (c) => {
     const user = await getUserFromSessionCookie(c);
 
-    const { recipeName, uploadedImageName, ingredients, instructions } =
-      c.req.valid('json');
+    const {
+      recipeName,
+      uploadedImageName,
+      ingredients,
+      instructions,
+      servings,
+    } = c.req.valid('json');
     const recipe = await createRecipe({
       creatorId: user.id,
-      name: recipeName,
       imageName: uploadedImageName ?? null,
+      name: recipeName,
+      servings,
       ingredients,
       instructions,
     });

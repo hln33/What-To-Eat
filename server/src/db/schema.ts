@@ -13,6 +13,7 @@ export const recipeTable = sqliteTable('recipes', {
     .references(() => userTable.id, { onDelete: 'cascade' })
     .notNull(),
   name: text().notNull(),
+  servings: int().notNull(),
   /**
    * name used to fetch from S3 bucket
    */

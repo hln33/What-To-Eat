@@ -1,5 +1,5 @@
 import { Component, createSignal, ErrorBoundary, Suspense } from "solid-js";
-import { createForm } from "@modular-forms/solid";
+import { createForm, minRange, required, setValue } from "@modular-forms/solid";
 
 import Button from "@/components/ui/Button";
 import FileUpload from "@/components/ui/FileUpload";
@@ -8,6 +8,7 @@ import { createUploadImageMutation } from "../../mutations";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 import RecipeInputInstructions from "./RecipeInputInstructions";
 import RecipeInputName from "./RecipeInputName";
+import NumberField from "@/components/ui/NumberField";
 
 const SectionHeader: Component<{ label: string }> = (props) => (
   <h2 class="mb-5 block text-left text-3xl">{props.label}</h2>
@@ -16,8 +17,9 @@ const SectionHeader: Component<{ label: string }> = (props) => (
 const NewRecipeForm: Component<{
   onSubmit: (recipe: SubmittedRecipeForm) => void;
 }> = (props) => {
-  const [form, { Form }] = createForm<RecipeForm>({
+  const [form, { Field, Form }] = createForm<RecipeForm>({
     initialValues: {
+      servings: 0,
       ingredients: [{ amount: 0, unit: undefined, name: "" }],
       instructions: [""],
     },
@@ -38,6 +40,7 @@ const NewRecipeForm: Component<{
   };
 
   const handleSubmit = (values: SubmittedRecipeForm) => {
+    console.log(values);
     props.onSubmit({
       ...values,
       uploadedImageName: uploadedImageName(),
@@ -51,13 +54,37 @@ const NewRecipeForm: Component<{
           class="flex flex-col items-center gap-12"
           onSubmit={(values) => handleSubmit(values as SubmittedRecipeForm)}
         >
-          <FileUpload
-            label="Recipe image (optional)"
-            onFileAccept={handleRecipeImageUpload}
-          />
-
           <div class="w-full space-y-20">
-            <RecipeInputName form={form} />
+            <div class="space-y-6">
+              <SectionHeader label="General" />
+              <FileUpload
+                label="Recipe image (optional)"
+                onFileAccept={handleRecipeImageUpload}
+              />
+              <RecipeInputName form={form} />
+              <Field
+                name="servings"
+                type="number"
+                validate={[
+                  required("Please enter number of servings."),
+                  minRange(
+                    1,
+                    "Please enter a serving amount greater than zero",
+                  ),
+                ]}
+              >
+                {(field, _fieldProps) => (
+                  <NumberField
+                    label="servings"
+                    value={field.value}
+                    handleRawInputChange={(value) =>
+                      setValue(form, "servings", value)
+                    }
+                    error={field.error}
+                  />
+                )}
+              </Field>
+            </div>
 
             <div>
               <SectionHeader label="Ingredients" />

@@ -23,13 +23,14 @@ export const seedDatabase = async () => {
   await createUser('harry', 'password123');
 
   const pathToJSONFile = path.join(import.meta.dirname, 'recipeData.json');
-  for (const { name, ingredients, instructions } of JSON.parse(
+  for (const { name, servings, ingredients, instructions } of JSON.parse(
     fs.readFileSync(pathToJSONFile, 'utf-8')
   )) {
     await createRecipe({
       creatorId: adminUser.id,
       imageName: null,
       name,
+      servings,
       ingredients,
       instructions,
     });

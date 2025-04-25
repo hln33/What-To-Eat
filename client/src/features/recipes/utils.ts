@@ -1,4 +1,5 @@
-import { IngredientStatusText, Recipe, RecipeTableData } from "./types";
+import { Recipe } from "@server/src/models/recipe";
+import { IngredientStatusText, RecipeTableData } from "./types";
 
 export const INGREDIENT_STATUSES = {
   missingAll: "Missing all ingredients",

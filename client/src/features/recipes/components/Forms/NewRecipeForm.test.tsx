@@ -37,6 +37,8 @@ describe("New Recipe Form", () => {
       "Scrambled Eggs",
     );
 
+    await user.type(screen.getByRole("spinbutton", { name: "servings" }), "5");
+
     const firstIngredientInputs = getIngredientInputs(
       screen.getByRole("group", { name: "Ingredient 1" }),
     );
@@ -85,6 +87,7 @@ describe("New Recipe Form", () => {
     await waitFor(() =>
       expect(handleSubmit).toHaveBeenCalledWith({
         name: "Scrambled Eggs",
+        servings: 5,
         ingredients: [
           { amount: 1, unit: "kg", name: "eggs" },
           { amount: 200, unit: "g", name: "cheese" },
@@ -110,6 +113,11 @@ describe("New Recipe Form", () => {
       screen.getByRole("textbox", { name: "Recipe name" }),
     ).not.toBeValid();
     screen.getByText("Please enter a name for the recipe");
+
+    expect(
+      screen.getByRole("spinbutton", { name: "servings" }),
+    ).not.toBeValid();
+    screen.getByText("Please enter a serving amount greater than zero");
 
     const firstIngredientInputs = getIngredientInputs(
       screen.getByRole("group", { name: "Ingredient 1" }),

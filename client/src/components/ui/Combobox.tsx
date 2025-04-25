@@ -66,7 +66,7 @@ const Combobox: Component<
       <Show when={!props.controlled}>
         <Kobalte.HiddenSelect {...selectProps} />
       </Show>
-      <Kobalte.Control<string> class="h-12 rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
+      <Kobalte.Control<string> class="h-12 rounded-lg border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-2 ui-invalid:border-red-500">
         <div class="relative flex w-full items-center gap-2 p-3 text-black">
           <Kobalte.Input
             class="w-full bg-inherit outline-none placeholder:text-slate-400"

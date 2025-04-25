@@ -1,6 +1,7 @@
 [
   {
     "name": "Classic Chocolate Chip Cookies",
+    "servings": 24,
     "ingredients": [
       { "unit": "g", "amount": 250, "name": "all-purpose flour" },
       { "unit": "g", "amount": 150, "name": "butter" },
@@ -18,6 +19,7 @@
   },
   {
     "name": "Spaghetti Bolognese",
+    "servings": 4,
     "ingredients": [
       { "unit": "g", "amount": 400, "name": "ground beef" },
       { "unit": "g", "amount": 300, "name": "spaghetti" },
@@ -35,6 +37,7 @@
   },
   {
     "name": "Greek Salad",
+    "servings": 2,
     "ingredients": [
       { "unit": "g", "amount": 200, "name": "cucumber" },
       { "unit": "g", "amount": 150, "name": "tomatoes" },
@@ -52,6 +55,7 @@
   },
   {
     "name": "Banana Bread",
+    "servings": 8,
     "ingredients": [
       { "unit": "g", "amount": 300, "name": "ripe bananas" },
       { "unit": "g", "amount": 200, "name": "flour" },
@@ -69,6 +73,7 @@
   },
   {
     "name": "Vegetable Stir-Fry",
+    "servings": 3,
     "ingredients": [
       { "unit": "g", "amount": 150, "name": "broccoli" },
       { "unit": "g", "amount": 100, "name": "bell peppers" },
@@ -86,6 +91,7 @@
   },
   {
     "name": "Pancakes",
+    "servings": 12,
     "ingredients": [
       { "unit": "g", "amount": 200, "name": "flour" },
       { "unit": "g", "amount": 30, "name": "sugar" },
@@ -103,6 +109,7 @@
   },
   {
     "name": "Chicken Curry",
+    "servings": 4,
     "ingredients": [
       { "unit": "g", "amount": 500, "name": "chicken thighs" },
       { "unit": "g", "amount": 200, "name": "coconut milk" },
@@ -120,6 +127,7 @@
   },
   {
     "name": "Omelette",
+    "servings": 1,
     "ingredients": [
       { "unit": "g", "amount": 50, "name": "cheese" },
       { "unit": "g", "amount": 30, "name": "mushrooms" },
@@ -137,6 +145,7 @@
   },
   {
     "name": "Beef Tacos",
+    "servings": 6,
     "ingredients": [
       { "unit": "g", "amount": 300, "name": "ground beef" },
       { "unit": "g", "amount": 100, "name": "taco seasoning" },
@@ -154,6 +163,7 @@
   },
   {
     "name": "Apple Pie",
+    "servings": 8,
     "ingredients": [
       { "unit": "g", "amount": 500, "name": "apples" },
       { "unit": "g", "amount": 250, "name": "pie crust" },

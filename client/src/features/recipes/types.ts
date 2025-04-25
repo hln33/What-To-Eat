@@ -1,14 +1,5 @@
+import { Recipe } from "@server/src/models/recipe";
 import { Ingredient } from "../ingredients/types";
-
-export type Recipe = {
-  id: number;
-  creatorId: number;
-  creator: string;
-  imageUrl: string | null;
-  name: string;
-  ingredients: Ingredient[];
-  instructions: string[];
-};
 
 export type RecipeTableData = Recipe & {
   ingredientStatus: IngredientStatus;

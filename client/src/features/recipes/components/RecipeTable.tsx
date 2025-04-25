@@ -3,7 +3,6 @@ import {
   ColumnFiltersState,
   createColumnHelper,
   createSolidTable,
-  // flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -13,9 +12,10 @@ import SearchIcon from "~icons/lucide/search";
 import { useUserContext } from "@/contexts/UserContext";
 import Input from "@/components/ui/Input";
 import { getRecipesWithIngredientStatus } from "../utils";
-import { Recipe, RecipeTableData } from "../types";
+import { RecipeTableData } from "../types";
 import RecipeTableFooter from "./RecipeTableFooter";
 import RecipeCard from "./RecipeCard";
+import { Recipe } from "@server/src/models/recipe";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [

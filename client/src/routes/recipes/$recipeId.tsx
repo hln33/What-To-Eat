@@ -156,11 +156,16 @@ const RecipeView: Component = () => {
                 </div>
               </div>
 
-              <div class="text-3xl">By: {recipeQuery.data?.creator}</div>
-              <Rating
-                value={rating}
-                onChange={(rating) => setRating(rating)}
-              />
+              <div>
+                <div class="text-3xl">By: {recipeQuery.data?.creator}</div>
+                <div class="text-slate-200">
+                  Servings: {recipeQuery.data?.servings}
+                </div>
+                <Rating
+                  value={rating}
+                  onChange={(rating) => setRating(rating)}
+                />
+              </div>
               <Separator />
             </div>
 
