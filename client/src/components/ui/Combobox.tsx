@@ -4,7 +4,6 @@ import CheckIcon from "~icons/fe/check";
 import ChevronDownIcon from "~icons/lucide/chevron-down";
 
 import InputError from "../InputError";
-import RequiredInputLabel from "../RequiredInputLabel";
 
 type UncontrolledProps = {
   controlled?: false;
@@ -54,12 +53,10 @@ const Combobox: Component<
       )}
     >
       <Show when={props.label}>
-        <Kobalte.Label class="mb-1 block text-left text-xl">
-          {props.required ? (
-            <RequiredInputLabel label={props.label!} />
-          ) : (
-            props.label
-          )}
+        <Kobalte.Label
+          class={`mb-1 block text-left text-xl ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
+        >
+          {props.label}
         </Kobalte.Label>
       </Show>
 

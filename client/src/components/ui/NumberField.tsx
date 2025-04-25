@@ -7,6 +7,7 @@ import MinusIcon from "~icons/lucide/minus";
 const NumberField: Component<{
   class?: string;
   label: string;
+  required?: boolean;
   value: number | undefined;
   handleRawInputChange: (value: number) => void;
   error: string;
@@ -19,7 +20,11 @@ const NumberField: Component<{
       onRawValueChange={props.handleRawInputChange}
       validationState={props.error ? "invalid" : "valid"}
     >
-      <Kobalte.Label class="text-left text-xl">{props.label}</Kobalte.Label>
+      <Kobalte.Label
+        class={`mb-1 text-left text-xl ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
+      >
+        {props.label}
+      </Kobalte.Label>
       <div
         class={`flex size-fit rounded outline-blue-500 focus-within:outline ${props.error ? "border border-red-500" : ""}`}
       >

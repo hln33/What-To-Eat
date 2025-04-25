@@ -38,6 +38,7 @@ const RecipeInputInstructions: Component<{
                         {...fieldProps}
                         type="text"
                         label={`Instruction ${index() + 1}`}
+                        required
                         value={field.value}
                         error={field.error}
                         disabled={props.form.submitting}
@@ -45,6 +46,7 @@ const RecipeInputInstructions: Component<{
                     )}
                   </Field>
                   <DeleteFieldButton
+                    class="self-end"
                     ariaLabel={`Delete instruction ${index()}`}
                     onClick={() =>
                       remove(props.form, fieldArray.name, { at: index() })

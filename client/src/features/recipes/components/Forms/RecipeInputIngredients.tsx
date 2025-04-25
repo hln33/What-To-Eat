@@ -33,10 +33,11 @@ const RecipeInputIngredients: Component<{
           <div class="space-y-8">
             <For each={fieldArray.items}>
               {(_, index) => (
-                <fieldset class="rounded border border-slate-500 p-4 shadow-lg">
+                <fieldset class="relative flex flex-col rounded border border-slate-500 px-4 py-1 shadow-lg">
                   <legend class="rounded px-2 text-left text-xl font-bold">
                     Ingredient {index() + 1}
                   </legend>
+
                   <div class="my-2 flex items-start gap-3">
                     <Field
                       of={props.form}
@@ -53,6 +54,7 @@ const RecipeInputIngredients: Component<{
                           class="w-3/12"
                           label="Amount"
                           type="number"
+                          required
                           value={field.value?.toString()}
                           error={field.error}
                         />
@@ -70,9 +72,9 @@ const RecipeInputIngredients: Component<{
                           label="Unit"
                           options={["g", "kg", "oz", "lb"]}
                           defaultValue={field.value ?? ""}
+                          required
                           value={field.value}
                           error={field.error}
-                          required
                         />
                       )}
                     </Field>
@@ -84,23 +86,26 @@ const RecipeInputIngredients: Component<{
                       {(field, props) => (
                         <Combobox
                           {...props}
-                          class="w-4/12"
+                          class="w-6/12"
                           controlled={false}
                           label="Name"
+                          required
                           value={field.value}
                           error={field.error}
                           options={ingredientNamesQuery.data ?? []}
                         />
                       )}
                     </Field>
-                    <DeleteFieldButton
-                      ariaLabel={`Delete ingredient ${index() + 1}`}
-                      onClick={() =>
-                        remove(props.form, fieldArray.name, { at: index() })
-                      }
-                      disabled={index() === 0}
-                    />
                   </div>
+                  <DeleteFieldButton
+                    class="-ml-3"
+                    ariaLabel={`Delete ingredient ${index() + 1}`}
+                    buttonText="Delete ingredient"
+                    onClick={() =>
+                      remove(props.form, fieldArray.name, { at: index() })
+                    }
+                    disabled={index() === 0}
+                  />
                 </fieldset>
               )}
             </For>

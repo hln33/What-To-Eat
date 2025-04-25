@@ -4,7 +4,6 @@ import CheckIcon from "~icons/fe/check";
 import CloseIcon from "~icons/fe/close";
 
 import InputError from "../InputError";
-import RequiredInputLabel from "../RequiredInputLabel";
 
 type UncontrolledProps = {
   controlled?: false;
@@ -51,13 +50,7 @@ const MultiSelect: Component<
         </Kobalte.Item>
       )}
     >
-      <Kobalte.Label class="mb-1 block text-left">
-        {props.required ? (
-          <RequiredInputLabel label={props.label} />
-        ) : (
-          props.label
-        )}
-      </Kobalte.Label>
+      <Kobalte.Label class="mb-1 block text-left">{props.label}</Kobalte.Label>
 
       <Show when={!props.controlled}>
         <Kobalte.HiddenSelect {...selectProps} />

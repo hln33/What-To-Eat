@@ -1,16 +1,16 @@
 import { Component, JSX, Show, splitProps } from "solid-js";
 import { TextField as Kobalte } from "@kobalte/core/text-field";
+import { twMerge } from "tailwind-merge";
 
 import InputError from "../InputError";
-import RequiredInputLabel from "../RequiredInputLabel";
-import { twMerge } from "tailwind-merge";
 
 type TextInputProps = {
   class?: string;
-  value: string | undefined;
-  error: string;
-  onInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
   label?: string;
+  required?: boolean;
+  value: string | undefined;
+  onInput: JSX.EventHandler<HTMLInputElement, InputEvent>;
+  error: string;
   icon?: JSX.Element;
 } & JSX.InputHTMLAttributes<HTMLInputElement>;
 
@@ -28,12 +28,10 @@ const TextField: Component<TextInputProps> = (props) => {
       validationState={props.error ? "invalid" : "valid"}
     >
       <Show when={props.label}>
-        <Kobalte.Label class="mb-1 text-xl">
-          {rootProps.required ? (
-            <RequiredInputLabel label={props.label!} />
-          ) : (
-            props.label
-          )}
+        <Kobalte.Label
+          class={`mb-1 text-xl ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
+        >
+          {props.label}
         </Kobalte.Label>
       </Show>
 

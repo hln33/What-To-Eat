@@ -16,6 +16,7 @@ const RecipeInputName: Component<{ form: FormStore<RecipeForm> }> = (props) => {
           {...fieldProps}
           type="text"
           label="Recipe name"
+          required
           value={field.value}
           error={field.error}
           disabled={props.form.submitting}

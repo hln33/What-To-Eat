@@ -76,6 +76,7 @@ const NewRecipeForm: Component<{
                 {(field, _fieldProps) => (
                   <NumberField
                     label="servings"
+                    required
                     value={field.value}
                     handleRawInputChange={(value) =>
                       setValue(form, "servings", value)

@@ -5,19 +5,22 @@ import PlusIcon from "~icons/fe/plus";
 import Button from "@/components/ui/Button";
 
 export const DeleteFieldButton: Component<{
+  class?: string;
   ariaLabel: string;
+  buttonText?: string;
   onClick: () => void;
   disabled: boolean;
 }> = (props) => {
   return (
     <Button
-      class="self-end"
+      class={props.class}
       variant="subtle"
       color="red"
       onClick={props.onClick}
       disabled={props.disabled}
     >
       <TrashIcon class="size-6" />
+      {props.buttonText}
     </Button>
   );
 };

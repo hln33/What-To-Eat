@@ -10,6 +10,7 @@ const Select: Component<
   {
     class?: string;
     label: string;
+    required?: boolean;
     error: string;
     options: string[];
     defaultValue: string;
@@ -40,7 +41,11 @@ const Select: Component<
     >
       <Kobalte.HiddenSelect {...selectProps} />
       <div class="space-y-1 text-left">
-        <Kobalte.Label class="text-xl">{props.label}</Kobalte.Label>
+        <Kobalte.Label
+          class={`text-xl ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
+        >
+          {props.label}
+        </Kobalte.Label>
         <Kobalte.Trigger class="flex h-12 w-full items-center justify-between rounded-lg bg-white p-3 text-left text-black ui-invalid:border-2 ui-invalid:border-red-500">
           <Kobalte.Value<string> class="ui-placeholder-shown:text-slate-400">
             {(state) => state.selectedOption()}
