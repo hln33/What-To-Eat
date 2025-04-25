@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../../types";
-import { createUploadImageMutation } from "../../mutations";
+import { createUploadImageMutation } from "../../queries";
 import RecipeInputName from "../Forms/RecipeInputName";
 import { EditRecipeDialogActions } from "./EditRecipeDialogActions";
 
@@ -53,7 +53,7 @@ const EditRecipeImageAndNameDialog: Component<{
             variant="filled"
           >
             <PencilIcon
-              class="text-slate-200"
+              class="text-slate-100"
               aria-label="Edit recipe image"
             />
           </Button>

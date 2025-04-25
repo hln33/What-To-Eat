@@ -14,9 +14,14 @@ import {
 } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 import StockImageIcon from "~icons/lucide/image";
+import HeartIcon from "~icons/lucide/heart";
 
 import { useUserContext } from "@/contexts/UserContext";
-import { getRecipe, updateRecipe } from "@/features/recipes/api";
+import {
+  addRecipeToFavorites,
+  getFavoritedRecipes,
+  removeRecipeFromFavorites,
+} from "@/features/users/api";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
@@ -26,66 +31,115 @@ import Skeleton from "@/components/ui/Skeleton";
 import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 import { toast } from "@/components/ui/Toast";
+import Button from "@/components/ui/Button";
+import {
+  createRecipeQuery,
+  createUpdateRecipeMutation,
+} from "@/features/recipes/queries";
+
+const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
+  const user = useUserContext();
+  const queryClient = useQueryClient();
+
+  const favoritedRecipesQuery = createQuery(() => ({
+    queryKey: ["user", user.info.id],
+    queryFn: () => getFavoritedRecipes(user.info.id!),
+    enabled: user.info.isLoggedIn,
+  }));
+
+  const favoriteRecipeMutation = createMutation(() => ({
+    mutationFn: addRecipeToFavorites,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["user", user.info.id] }),
+  }));
+  const unfavoriteRecipeMutation = createMutation(() => ({
+    mutationFn: removeRecipeFromFavorites,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["user", user.info.id] }),
+  }));
+
+  const isRecipeFavorited = (): boolean => {
+    if (favoritedRecipesQuery.data !== undefined) {
+      return favoritedRecipesQuery.data
+        .map((entry) => entry.recipeId)
+        .includes(parseInt(props.recipeId));
+    }
+    return false;
+  };
+  return (
+    <Button
+      aria-label={`${isRecipeFavorited() ? "Remove from favorites" : "Add to favorites"}`}
+      onClick={() => {
+        const userId = parseInt(user.info.id!);
+        const recipeId = parseInt(props.recipeId);
+        if (isRecipeFavorited()) {
+          unfavoriteRecipeMutation.mutate({
+            userId,
+            recipeId,
+          });
+        } else {
+          favoriteRecipeMutation.mutate({
+            userId,
+            recipeId,
+          });
+        }
+      }}
+    >
+      <HeartIcon class={`${isRecipeFavorited() ? "text-pink-500" : ""}`} />
+    </Button>
+  );
+};
 
 const RecipeView: Component = () => {
-  const queryClient = useQueryClient();
+  const [rating, setRating] = createSignal(3);
+
   const params = Route.useParams()();
   const user = useUserContext();
 
-  const recipeQuery = createQuery(() => ({
-    queryKey: ["recipe", params.recipeId],
-    queryFn: () => getRecipe(params.recipeId),
-  }));
-  const updateRecipeMutation = createMutation(() => ({
-    mutationFn: updateRecipe,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["recipe", params.recipeId] }),
-  }));
+  const recipeQuery = createRecipeQuery(params.recipeId);
+  const updateRecipeMutation = createUpdateRecipeMutation(params.recipeId);
 
-  const [rating, setRating] = createSignal(3);
-
-  const handleRecipeFieldUpdate = (
-    updatedField: "image" | "name" | "ingredients" | "instructions" | null,
+  const handleRecipeUpdate = (
+    updatedField:
+      | "image"
+      | "name"
+      | "ingredients"
+      | "instructions"
+      | "multiple",
     updatedRecipe: SubmittedRecipeForm,
   ) => {
-    if (!recipeQuery.data) {
-      console.error("Nothing to edit; no recipe loaded.");
-      return;
-    }
-
-    const recipeWithUpdatedField = {
+    const mutationValues = {
       recipeId: params.recipeId,
       recipe: updatedRecipe,
     };
-    updateRecipeMutation.mutate(recipeWithUpdatedField, {
+    updateRecipeMutation.mutate(mutationValues, {
       onSuccess: () =>
         toast.success(
-          updatedField === null
+          updatedField === "multiple"
             ? "Recipe updated."
             : `Recipe ${updatedField} updated.`,
         ),
       onError: () =>
         toast.error(
-          updatedField === null
+          updatedField === "multiple"
             ? "Failed to update recipe. Please try again."
             : `Failed to update recipe ${updatedField}. Please try again.`,
         ),
     });
   };
 
+  const isAbleToEdit = () =>
+    recipeQuery.data !== undefined &&
+    user.info.isLoggedIn &&
+    parseInt(user.info.id) === recipeQuery.data.creatorId;
   const recipeTemplate = (): SubmittedRecipeForm => ({
     ...recipeQuery.data!,
     uploadedImageName: null,
   });
 
-  const isAbleToEdit = () =>
-    recipeQuery.data !== undefined &&
-    user.info.isLoggedIn &&
-    parseInt(user.info.id) === recipeQuery.data.creatorId;
-
   return (
-    <div class="space-y-10">
-      <nav class="flex items-center justify-between">
+    <div>
+      <nav class="mb-5 flex items-center justify-between">
         <Link
           to="/"
           class="text-lg underline"
@@ -131,11 +185,13 @@ const RecipeView: Component = () => {
                     </Show>
                   </div>
                   <Show when={isAbleToEdit()}>
-                    <div class="absolute right-2 top-2">
+                    <div class="absolute right-2 top-2 flex gap-2">
+                      <FavoriteRecipeButton recipeId={params.recipeId} />
+
                       <EditRecipeImageAndNameDialog
                         initialName={recipeQuery.data!.name}
                         onSubmit={(values) => {
-                          handleRecipeFieldUpdate(null, {
+                          handleRecipeUpdate("multiple", {
                             ...recipeTemplate(),
                             name: values.name,
                             uploadedImageName: values.uploadedImageName,
@@ -168,7 +224,7 @@ const RecipeView: Component = () => {
               ingredients={recipeQuery.data?.ingredients}
               userOwnsRecipe={isAbleToEdit()}
               handleIngredientsUpdate={(updatedIngredients) =>
-                handleRecipeFieldUpdate("ingredients", {
+                handleRecipeUpdate("ingredients", {
                   ...recipeTemplate(),
                   ingredients: updatedIngredients,
                 })
@@ -182,7 +238,7 @@ const RecipeView: Component = () => {
                   <EditInstructionsDialog
                     initialInstructions={recipeQuery.data!.instructions}
                     onSubmit={(values) =>
-                      handleRecipeFieldUpdate("instructions", {
+                      handleRecipeUpdate("instructions", {
                         ...recipeTemplate(),
                         instructions: values.instructions,
                       })

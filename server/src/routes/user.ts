@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { deleteCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
+import { z } from 'zod';
 
 import {
   checkSessionExists,
@@ -11,8 +12,11 @@ import {
   validateSessionToken,
 } from '../models/session.ts';
 import {
+  addRecipeToFavorites,
   createUser,
+  getFavoritedRecipeIds,
   getUser,
+  removeRecipeFromFavorites,
   userExists,
   verifyPassword,
 } from '../models/user.ts';
@@ -74,7 +78,6 @@ const users = new Hono()
   })
   .get('/session', async (c) => {
     const sessionToken = getSessionCookie(c);
-
     const { session, user } = await validateSessionToken(sessionToken);
     if (!session || !user) {
       throw new HTTPException(401, { message: 'Invalid session.' });
@@ -89,7 +92,43 @@ const users = new Hono()
   /**
    * Owned Resources
    */
-  .get('/:userId/recipes', async (c) => {
-    const userId = Number(c.req.param('userId'));
-  });
+  .get('/:id/favorites', async (c) => {
+    const { id: userId } = c.req.param();
+
+    const recipeIds = await getFavoritedRecipeIds(parseInt(userId));
+
+    return c.json(recipeIds);
+  })
+  .post(
+    '/:id/favorites',
+    zValidator('json', z.object({ recipeId: z.number() })),
+    async (c) => {
+      const sessionToken = getSessionCookie(c);
+      const { session, user } = await validateSessionToken(sessionToken);
+      if (!session || !user) {
+        throw new HTTPException(401, { message: 'Invalid session.' });
+      }
+
+      const { recipeId } = c.req.valid('json');
+      await addRecipeToFavorites(user.id, recipeId);
+
+      return c.json({ message: 'Recipe successfully added to favorites.' });
+    }
+  )
+  .delete(
+    '/:id/favorites',
+    zValidator('json', z.object({ recipeId: z.number() })),
+    async (c) => {
+      const sessionToken = getSessionCookie(c);
+      const { session, user } = await validateSessionToken(sessionToken);
+      if (!session || !user) {
+        throw new HTTPException(401, { message: 'Invalid session.' });
+      }
+
+      const { recipeId } = c.req.valid('json');
+      await removeRecipeFromFavorites(user.id, recipeId);
+
+      return c.json({ message: 'Recipe successfully removed from favorites.' });
+    }
+  );
 export default users;

@@ -48,3 +48,43 @@ export const getUserSession = async (): Promise<{
     return null;
   }
 };
+
+export const addRecipeToFavorites = async (values: {
+  userId: number;
+  recipeId: number;
+}): Promise<void> => {
+  const res = await api.users[":id"].favorites.$post({
+    param: { id: values.userId.toString() },
+    json: { recipeId: values.recipeId },
+  });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
+};
+
+export const removeRecipeFromFavorites = async (values: {
+  userId: number;
+  recipeId: number;
+}): Promise<void> => {
+  const res = await api.users[":id"].favorites.$delete({
+    param: { id: values.userId.toString() },
+    json: { recipeId: values.recipeId },
+  });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
+};
+
+export const getFavoritedRecipes = async (
+  userId: string,
+): Promise<{ recipeId: number }[]> => {
+  const res = await api.users[":id"].favorites.$get({
+    param: { id: userId },
+  });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
+
+  const jsonData = await res.json();
+  return jsonData;
+};

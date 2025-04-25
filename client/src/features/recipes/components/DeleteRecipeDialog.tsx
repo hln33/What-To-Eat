@@ -5,14 +5,13 @@ import { type DialogTriggerProps } from "@kobalte/core/dialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
 import Button from "@/components/ui/Button";
 import { toast } from "@/components/ui/Toast";
-import { useDeleteRecipe } from "../mutations";
+import { createDeleteRecipeMutation } from "../queries";
 
 const DeleteRecipeDialog: Component<{ recipeId: string }> = (props) => {
   const navigate = useNavigate();
   const [open, setOpen] = createSignal(false);
 
-  const deleteRecipe = useDeleteRecipe();
-
+  const deleteRecipe = createDeleteRecipeMutation();
   const handleDelete = async () => {
     deleteRecipe.mutate(props.recipeId, {
       onSuccess: () => {

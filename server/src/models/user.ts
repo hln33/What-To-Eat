@@ -1,6 +1,6 @@
 import * as argon2 from 'argon2';
-import { type InferSelectModel, eq } from 'drizzle-orm';
-import { db, userTable } from '../db/schema.ts';
+import { type InferSelectModel, and, eq } from 'drizzle-orm';
+import { db, userRecipeFavoritesTable, userTable } from '../db/schema.ts';
 
 export type User = InferSelectModel<typeof userTable>;
 
@@ -56,4 +56,35 @@ export const verifyPassword = async (
 
   const user = res[0];
   return await argon2.verify(user.passwordHash, password);
+};
+
+export const getFavoritedRecipeIds = async (
+  userId: number
+): Promise<{ recipeId: number }[]> => {
+  const res = await db
+    .select({ recipeId: userRecipeFavoritesTable.recipeId })
+    .from(userRecipeFavoritesTable)
+    .where(eq(userRecipeFavoritesTable.userId, userId));
+  return res;
+};
+
+export const addRecipeToFavorites = async (
+  userId: number,
+  recipeId: number
+): Promise<void> => {
+  await db.insert(userRecipeFavoritesTable).values({ userId, recipeId });
+};
+
+export const removeRecipeFromFavorites = async (
+  userId: number,
+  recipeId: number
+): Promise<void> => {
+  await db
+    .delete(userRecipeFavoritesTable)
+    .where(
+      and(
+        eq(userRecipeFavoritesTable.userId, userId),
+        eq(userRecipeFavoritesTable.recipeId, recipeId)
+      )
+    );
 };

@@ -4,7 +4,7 @@ import { createForm, minRange, required, setValue } from "@modular-forms/solid";
 import Button from "@/components/ui/Button";
 import FileUpload from "@/components/ui/FileUpload";
 import { RecipeForm, SubmittedRecipeForm } from "../../types";
-import { createUploadImageMutation } from "../../mutations";
+import { createUploadImageMutation } from "../../queries";
 import RecipeInputIngredients from "./RecipeInputIngredients";
 import RecipeInputInstructions from "./RecipeInputInstructions";
 import RecipeInputName from "./RecipeInputName";

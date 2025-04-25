@@ -1,17 +1,14 @@
 import { Component, ErrorBoundary, Show, Suspense } from "solid-js";
 import Skeleton from "@/components/ui/Skeleton";
-import { createQuery } from "@tanstack/solid-query";
-import { getAllRecipes } from "../api";
+
+import { createAllRecipesQuery } from "../queries";
 import RecipeTable from "./RecipeTable";
 
 const Recipes: Component<{
   class?: string;
   providedIngredients: Set<string>;
 }> = (props) => {
-  const recipesQuery = createQuery(() => ({
-    queryKey: ["recipes"],
-    queryFn: getAllRecipes,
-  }));
+  const recipesQuery = createAllRecipesQuery();
 
   return (
     <section class={props.class}>

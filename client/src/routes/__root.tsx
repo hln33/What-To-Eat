@@ -68,7 +68,7 @@ export const RootComponent: ParentComponent = () => {
         </nav>
       </header>
 
-      <div class="flex items-center justify-center py-8">
+      <div class="flex items-center justify-center pb-8 pt-2">
         <main class="w-screen p-5">
           <Outlet />
         </main>

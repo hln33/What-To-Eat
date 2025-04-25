@@ -65,3 +65,17 @@ export const sessionTable = sqliteTable('session', {
     mode: 'timestamp',
   }).notNull(),
 });
+
+/* USER & RECIPE RELATIONS */
+export const userRecipeFavoritesTable = sqliteTable(
+  'user_recipe_favorites',
+  {
+    userId: int('user_id')
+      .references(() => userTable.id)
+      .notNull(),
+    recipeId: int('recipe_id')
+      .references(() => recipeTable.id)
+      .notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.recipeId] })]
+);
