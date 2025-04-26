@@ -2,7 +2,7 @@ import { Component, ErrorBoundary, Show, Suspense } from "solid-js";
 import Skeleton from "@/components/ui/Skeleton";
 
 import { createAllRecipesQuery } from "../queries";
-import RecipeTable from "./RecipeTable";
+import RecipeList from "./RecipeList";
 
 const Recipes: Component<{
   class?: string;
@@ -31,7 +31,7 @@ const Recipes: Component<{
               when={recipesQuery.data?.length ?? 0 > 0}
               fallback={<div>No Recipes to Show</div>}
             >
-              <RecipeTable
+              <RecipeList
                 recipes={recipesQuery.data ?? []}
                 providedIngredients={props.providedIngredients}
               />

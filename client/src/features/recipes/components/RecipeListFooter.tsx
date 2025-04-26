@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import { Table } from "@tanstack/solid-table";
 import { RecipeTableData } from "../types";
 
-const RecipeTableFooter: Component<{
+const RecipeListFooter: Component<{
   class?: string;
   table: Table<RecipeTableData>;
 }> = (props) => {
@@ -49,4 +49,4 @@ const RecipeTableFooter: Component<{
   );
 };
 
-export default RecipeTableFooter;
+export default RecipeListFooter;

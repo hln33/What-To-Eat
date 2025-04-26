@@ -9,35 +9,32 @@ import {
 } from "@tanstack/solid-table";
 import SearchIcon from "~icons/lucide/search";
 
+import { createUserFavoriteRecipesQuery } from "@/features/users/queries";
 import { useUserContext } from "@/contexts/UserContext";
 import Input from "@/components/ui/Input";
-import { getRecipesWithIngredientStatus } from "../utils";
-import { RecipeTableData } from "../types";
-import RecipeTableFooter from "./RecipeTableFooter";
+import { getRecipeTableData } from "../utils";
+import { FetchedRecipe, RecipeTableData } from "../types";
+import RecipeListFooter from "./RecipeListFooter";
 import RecipeCard from "./RecipeCard";
-import { Recipe } from "@server/src/models/recipe";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [
-  columnHelper.accessor("name", {
-    header: () => <div>Name</div>,
-  }),
-  columnHelper.accessor("ingredients", {
-    header: () => <div>Ingredients</div>,
-  }),
-  columnHelper.accessor("ingredientStatus", {
-    header: () => <div>Status</div>,
-  }),
-  columnHelper.accessor("creator", {
-    header: () => <div>Creator</div>,
-  }),
+  columnHelper.accessor("isFavorited", {}),
+  columnHelper.accessor("name", {}),
+  columnHelper.accessor("ingredients", {}),
+  columnHelper.accessor("ingredientStatus", {}),
+  columnHelper.accessor("creator", {}),
 ];
 
-const RecipeTable: Component<{
-  recipes: Recipe[];
+const RecipeList: Component<{
+  recipes: FetchedRecipe[];
   providedIngredients: Set<string>;
 }> = (props) => {
   const user = useUserContext();
+
+  const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
+  const favoriteRecipeIds = (): number[] =>
+    favoriteRecipesQuery.data?.map((entry) => entry.recipeId) ?? [];
 
   const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
     [],
@@ -46,13 +43,13 @@ const RecipeTable: Component<{
     pageIndex: 0,
     pageSize: 10,
   });
-
   const table = () =>
     createSolidTable({
       columns,
-      data: getRecipesWithIngredientStatus(
+      data: getRecipeTableData(
         props.recipes,
         props.providedIngredients,
+        favoriteRecipeIds(),
       ),
       getCoreRowModel: getCoreRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
@@ -81,6 +78,29 @@ const RecipeTable: Component<{
             }
           />
           <label for="show-my-recipes">Show my Recipes</label>
+        </div>
+        <div class="flex gap-2">
+          <input
+            type="checkbox"
+            id="show-my-favorites"
+            onClick={(e) => {
+              if (e.currentTarget.checked) {
+                setColumnFilters([
+                  {
+                    id: "isFavorited",
+                    value: true,
+                  },
+                ]);
+              } else {
+                setColumnFilters((prev) =>
+                  prev.filter(
+                    (columnFilter) => columnFilter.id !== "isFavorited",
+                  ),
+                );
+              }
+            }}
+          />
+          <label for="show-my-favorites">Show my favorites</label>
         </div>
       </Show>
 
@@ -111,7 +131,7 @@ const RecipeTable: Component<{
         </For>
       </section>
 
-      <RecipeTableFooter
+      <RecipeListFooter
         class="border-gray-600 p-2"
         table={table()}
       />
@@ -119,4 +139,4 @@ const RecipeTable: Component<{
   );
 };
 
-export default RecipeTable;
+export default RecipeList;

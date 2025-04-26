@@ -1,7 +1,12 @@
 import { Recipe } from "@server/src/models/recipe";
 import { Ingredient } from "../ingredients/types";
 
-export type RecipeTableData = Recipe & {
+export type FetchedRecipe = Omit<Recipe, "imageName"> & {
+  imageUrl: string | null;
+};
+
+export type RecipeTableData = FetchedRecipe & {
+  isFavorited: boolean;
   ingredientStatus: IngredientStatus;
 };
 

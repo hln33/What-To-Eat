@@ -1,8 +1,8 @@
 import { api } from "@/api";
-import { SubmittedRecipeForm } from "./types";
+import { FetchedRecipe, SubmittedRecipeForm } from "./types";
 import { Recipe } from "@server/src/models/recipe";
 
-export const getAllRecipes = async (): Promise<Recipe[]> => {
+export const getAllRecipes = async (): Promise<FetchedRecipe[]> => {
   const res = await api.recipes.$get();
   return res.json();
 };

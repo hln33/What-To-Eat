@@ -8,10 +8,10 @@ import ShoppingBasketIcon from "~icons/lucide/shopping-basket";
 import CheckIcon from "~icons/fe/check";
 
 import Image from "@/components/ui/Image";
-import { Recipe } from "../types";
+import { FetchedRecipe } from "../types";
 
 const RecipeCard: Component<{
-  recipe: Recipe;
+  recipe: FetchedRecipe;
   providedIngredients: Set<string>;
 }> = (props) => {
   const navigate = useNavigate();

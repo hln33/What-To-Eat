@@ -13,15 +13,6 @@ import HeartIcon from "~icons/lucide/heart";
 
 import { useUserContext } from "@/contexts/UserContext";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
-import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
-import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
-import EditRecipeImageAndNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeImageAndNameDialog";
-import RecipePageIngredientSection from "@/features/ingredients/components/RecipePageIngredientSection";
-import Skeleton from "@/components/ui/Skeleton";
-import Rating from "@/components/ui/Rating";
-import Image from "@/components/ui/Image";
-import { toast } from "@/components/ui/Toast";
-import Button from "@/components/ui/Button";
 import {
   createRecipeQuery,
   createUpdateRecipeMutation,
@@ -31,6 +22,15 @@ import {
   createUserFavoriteRecipesQuery,
   createUserUnfavoriteRecipeMutation,
 } from "@/features/users/queries";
+import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
+import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
+import EditRecipeImageAndNameDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeImageAndNameDialog";
+import RecipePageIngredientSection from "@/features/ingredients/components/RecipePageIngredientSection";
+import Skeleton from "@/components/ui/Skeleton";
+import Rating from "@/components/ui/Rating";
+import Image from "@/components/ui/Image";
+import { toast } from "@/components/ui/Toast";
+import Button from "@/components/ui/Button";
 
 const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
   const user = useUserContext();
@@ -40,12 +40,12 @@ const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
   const unfavoriteRecipeMutation = createUserUnfavoriteRecipeMutation();
 
   const isRecipeFavorited = (): boolean => {
-    if (favoriteRecipesQuery.data !== undefined) {
-      return favoriteRecipesQuery.data
-        .map((entry) => entry.recipeId)
-        .includes(parseInt(props.recipeId));
+    if (favoriteRecipesQuery.data === undefined) {
+      return false;
     }
-    return false;
+    return favoriteRecipesQuery.data
+      .map((entry) => entry.recipeId)
+      .includes(parseInt(props.recipeId));
   };
   return (
     <Button

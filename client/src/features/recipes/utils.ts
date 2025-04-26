@@ -1,5 +1,4 @@
-import { Recipe } from "@server/src/models/recipe";
-import { IngredientStatusText, RecipeTableData } from "./types";
+import { FetchedRecipe, IngredientStatusText, RecipeTableData } from "./types";
 
 export const INGREDIENT_STATUSES = {
   missingAll: "Missing all ingredients",
@@ -19,17 +18,20 @@ const getIngredientStatusText = (
     return "MissingAll";
   } else {
     return "MissingSome";
-    // const isPlural = numMissingIngredients > 1;
-    // return `Missing ${numMissingIngredients} ingredient${isPlural ? "s" : ""}`;
   }
 };
 
-export const getRecipesWithIngredientStatus = (
-  recipes: Recipe[],
+export const getRecipeTableData = (
+  recipes: FetchedRecipe[],
   providedIngredients: Set<string>,
+  favoritedRecipeIds: number[],
 ): RecipeTableData[] => {
   return recipes.map((recipe) => {
-    const requiredIngredients = new Set(recipe.ingredients);
+    const requiredIngredientNames = recipe.ingredients.map(
+      (ingredient) => ingredient.name,
+    );
+
+    const requiredIngredients = new Set(requiredIngredientNames);
     const statusText = getIngredientStatusText(
       requiredIngredients,
       providedIngredients,
@@ -39,6 +41,7 @@ export const getRecipesWithIngredientStatus = (
 
     return {
       ...recipe,
+      isFavorited: favoritedRecipeIds.includes(recipe.id),
       ingredientStatus: { statusText, missingIngredients },
     };
   });
