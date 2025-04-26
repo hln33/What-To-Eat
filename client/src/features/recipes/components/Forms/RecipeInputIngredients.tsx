@@ -7,6 +7,7 @@ import {
   minRange,
   remove,
   required,
+  setValue,
 } from "@modular-forms/solid";
 
 import { createIngredientNamesQuery } from "@/features/ingredients/queries";
@@ -83,16 +84,21 @@ const RecipeInputIngredients: Component<{
                       name={`${fieldArray.name}.${index()}.name`}
                       validate={[required("Please enter an ingredient")]}
                     >
-                      {(field, props) => (
+                      {(field, _fieldProps) => (
                         <Combobox
-                          {...props}
                           class="w-6/12"
-                          controlled={false}
-                          label="Name"
                           required
-                          value={field.value}
-                          error={field.error}
+                          label="Name"
                           options={ingredientNamesQuery.data ?? []}
+                          value={field.value}
+                          onChange={(value) =>
+                            setValue(
+                              props.form,
+                              `${fieldArray.name}.${index()}.name`,
+                              value ?? "",
+                            )
+                          }
+                          error={field.error}
                         />
                       )}
                     </Field>

@@ -1,42 +1,32 @@
-import { Component, JSX, Setter, Show, splitProps } from "solid-js";
+import { Component, Show, splitProps } from "solid-js";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
 import CheckIcon from "~icons/fe/check";
 import ChevronDownIcon from "~icons/lucide/chevron-down";
 
 import InputError from "../InputError";
 
-type UncontrolledProps = {
-  controlled?: false;
-  onChange: JSX.EventHandler<HTMLSelectElement, Event>;
-};
-type ControlledProps = {
-  controlled: true;
-  onChange: Setter<string>;
-};
-
-const Combobox: Component<
-  {
-    class?: string;
-    label?: string;
-    options: string[];
-    value: string | undefined;
-    placeholder?: string;
-    error?: string;
-  } & JSX.SelectHTMLAttributes<HTMLSelectElement> &
-    (ControlledProps | UncontrolledProps)
-> = (props) => {
-  const [rootProps, selectProps] = splitProps(
-    props,
-    ["name", "placeholder", "options"],
-    ["placeholder", "ref", "onInput", "onChange", "onBlur", "required"],
-  );
+/**
+ * A single select combobox.
+ */
+const Combobox: Component<{
+  class?: string;
+  label?: string;
+  options: string[];
+  value: string | undefined;
+  onChange: (value: string | null) => void;
+  name?: string;
+  required?: boolean;
+  placeholder?: string;
+  error?: string;
+}> = (props) => {
+  const [rootProps] = splitProps(props, ["name", "placeholder", "options"]);
 
   return (
     <Kobalte<string>
       {...rootProps}
       class={props.class ?? ""}
       defaultValue={props.value}
-      onChange={props.controlled ? props.onChange : undefined}
+      onChange={props.onChange}
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
@@ -60,15 +50,9 @@ const Combobox: Component<
         </Kobalte.Label>
       </Show>
 
-      <Show when={!props.controlled}>
-        <Kobalte.HiddenSelect {...selectProps} />
-      </Show>
       <Kobalte.Control<string> class="h-12 rounded-lg border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-2 ui-invalid:border-red-500">
         <div class="relative flex w-full items-center gap-2 p-3 text-black">
-          <Kobalte.Input
-            class="w-full bg-inherit outline-none placeholder:text-slate-400"
-            aria-label={props["aria-label"]}
-          />
+          <Kobalte.Input class="w-full bg-inherit outline-none placeholder:text-slate-400" />
           <Kobalte.Icon>
             <ChevronDownIcon class="size-5" />
           </Kobalte.Icon>

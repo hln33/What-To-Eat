@@ -18,7 +18,7 @@ const DropdownTrigger = Kobalte.Trigger;
 const DropdownContent: ParentComponent = (props) => {
   return (
     <Kobalte.Portal>
-      <Kobalte.Content class="min-w-32 rounded bg-slate-600 px-4 py-2 text-white shadow-lg">
+      <Kobalte.Content class="z-50 min-w-32 rounded bg-slate-600 px-4 py-2 text-white shadow-lg">
         {props.children}
         <Kobalte.Arrow
           size={12}

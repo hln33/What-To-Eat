@@ -51,7 +51,12 @@ const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
     <Button
       aria-label={`${isRecipeFavorited() ? "Remove from favorites" : "Add to favorites"}`}
       onClick={() => {
-        const userId = parseInt(user.info.id!);
+        if (user.info.isLoggedIn === false) {
+          console.error("Cannot favorite recipe when user is not logged in!");
+          return;
+        }
+
+        const userId = parseInt(user.info.id);
         const recipeId = parseInt(props.recipeId);
         if (isRecipeFavorited()) {
           unfavoriteRecipeMutation.mutate({
