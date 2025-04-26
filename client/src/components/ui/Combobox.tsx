@@ -19,14 +19,18 @@ const Combobox: Component<{
   placeholder?: string;
   error?: string;
 }> = (props) => {
-  const [rootProps] = splitProps(props, ["name", "placeholder", "options"]);
+  const [rootProps] = splitProps(props, [
+    "name",
+    "placeholder",
+    "options",
+    "onChange",
+    "class",
+  ]);
 
   return (
     <Kobalte<string>
       {...rootProps}
-      class={props.class ?? ""}
       defaultValue={props.value}
-      onChange={props.onChange}
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
