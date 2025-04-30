@@ -10,24 +10,34 @@ import CheckIcon from "~icons/fe/check";
 import Image from "@/components/ui/Image";
 import { FetchedRecipe } from "../types";
 
+const getIngredientStatus = (
+  requiredIngredients: string[],
+  providedIngredients: string[],
+) => {
+  const numMissing = requiredIngredients.filter(
+    (ingredient) => !providedIngredients.includes(ingredient),
+  ).length;
+
+  if (numMissing === 0) {
+    return "Ready";
+  } else if (numMissing === requiredIngredients.length) {
+    return "MissingAll";
+  } else {
+    return "MissingSome";
+  }
+};
+
 const RecipeCard: Component<{
   recipe: FetchedRecipe;
   providedIngredients: Set<string>;
 }> = (props) => {
   const navigate = useNavigate();
 
-  const ingredientStatus = (): "Ready" | "MissingSome" | "MissingAll" => {
-    const numMissing = props.recipe.ingredients.filter(
-      (ingredient) => !props.providedIngredients.has(ingredient.name),
-    ).length;
-    if (numMissing === 0) {
-      return "Ready";
-    } else if (numMissing === props.recipe.ingredients.length) {
-      return "MissingAll";
-    } else {
-      return "MissingSome";
-    }
-  };
+  const ingredientStatus = (): "Ready" | "MissingSome" | "MissingAll" =>
+    getIngredientStatus(
+      props.recipe.ingredients.map((ingredient) => ingredient.name),
+      Array.from(props.providedIngredients),
+    );
 
   return (
     <div
@@ -70,7 +80,7 @@ const RecipeCard: Component<{
             </span>
           </Match>
           <Match when={ingredientStatus() === "MissingSome"}>
-            <span class="flex items-center gap-2 text-red-500">
+            <span class="flex items-center gap-2 text-yellow-500">
               <ShoppingBasketIcon />
               Missing some ingredients
             </span>

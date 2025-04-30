@@ -20,7 +20,7 @@ export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id"> & {
 
 export type IngredientStatusText = "Ready" | "MissingAll" | "MissingSome";
 
-export type IngredientStatus = {
+type IngredientStatus = {
   statusText: IngredientStatusText;
   missingIngredients: Set<string>;
 };

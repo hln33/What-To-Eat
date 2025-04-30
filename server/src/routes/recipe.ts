@@ -74,19 +74,6 @@ const recipeRoutes = new Hono()
 
     return c.json(recipesWithImages);
   })
-  .get('/:id', async (c) => {
-    const id = Number(c.req.param('id'));
-    const recipe = await getRecipe(id);
-    if (recipe === null) {
-      return c.json({}, 404);
-    }
-
-    const imageUrl =
-      recipe.imageName !== null
-        ? await createPresignedUrl(recipe.imageName)
-        : null;
-    return c.json({ ...recipe, imageUrl });
-  })
   .post('/', zValidator('json', recipeSchema), async (c) => {
     const user = await getUserFromSessionCookie(c);
 
@@ -111,6 +98,19 @@ const recipeRoutes = new Hono()
     });
 
     return c.json({ ...recipe, imageUrl: null }, 201);
+  })
+  .get('/:id', async (c) => {
+    const id = Number(c.req.param('id'));
+    const recipe = await getRecipe(id);
+    if (recipe === null) {
+      return c.json({}, 404);
+    }
+
+    const imageUrl =
+      recipe.imageName !== null
+        ? await createPresignedUrl(recipe.imageName)
+        : null;
+    return c.json({ ...recipe, imageUrl });
   })
   .put('/:id', zValidator('json', recipeSchema), async (c) => {
     const user = await getUserFromSessionCookie(c);
