@@ -3,6 +3,7 @@ import {
   Field,
   FieldArray,
   FormStore,
+  getValues,
   insert,
   minRange,
   remove,
@@ -22,6 +23,21 @@ const RecipeInputIngredients: Component<{
   form: FormStore<RecipeForm>;
 }> = (props) => {
   const ingredientNamesQuery = createIngredientNamesQuery();
+
+  const selectedIngredientNames = (): (string | undefined)[] =>
+    getValues(props.form, "ingredients").map((ingredient) => ingredient?.name);
+
+  const getAvailableIngredientNames = (ingredientIndex: number) => {
+    if (ingredientNamesQuery.data === undefined) {
+      return [];
+    }
+    return ingredientNamesQuery.data.filter(
+      (ingredient) =>
+        !selectedIngredientNames()
+          .toSpliced(ingredientIndex, 1)
+          .includes(ingredient),
+    );
+  };
 
   return (
     <FieldArray
@@ -89,7 +105,7 @@ const RecipeInputIngredients: Component<{
                           class="w-6/12"
                           required
                           label="Name"
-                          options={ingredientNamesQuery.data ?? []}
+                          options={getAvailableIngredientNames(index())}
                           value={field.value}
                           onChange={(value) =>
                             setValue(

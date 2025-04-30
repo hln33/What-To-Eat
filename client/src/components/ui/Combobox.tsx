@@ -9,11 +9,11 @@ import InputError from "../InputError";
  * A single select combobox.
  */
 const Combobox: Component<{
-  class?: string;
-  label?: string;
   options: string[];
   value: string | undefined;
   onChange: (value: string | null) => void;
+  class?: string;
+  label?: string;
   name?: string;
   required?: boolean;
   placeholder?: string;
@@ -47,11 +47,13 @@ const Combobox: Component<{
       )}
     >
       <Show when={props.label}>
-        <Kobalte.Label
-          class={`mb-1 block text-left text-xl ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
-        >
-          {props.label}
-        </Kobalte.Label>
+        {(label) => (
+          <Kobalte.Label
+            class={`mb-1 block text-left text-xl ${props.required ? "after:ml-1 after:text-red-500 after:content-['*']" : ""}`}
+          >
+            {label()}
+          </Kobalte.Label>
+        )}
       </Show>
 
       <Kobalte.Control<string> class="h-12 rounded-lg border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-2 ui-invalid:border-red-500">

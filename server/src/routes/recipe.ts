@@ -47,6 +47,18 @@ const verifyUserOwnsRecipe = async (user: User, recipeId: number) => {
   }
 };
 
+const verifyNoDuplicateIngredientNames = (ingredientNames: string[]) => {
+  const seen = new Set();
+  for (const ingredient of ingredientNames) {
+    if (seen.has(ingredient)) {
+      throw new HTTPException(400, {
+        message: 'Can not submit a recipe with duplicate ingredient names.',
+      });
+    }
+    seen.add(ingredient);
+  }
+};
+
 const recipeRoutes = new Hono()
   .get('/', async (c) => {
     const recipes = await getAllRecipes();
@@ -85,6 +97,10 @@ const recipeRoutes = new Hono()
       instructions,
       servings,
     } = c.req.valid('json');
+    verifyNoDuplicateIngredientNames(
+      ingredients.map((ingredient) => ingredient.name)
+    );
+
     const recipe = await createRecipe({
       creatorId: user.id,
       imageName: uploadedImageName ?? null,
@@ -104,6 +120,10 @@ const recipeRoutes = new Hono()
 
     const { recipeName, ingredients, instructions, uploadedImageName } =
       c.req.valid('json');
+    verifyNoDuplicateIngredientNames(
+      ingredients.map((ingredient) => ingredient.name)
+    );
+
     await updateRecipe({
       recipeId,
       recipeName,
