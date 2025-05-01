@@ -2,7 +2,7 @@ import { ErrorBoundary, Suspense, type Component } from "solid-js";
 import { createFileRoute, Link } from "@tanstack/solid-router";
 
 import { createUserIngredientsQuery } from "@/features/users/queries";
-import UserIngredients from "@/features/ingredients/components/UserIngredients";
+import UserIngredientsInput from "@/features/ingredients/components/UserIngredientsInput";
 import { createIngredientNamesQuery } from "@/features/ingredients/queries";
 import Recipes from "@/features/recipes/components/Recipes";
 import Skeleton from "@/components/ui/Skeleton";
@@ -24,9 +24,10 @@ const Index: Component = () => {
 
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
         <Suspense fallback={<Skeleton height={40} />}>
-          <UserIngredients />
+          <UserIngredientsInput />
         </Suspense>
       </ErrorBoundary>
+
       <Recipes providedIngredients={new Set(userIngredientsQuery.data ?? [])} />
     </div>
   );

@@ -3,6 +3,7 @@ import { Component, createSignal, Index, Show } from "solid-js";
 import EditIngredientsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeIngredientsDialog";
 import { Ingredient, IngredientUnit } from "@/features/ingredients/types";
 import RecipePageIngredientSectionSettings from "./RecipePageIngredientSectionSettings.tsx";
+import { createUserIngredientsQuery } from "@/features/users/queries.js";
 
 const convertWeightUnits = (
   value: number,
@@ -19,6 +20,41 @@ const convertWeightUnits = (
   const valueInGrams = value * conversionFactorsToGrams[originalUnit];
   const convertedValue = valueInGrams / conversionFactorsToGrams[finalUnit];
   return convertedValue.toFixed(4);
+};
+
+const IngredientList: Component<{
+  ingredients: Ingredient[] | undefined;
+  weightUnit: IngredientUnit | null;
+}> = (props) => {
+  const userIngredientsQuery = createUserIngredientsQuery();
+  const userIngredients = () => userIngredientsQuery.data ?? [];
+
+  const getIngredientTextColor = (
+    userIngredients: string[],
+    ingredient: string,
+  ) => {
+    if (userIngredients.length === 0) {
+      return "";
+    }
+    return userIngredients.includes(ingredient)
+      ? "text-green-500"
+      : "text-red-500";
+  };
+  return (
+    <ul class="list-inside list-disc text-slate-100">
+      <Index each={props.ingredients}>
+        {(ingredient) => (
+          <li
+            class={getIngredientTextColor(userIngredients(), ingredient().name)}
+          >
+            {props.weightUnit === null
+              ? `${ingredient().amount} ${ingredient().unit} ${ingredient().name}`
+              : `${convertWeightUnits(ingredient().amount, ingredient().unit, props.weightUnit!)} ${props.weightUnit} ${ingredient().name}`}
+          </li>
+        )}
+      </Index>
+    </ul>
+  );
 };
 
 const RecipePageIngredientSection: Component<{
@@ -49,17 +85,10 @@ const RecipePageIngredientSection: Component<{
         />
       </div>
 
-      <ul class="list-inside list-disc text-slate-100">
-        <Index each={props.ingredients}>
-          {(ingredient) => (
-            <li>
-              {finalConversionUnit() === null
-                ? `${ingredient().amount} ${ingredient().unit} ${ingredient().name}`
-                : `${convertWeightUnits(ingredient().amount, ingredient().unit, finalConversionUnit()!)} ${finalConversionUnit()} ${ingredient().name}`}
-            </li>
-          )}
-        </Index>
-      </ul>
+      <IngredientList
+        ingredients={props.ingredients}
+        weightUnit={finalConversionUnit()}
+      />
     </section>
   );
 };

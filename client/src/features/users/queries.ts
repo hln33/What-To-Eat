@@ -111,7 +111,7 @@ export const createUserIngredientsQuery = () => {
   }));
 };
 
-export const createUserIngredientsMutation = (options: {
+export const createAddUserIngredientsMutation = (options: {
   invalidate: boolean;
 }) => {
   const queryClient = useQueryClient();

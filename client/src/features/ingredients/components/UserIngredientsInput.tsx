@@ -2,7 +2,7 @@ import { Component, Show } from "solid-js";
 import { useQueryClient } from "@tanstack/solid-query";
 
 import {
-  createUserIngredientsMutation,
+  createAddUserIngredientsMutation,
   createUserIngredientsQuery,
   userKeys,
 } from "@/features/users/queries";
@@ -20,13 +20,13 @@ const debounce = (callback: () => void) => {
   timeoutId = window.setTimeout(callback, DEBOUNCE_DELAY_MS);
 };
 
-const UserIngredients: Component = () => {
+const UserIngredientsInput: Component = () => {
   const user = useUserContext();
   const queryClient = useQueryClient();
 
   const ingredientsQuery = createIngredientNamesQuery();
   const userIngredientsQuery = createUserIngredientsQuery();
-  const addUserIngredientsMutation = createUserIngredientsMutation({
+  const addUserIngredientsMutation = createAddUserIngredientsMutation({
     invalidate: false,
   });
 
@@ -69,4 +69,4 @@ const UserIngredients: Component = () => {
   );
 };
 
-export default UserIngredients;
+export default UserIngredientsInput;
