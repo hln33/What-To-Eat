@@ -10,16 +10,6 @@ import { useUserContext } from "@/contexts/UserContext";
 import MultiSelect from "@/components/ui/MultiSelect";
 import { createIngredientNamesQuery } from "../queries";
 
-const debounce = (callback: () => void) => {
-  const DEBOUNCE_DELAY_MS = 5000;
-  let timeoutId: number | null = null;
-
-  if (timeoutId !== null) {
-    window.clearTimeout(timeoutId);
-  }
-  timeoutId = window.setTimeout(callback, DEBOUNCE_DELAY_MS);
-};
-
 const UserIngredientsInput: Component = () => {
   const user = useUserContext();
   const queryClient = useQueryClient();
@@ -29,6 +19,14 @@ const UserIngredientsInput: Component = () => {
   const addUserIngredientsMutation = createAddUserIngredientsMutation({
     invalidate: false,
   });
+
+  let timeoutId: number | undefined;
+  const debounce = (callback: () => void) => {
+    const DEBOUNCE_DELAY_MS = 5000;
+
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(callback, DEBOUNCE_DELAY_MS);
+  };
 
   const handleIngredientsChange = (ingredients: string[]) => {
     debounce(() => {
@@ -46,7 +44,7 @@ const UserIngredientsInput: Component = () => {
 
     /**
      * Directly set query data to allow UI to instantly reflect newly added ingredients.
-     * The mutation is only used to save the user's ingredients in the background
+     * The mutation is only used to save the user's ingredients in the background.
      */
     queryClient.setQueryData(
       userKeys.ingredientsList(user.info.id ?? ""),
