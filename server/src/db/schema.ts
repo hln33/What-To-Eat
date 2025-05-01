@@ -79,3 +79,16 @@ export const userRecipeFavoritesTable = sqliteTable(
   },
   (table) => [primaryKey({ columns: [table.userId, table.recipeId] })]
 );
+
+export const userIngredientsTable = sqliteTable(
+  'user_ingredients',
+  {
+    userId: int('user_id')
+      .references(() => userTable.id)
+      .notNull(),
+    ingredientId: int('ingredient_id')
+      .references(() => ingredientTable.id)
+      .notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.ingredientId] })]
+);

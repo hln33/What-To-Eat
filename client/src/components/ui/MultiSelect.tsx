@@ -1,40 +1,32 @@
-import { Component, For, JSX, Setter, Show, splitProps } from "solid-js";
+import { Component, For, JSX, splitProps } from "solid-js";
 import { Combobox as Kobalte } from "@kobalte/core/combobox";
 import CheckIcon from "~icons/fe/check";
 import CloseIcon from "~icons/fe/close";
 
 import InputError from "../InputError";
 
-type UncontrolledProps = {
-  controlled?: false;
-  onChange: JSX.EventHandler<HTMLSelectElement, Event>;
-};
-type ControlledProps = {
-  controlled: true;
-  onChange: Setter<string[]>;
-};
-
-const MultiSelect: Component<
-  {
-    label: string;
-    options: string[];
-    placeholder?: string;
-    error?: string;
-    leftSection?: JSX.Element;
-  } & (UncontrolledProps | ControlledProps) &
-    Omit<JSX.SelectHTMLAttributes<HTMLSelectElement>, "onChange">
-> = (props) => {
-  const [rootProps, selectProps] = splitProps(
-    props,
-    ["name", "placeholder", "options"],
-    ["placeholder", "ref", "onInput", "onChange", "onBlur", "required"],
-  );
+const MultiSelect: Component<{
+  label: string;
+  options: string[];
+  values?: string[];
+  defaultValue: string[];
+  onChange: (values: string[]) => void;
+  placeholder?: string;
+  error?: string;
+  leftSection?: JSX.Element;
+}> = (props) => {
+  const [rootProps] = splitProps(props, [
+    "onChange",
+    "defaultValue",
+    "placeholder",
+    "options",
+  ]);
 
   return (
     <Kobalte<string>
       {...rootProps}
-      onChange={props.controlled ? props.onChange : undefined}
       multiple
+      value={props.values}
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
@@ -51,10 +43,6 @@ const MultiSelect: Component<
       )}
     >
       <Kobalte.Label class="mb-1 block text-left">{props.label}</Kobalte.Label>
-
-      <Show when={!props.controlled}>
-        <Kobalte.HiddenSelect {...selectProps} />
-      </Show>
       <Kobalte.Control<string> class="rounded-lg border border-gray-500 bg-white focus-within:ring-2 focus-within:ring-blue-600 ui-invalid:border-red-500">
         {(state) => (
           <div class="relative flex justify-between gap-2 p-3">

@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import { deleteCookie } from 'hono/cookie';
 import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
@@ -13,9 +13,11 @@ import {
 } from '../models/session.ts';
 import {
   addRecipeToFavorites,
+  addUserIngredients,
   createUser,
   getFavoritedRecipeIds,
   getUser,
+  getUserIngredientNames,
   removeRecipeFromFavorites,
   userExists,
   verifyPassword,
@@ -26,6 +28,16 @@ import {
   SESSION_COOKIE_NAME,
   setSessionCookie,
 } from './cookies/index.ts';
+import { getAllIngredients } from '../models/ingredient.ts';
+
+const getUserFromSessionCookie = async (c: Context) => {
+  const sessionToken = getSessionCookie(c);
+  const { session, user } = await validateSessionToken(sessionToken);
+  if (!session || !user) {
+    throw new HTTPException(401, { message: 'Invalid session.' });
+  }
+  return user;
+};
 
 const users = new Hono()
   /**
@@ -103,11 +115,7 @@ const users = new Hono()
     '/:id/favorites',
     zValidator('json', z.object({ recipeId: z.number() })),
     async (c) => {
-      const sessionToken = getSessionCookie(c);
-      const { session, user } = await validateSessionToken(sessionToken);
-      if (!session || !user) {
-        throw new HTTPException(401, { message: 'Invalid session.' });
-      }
+      const user = await getUserFromSessionCookie(c);
 
       const { recipeId } = c.req.valid('json');
       await addRecipeToFavorites(user.id, recipeId);
@@ -119,16 +127,47 @@ const users = new Hono()
     '/:id/favorites',
     zValidator('json', z.object({ recipeId: z.number() })),
     async (c) => {
-      const sessionToken = getSessionCookie(c);
-      const { session, user } = await validateSessionToken(sessionToken);
-      if (!session || !user) {
-        throw new HTTPException(401, { message: 'Invalid session.' });
-      }
+      const user = await getUserFromSessionCookie(c);
 
       const { recipeId } = c.req.valid('json');
       await removeRecipeFromFavorites(user.id, recipeId);
 
       return c.json({ message: 'Recipe successfully removed from favorites.' });
+    }
+  )
+  .get('/:id/ingredients', async (c) => {
+    const user = await getUserFromSessionCookie(c);
+
+    const ingredientNames = await getUserIngredientNames(user.id);
+
+    return c.json(ingredientNames);
+  })
+  .post(
+    '/:id/ingredients',
+    zValidator(
+      'json',
+      z.object({ ingredientNames: z.array(z.string().min(1)) })
+    ),
+    async (c) => {
+      const user = await getUserFromSessionCookie(c);
+
+      const { ingredientNames } = c.req.valid('json');
+      const allIngredients = await getAllIngredients();
+      const allIngredientNames = allIngredients.map(
+        (ingredient) => ingredient.name
+      );
+
+      for (const ingredientName of ingredientNames) {
+        if (allIngredientNames.includes(ingredientName) === false) {
+          throw new HTTPException(400, {
+            message: `Ingredient "${ingredientName}" does not exist in the system.`,
+          });
+        }
+      }
+
+      await addUserIngredients(user.id, ingredientNames);
+
+      return c.json({ message: 'User ingredient successfully added.' }, 200);
     }
   );
 export default users;

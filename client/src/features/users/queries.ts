@@ -7,7 +7,9 @@ import {
 import { useUserContext } from "@/contexts/UserContext";
 import {
   addRecipeToFavorites,
+  addUserIngredients,
   getFavoritedRecipes,
+  getUserIngredients,
   getUserSession,
   login,
   logout,
@@ -15,10 +17,11 @@ import {
   removeRecipeFromFavorites,
 } from "./api";
 
-const userKeys = {
+export const userKeys = {
   all: ["users"],
   session: () => [...userKeys.all, "session"],
   favoriteRecipeList: (id: string) => [...userKeys.all, id, "favoriteRecipes"],
+  ingredientsList: (id: string) => [...userKeys.all, id, "ingredients"],
 };
 
 export const createUserSessionQuery = () => {
@@ -93,5 +96,38 @@ export const createUserUnfavoriteRecipeMutation = () => {
       queryClient.invalidateQueries({
         queryKey: userKeys.favoriteRecipeList(user.info.id ?? ""),
       }),
+  }));
+};
+
+export const createUserIngredientsQuery = () => {
+  const user = useUserContext();
+  if (user.info.isLoggedIn === false) {
+    console.error("cannot fetch ingredients for user that is not logged in.");
+  }
+
+  return createQuery(() => ({
+    queryKey: userKeys.ingredientsList(user.info.id!),
+    queryFn: () => getUserIngredients(user.info.id!),
+  }));
+};
+
+export const createUserIngredientsMutation = (options: {
+  invalidate: boolean;
+}) => {
+  const queryClient = useQueryClient();
+  const user = useUserContext();
+  if (user.info.isLoggedIn === false) {
+    console.error("cannot add ingredients for user that is not logged in.");
+  }
+
+  return createMutation(() => ({
+    mutationFn: addUserIngredients,
+    onSuccess: () => {
+      if (options.invalidate) {
+        queryClient.invalidateQueries({
+          queryKey: userKeys.ingredientsList(user.info.id!),
+        });
+      }
+    },
   }));
 };

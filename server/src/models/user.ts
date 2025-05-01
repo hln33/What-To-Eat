@@ -1,6 +1,12 @@
 import * as argon2 from 'argon2';
 import { type InferSelectModel, and, eq } from 'drizzle-orm';
-import { db, userRecipeFavoritesTable, userTable } from '../db/schema.ts';
+import {
+  db,
+  ingredientTable,
+  userIngredientsTable,
+  userRecipeFavoritesTable,
+  userTable,
+} from '../db/schema.ts';
 
 export type User = InferSelectModel<typeof userTable>;
 
@@ -87,4 +93,45 @@ export const removeRecipeFromFavorites = async (
         eq(userRecipeFavoritesTable.recipeId, recipeId)
       )
     );
+};
+
+export const addUserIngredients = async (
+  userId: number,
+  ingredientNames: string[]
+): Promise<void> => {
+  /**
+   * Update ingredients by simply deleting them all and inserting them again.
+   * There will not be many ingredients for a user so the
+   * computation cost is low and the code is simple.
+   */
+  await db
+    .delete(userIngredientsTable)
+    .where(eq(userIngredientsTable.userId, userId));
+
+  for (const ingredientName of ingredientNames) {
+    const [ingredient] = await db
+      .select()
+      .from(ingredientTable)
+      .where(eq(ingredientTable.name, ingredientName));
+
+    await db
+      .insert(userIngredientsTable)
+      .values({ userId, ingredientId: ingredient.id })
+      .onConflictDoNothing();
+  }
+};
+
+export const getUserIngredientNames = async (
+  userId: number
+): Promise<string[]> => {
+  const ingredients = await db
+    .select({ name: ingredientTable.name })
+    .from(userIngredientsTable)
+    .where(eq(userIngredientsTable.userId, userId))
+    .innerJoin(
+      ingredientTable,
+      eq(ingredientTable.id, userIngredientsTable.ingredientId)
+    );
+
+  return ingredients.map((ingredient) => ingredient.name);
 };

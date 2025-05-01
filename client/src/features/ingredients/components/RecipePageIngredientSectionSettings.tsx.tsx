@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/Dropdown";
 import { IngredientUnit, MeasurementSystem } from "../types";
 
-const IngredientUnitSettings: Component<{
+const RecipePageIngredientSectionSettings: Component<{
   selectedUnit: Accessor<IngredientUnit | null>;
   onSelectedUnitChange: (unit: IngredientUnit | null) => void;
 }> = (props) => {
@@ -113,4 +113,4 @@ const IngredientUnitSettings: Component<{
   );
 };
 
-export default IngredientUnitSettings;
+export default RecipePageIngredientSectionSettings;

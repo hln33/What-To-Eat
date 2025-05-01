@@ -88,3 +88,27 @@ export const getFavoritedRecipes = async (
   const jsonData = await res.json();
   return jsonData;
 };
+
+export const getUserIngredients = async (userId: string): Promise<string[]> => {
+  const res = await api.users[":id"].ingredients.$get({
+    param: { id: userId },
+  });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
+
+  return await res.json();
+};
+
+export const addUserIngredients = async (values: {
+  userId: string;
+  ingredientNames: string[];
+}): Promise<void> => {
+  const res = await api.users[":id"].ingredients.$post({
+    param: { id: values.userId },
+    json: { ingredientNames: values.ingredientNames },
+  });
+  if (!res.ok) {
+    throw new Error("Server error.");
+  }
+};

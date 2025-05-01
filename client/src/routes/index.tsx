@@ -1,21 +1,15 @@
+import { ErrorBoundary, Suspense, type Component } from "solid-js";
 import { createFileRoute, Link } from "@tanstack/solid-router";
 
-import {
-  createSignal,
-  ErrorBoundary,
-  Suspense,
-  type Component,
-} from "solid-js";
-
+import { createUserIngredientsQuery } from "@/features/users/queries";
+import UserIngredients from "@/features/ingredients/components/UserIngredients";
 import { createIngredientNamesQuery } from "@/features/ingredients/queries";
 import Recipes from "@/features/recipes/components/Recipes";
-import MultiSelect from "@/components/ui/MultiSelect";
 import Skeleton from "@/components/ui/Skeleton";
 
 const Index: Component = () => {
-  const [ingredients, setIngredients] = createSignal<string[]>([]);
-
   const ingredientsQuery = createIngredientNamesQuery();
+  const userIngredientsQuery = createUserIngredientsQuery();
 
   return (
     <div class="flex flex-col justify-around gap-8">
@@ -30,16 +24,10 @@ const Index: Component = () => {
 
       <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
         <Suspense fallback={<Skeleton height={40} />}>
-          <MultiSelect
-            controlled
-            label="Your Ingredients"
-            placeholder="Pick or type ingredients"
-            options={ingredientsQuery.data ?? []}
-            onChange={setIngredients}
-          />
+          <UserIngredients />
         </Suspense>
       </ErrorBoundary>
-      <Recipes providedIngredients={new Set(ingredients())} />
+      <Recipes providedIngredients={new Set(userIngredientsQuery.data ?? [])} />
     </div>
   );
 };

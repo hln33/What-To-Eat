@@ -2,7 +2,7 @@ import { Component, createSignal, Index, Show } from "solid-js";
 
 import EditIngredientsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeIngredientsDialog";
 import { Ingredient, IngredientUnit } from "@/features/ingredients/types";
-import IngredientUnitSettings from "./IngredientUnitSettings";
+import RecipePageIngredientSectionSettings from "./RecipePageIngredientSectionSettings.tsx";
 
 const convertWeightUnits = (
   value: number,
@@ -43,7 +43,7 @@ const RecipePageIngredientSection: Component<{
             />
           </Show>
         </div>
-        <IngredientUnitSettings
+        <RecipePageIngredientSectionSettings
           selectedUnit={finalConversionUnit}
           onSelectedUnitChange={setFinalConversionUnit}
         />
