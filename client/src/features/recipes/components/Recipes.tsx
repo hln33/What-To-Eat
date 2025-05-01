@@ -19,11 +19,11 @@ const Recipes: Component<{
           <Suspense
             fallback={
               <>
-                <Skeleton height={40} />
-                <Skeleton height={40} />
-                <Skeleton height={40} />
-                <Skeleton height={40} />
-                <Skeleton height={40} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
               </>
             }
           >

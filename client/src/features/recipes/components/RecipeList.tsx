@@ -1,4 +1,4 @@
-import { Component, createSignal, For, Show } from "solid-js";
+import { Component, createSignal, For } from "solid-js";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -7,15 +7,13 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/solid-table";
-import SearchIcon from "~icons/lucide/search";
 
 import { createUserFavoriteRecipesQuery } from "@/features/users/queries";
-import { useUserContext } from "@/contexts/UserContext";
-import Input from "@/components/ui/Input";
 import { getRecipeTableData } from "../utils";
 import { FetchedRecipe, RecipeTableData } from "../types";
 import RecipeListFooter from "./RecipeListFooter";
 import RecipeCard from "./RecipeCard";
+import RecipeListHeader from "./RecipeListHeader";
 
 const columnHelper = createColumnHelper<RecipeTableData>();
 const columns = [
@@ -30,8 +28,6 @@ const RecipeList: Component<{
   recipes: FetchedRecipe[];
   providedIngredients: Set<string>;
 }> = (props) => {
-  const user = useUserContext();
-
   const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
   const favoriteRecipeIds = (): number[] =>
     favoriteRecipesQuery.data?.map((entry) => entry.recipeId) ?? [];
@@ -63,61 +59,9 @@ const RecipeList: Component<{
 
   return (
     <>
-      <Show when={user.info.isLoggedIn}>
-        <div class="flex gap-2">
-          <input
-            type="checkbox"
-            id="show-my-recipes"
-            onClick={(e) =>
-              setColumnFilters([
-                {
-                  id: "creator",
-                  value: e.currentTarget.checked ? user.info.name : "",
-                },
-              ])
-            }
-          />
-          <label for="show-my-recipes">Show my Recipes</label>
-        </div>
-        <div class="flex gap-2">
-          <input
-            type="checkbox"
-            id="show-my-favorites"
-            onClick={(e) => {
-              if (e.currentTarget.checked) {
-                setColumnFilters([
-                  {
-                    id: "isFavorited",
-                    value: true,
-                  },
-                ]);
-              } else {
-                setColumnFilters((prev) =>
-                  prev.filter(
-                    (columnFilter) => columnFilter.id !== "isFavorited",
-                  ),
-                );
-              }
-            }}
-          />
-          <label for="show-my-favorites">Show my favorites</label>
-        </div>
-      </Show>
-
-      <Input
-        placeholder="Search recipes"
-        value={
-          (columnFilters().find((filter) => filter.id === "name")
-            ?.value as string) ?? ""
-        }
-        onInput={(e) =>
-          setColumnFilters((prev) =>
-            prev
-              .filter((filter) => filter.id !== "name")
-              .concat({ id: "name", value: e.currentTarget.value }),
-          )
-        }
-        leftSection={<SearchIcon />}
+      <RecipeListHeader
+        columnFilters={columnFilters()}
+        setColumnFilters={setColumnFilters}
       />
 
       <section class="flex flex-col items-center divide-y-2">
