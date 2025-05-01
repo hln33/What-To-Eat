@@ -1,19 +1,21 @@
-import { ErrorBoundary, Suspense, type Component } from "solid-js";
+import { ErrorBoundary, Show, Suspense, type Component } from "solid-js";
 import { createFileRoute, Link } from "@tanstack/solid-router";
 import PlusIcon from "~icons/lucide/plus";
 
 import { createUserIngredientsQuery } from "@/features/users/queries";
 import UserIngredientsInput from "@/features/ingredients/components/UserIngredientsInput";
 import { createIngredientNamesQuery } from "@/features/ingredients/queries";
-import Recipes from "@/features/recipes/components/Recipes";
+import RecipeList from "@/features/recipes/components/RecipeList";
+import { createAllRecipesQuery } from "@/features/recipes/queries";
 import Skeleton from "@/components/ui/Skeleton";
 
 const Index: Component = () => {
   const ingredientsQuery = createIngredientNamesQuery();
   const userIngredientsQuery = createUserIngredientsQuery();
+  const recipesQuery = createAllRecipesQuery();
 
   return (
-    <div class="flex flex-col justify-around gap-8">
+    <div class="space-y-10">
       <div class="flex justify-between">
         <h2 class="text-4xl">Recipes</h2>
         <Link
@@ -25,13 +27,41 @@ const Index: Component = () => {
         </Link>
       </div>
 
-      <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
-        <Suspense fallback={<Skeleton height={40} />}>
-          <UserIngredientsInput />
-        </Suspense>
-      </ErrorBoundary>
+      <section class="space-y-8">
+        <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
+          <Suspense fallback={<Skeleton height={40} />}>
+            <UserIngredientsInput />
+          </Suspense>
+        </ErrorBoundary>
 
-      <Recipes providedIngredients={new Set(userIngredientsQuery.data ?? [])} />
+        <div class="space-y-4">
+          <ErrorBoundary
+            fallback={(e) => <div>Error loading recipes: {e.toString()}</div>}
+          >
+            <Suspense
+              fallback={
+                <>
+                  <Skeleton height={200} />
+                  <Skeleton height={200} />
+                  <Skeleton height={200} />
+                  <Skeleton height={200} />
+                  <Skeleton height={200} />
+                </>
+              }
+            >
+              <Show
+                when={recipesQuery.data?.length ?? 0 > 0}
+                fallback={<div>No Recipes to Show</div>}
+              >
+                <RecipeList
+                  recipes={recipesQuery.data ?? []}
+                  providedIngredients={new Set(userIngredientsQuery.data ?? [])}
+                />
+              </Show>
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+      </section>
     </div>
   );
 };
