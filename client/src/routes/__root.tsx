@@ -24,15 +24,15 @@ export const RootComponent: ParentComponent = () => {
 
   return (
     <div class="h-fit min-h-screen bg-gray-800 text-center text-white">
-      <header class="flex flex-row items-center justify-between border-b border-slate-600 bg-slate-950 px-10 py-5">
+      <header class="flex items-center justify-between border-b border-slate-600 bg-slate-950 p-5">
         <Link
           to="/"
-          class="text-4xl"
+          class="text-3xl"
         >
           What to eat?
         </Link>
 
-        <nav class="flex space-x-5">
+        <nav class="flex items-center space-x-2">
           <Show
             when={sessionQuery.data !== undefined}
             fallback={
@@ -42,7 +42,13 @@ export const RootComponent: ParentComponent = () => {
               />
             }
           >
-            <Link to="/">Home</Link>
+            <Link
+              to="/"
+              class="text-xl"
+              activeProps={{ class: "text-blue-400 font-bold" }}
+            >
+              Home
+            </Link>
 
             <Show
               when={user.info.isLoggedIn}
