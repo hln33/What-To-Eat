@@ -37,7 +37,7 @@ const RecipeList: Component<{
   );
   const [pagination, setPagination] = createSignal({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   });
   const table = () =>
     createSolidTable({
@@ -58,13 +58,12 @@ const RecipeList: Component<{
     });
 
   return (
-    <>
+    <section>
       <RecipeListHeader
         columnFilters={columnFilters()}
         setColumnFilters={setColumnFilters}
       />
-
-      <section class="flex flex-col items-center divide-y-2">
+      <div class="flex flex-col items-center divide-y-2">
         <For each={table().getRowModel().rows}>
           {(row) => (
             <RecipeCard
@@ -73,13 +72,12 @@ const RecipeList: Component<{
             />
           )}
         </For>
-      </section>
-
+      </div>
       <RecipeListFooter
-        class="border-gray-600 p-2"
+        class="mt-5"
         table={table()}
       />
-    </>
+    </section>
   );
 };
 

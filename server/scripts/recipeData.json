@@ -178,5 +178,221 @@
       "Cover with top crust and seal edges.",
       "Bake at 200°C (400°F) for 45 minutes."
     ]
+  },
+  {
+    "name": "Minestrone Soup",
+    "servings": 6,
+    "ingredients": [
+      { "unit": "g", "amount": 200, "name": "pasta shells" },
+      { "unit": "oz", "amount": 14, "name": "canned tomatoes" },
+      { "unit": "g", "amount": 150, "name": "zucchini" },
+      { "unit": "g", "amount": 100, "name": "carrots" },
+      { "unit": "g", "amount": 50, "name": "parmesan cheese" }
+    ],
+    "instructions": [
+      "Sauté onions, carrots, and zucchini in olive oil.",
+      "Add tomatoes and vegetable broth, bring to boil.",
+      "Add pasta and cook until al dente.",
+      "Season with salt, pepper, and herbs.",
+      "Serve with grated parmesan."
+    ]
+  },
+  {
+    "name": "Garlic Shrimp Pasta",
+    "servings": 3,
+    "ingredients": [
+      { "unit": "g", "amount": 300, "name": "shrimp" },
+      { "unit": "g", "amount": 250, "name": "linguine" },
+      { "unit": "g", "amount": 30, "name": "garlic" },
+      { "unit": "oz", "amount": 3, "name": "white wine" },
+      { "unit": "g", "amount": 20, "name": "parsley" }
+    ],
+    "instructions": [
+      "Cook pasta according to package instructions.",
+      "Sauté garlic in olive oil until fragrant.",
+      "Add shrimp and cook until pink.",
+      "Deglaze pan with white wine.",
+      "Toss with pasta and garnish with parsley."
+    ]
+  },
+  {
+    "name": "Beef Burger",
+    "servings": 4,
+    "ingredients": [
+      { "unit": "g", "amount": 500, "name": "ground beef" },
+      { "unit": "g", "amount": 200, "name": "burger buns" },
+      { "unit": "g", "amount": 100, "name": "cheddar cheese" },
+      { "unit": "g", "amount": 50, "name": "lettuce" },
+      { "unit": "oz", "amount": 4, "name": "pickles" }
+    ],
+    "instructions": [
+      "Form ground beef into patties.",
+      "Grill or fry patties to desired doneness.",
+      "Toast burger buns lightly.",
+      "Assemble burgers with cheese, lettuce, and pickles.",
+      "Serve with ketchup and mustard."
+    ]
+  },
+  {
+    "name": "Mushroom Risotto",
+    "servings": 4,
+    "ingredients": [
+      { "unit": "g", "amount": 300, "name": "arborio rice" },
+      { "unit": "g", "amount": 200, "name": "mushrooms" },
+      { "unit": "oz", "amount": 4, "name": "white wine" },
+      { "unit": "g", "amount": 50, "name": "parmesan" },
+      { "unit": "g", "amount": 30, "name": "butter" }
+    ],
+    "instructions": [
+      "Sauté mushrooms in butter and set aside.",
+      "Toast rice in the same pan.",
+      "Add wine and cook until absorbed.",
+      "Gradually add hot stock while stirring.",
+      "Stir in mushrooms and parmesan before serving."
+    ]
+  },
+  {
+    "name": "Caesar Salad",
+    "servings": 2,
+    "ingredients": [
+      { "unit": "g", "amount": 200, "name": "romaine lettuce" },
+      { "unit": "g", "amount": 100, "name": "croutons" },
+      { "unit": "g", "amount": 50, "name": "parmesan" },
+      { "unit": "oz", "amount": 3, "name": "Caesar dressing" },
+      { "unit": "g", "amount": 30, "name": "anchovies" }
+    ],
+    "instructions": [
+      "Chop lettuce into bite-sized pieces.",
+      "Toss lettuce with dressing.",
+      "Add croutons and anchovies.",
+      "Shave parmesan over the top.",
+      "Serve immediately."
+    ]
+  },
+  {
+    "name": "Chocolate Mousse",
+    "servings": 6,
+    "ingredients": [
+      { "unit": "g", "amount": 200, "name": "dark chocolate" },
+      { "unit": "g", "amount": 100, "name": "sugar" },
+      { "unit": "oz", "amount": 6, "name": "heavy cream" },
+      { "unit": "g", "amount": 30, "name": "butter" },
+      { "unit": "oz", "amount": 1, "name": "vanilla extract" }
+    ],
+    "instructions": [
+      "Melt chocolate and butter together.",
+      "Whip cream with sugar and vanilla.",
+      "Fold melted chocolate into whipped cream.",
+      "Chill for at least 4 hours.",
+      "Serve with berries if desired."
+    ]
+  },
+  {
+    "name": "Ratatouille",
+    "servings": 4,
+    "ingredients": [
+      { "unit": "g", "amount": 200, "name": "eggplant" },
+      { "unit": "g", "amount": 200, "name": "zucchini" },
+      { "unit": "g", "amount": 200, "name": "bell peppers" },
+      { "unit": "oz", "amount": 14, "name": "canned tomatoes" },
+      { "unit": "g", "amount": 30, "name": "olive oil" }
+    ],
+    "instructions": [
+      "Slice all vegetables uniformly.",
+      "Sauté onions and garlic in olive oil.",
+      "Layer vegetables in a baking dish.",
+      "Pour tomatoes over the top.",
+      "Bake at 180°C (350°F) for 45 minutes."
+    ]
+  },
+  {
+    "name": "French Onion Soup",
+    "servings": 4,
+    "ingredients": [
+      { "unit": "g", "amount": 500, "name": "onions" },
+      { "unit": "oz", "amount": 32, "name": "beef broth" },
+      { "unit": "g", "amount": 200, "name": "gruyere cheese" },
+      { "unit": "g", "amount": 100, "name": "baguette" },
+      { "unit": "g", "amount": 30, "name": "butter" }
+    ],
+    "instructions": [
+      "Caramelize onions slowly in butter.",
+      "Add beef broth and simmer for 20 minutes.",
+      "Toast baguette slices.",
+      "Ladle soup into bowls, top with bread and cheese.",
+      "Broil until cheese is bubbly and golden."
+    ]
+  },
+  {
+    "name": "Blueberry Muffins",
+    "servings": 12,
+    "ingredients": [
+      { "unit": "g", "amount": 300, "name": "flour" },
+      { "unit": "g", "amount": 150, "name": "sugar" },
+      { "unit": "oz", "amount": 8, "name": "milk" },
+      { "unit": "g", "amount": 200, "name": "blueberries" },
+      { "unit": "g", "amount": 10, "name": "baking powder" }
+    ],
+    "instructions": [
+      "Mix dry ingredients in a bowl.",
+      "Whisk wet ingredients separately.",
+      "Combine wet and dry ingredients gently.",
+      "Fold in blueberries.",
+      "Bake at 190°C (375°F) for 20-25 minutes."
+    ]
+  },
+  {
+    "name": "Chicken Noodle Soup",
+    "servings": 6,
+    "ingredients": [
+      { "unit": "g", "amount": 400, "name": "chicken breast" },
+      { "unit": "g", "amount": 200, "name": "egg noodles" },
+      { "unit": "g", "amount": 100, "name": "carrots" },
+      { "unit": "g", "amount": 100, "name": "celery" },
+      { "unit": "oz", "amount": 32, "name": "chicken broth" }
+    ],
+    "instructions": [
+      "Poach chicken in broth until cooked.",
+      "Remove chicken and shred.",
+      "Add vegetables to broth and simmer.",
+      "Cook noodles separately.",
+      "Combine all ingredients and season to taste."
+    ]
+  },
+  {
+    "name": "Tiramisu",
+    "servings": 8,
+    "ingredients": [
+      { "unit": "g", "amount": 250, "name": "mascarpone" },
+      { "unit": "g", "amount": 200, "name": "ladyfingers" },
+      { "unit": "oz", "amount": 6, "name": "espresso" },
+      { "unit": "g", "amount": 50, "name": "cocoa powder" },
+      { "unit": "g", "amount": 50, "name": "sugar" }
+    ],
+    "instructions": [
+      "Dip ladyfingers briefly in cooled espresso.",
+      "Layer in a dish with mascarpone mixture.",
+      "Repeat layers, ending with mascarpone.",
+      "Dust with cocoa powder.",
+      "Chill for at least 6 hours before serving."
+    ]
+  },
+  {
+    "name": "Beef Stew",
+    "servings": 6,
+    "ingredients": [
+      { "unit": "g", "amount": 600, "name": "stewing beef" },
+      { "unit": "g", "amount": 300, "name": "potatoes" },
+      { "unit": "g", "amount": 200, "name": "carrots" },
+      { "unit": "oz", "amount": 32, "name": "beef stock" },
+      { "unit": "g", "amount": 30, "name": "flour" }
+    ],
+    "instructions": [
+      "Brown beef in batches and set aside.",
+      "Sauté onions and garlic.",
+      "Add flour to make a roux.",
+      "Return beef to pot, add vegetables and stock.",
+      "Simmer for 2 hours until meat is tender."
+    ]
   }
 ]

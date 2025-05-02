@@ -22,13 +22,16 @@ const UserIngredientsInput: Component = () => {
 
   let timeoutId: number | undefined;
   const debounce = (callback: () => void) => {
-    const DEBOUNCE_DELAY_MS = 5000;
-
     window.clearTimeout(timeoutId);
+
+    const DEBOUNCE_DELAY_MS = 5000;
     timeoutId = window.setTimeout(callback, DEBOUNCE_DELAY_MS);
   };
 
   const handleIngredientsChange = (ingredients: string[]) => {
+    /**
+     * Debounce the saving of user ingredients to avoid excessive API calls.
+     */
     debounce(() => {
       if (user.info.isLoggedIn === false) {
         console.error(
@@ -44,7 +47,7 @@ const UserIngredientsInput: Component = () => {
 
     /**
      * Directly set query data to allow UI to instantly reflect newly added ingredients.
-     * The mutation is only used to save the user's ingredients in the background.
+     * The prior mutation is only used to save the user's ingredients in the background.
      */
     queryClient.setQueryData(
       userKeys.ingredientsList(user.info.id ?? ""),
@@ -56,7 +59,7 @@ const UserIngredientsInput: Component = () => {
     <Show when={userIngredientsQuery.data}>
       {(userIngredients) => (
         <MultiSelect
-          label="Your Ingredients"
+          label="Ingredients in your kitchen"
           placeholder="Pick or type ingredients"
           options={ingredientsQuery.data ?? []}
           defaultValue={userIngredients()}

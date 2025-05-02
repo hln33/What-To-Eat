@@ -30,7 +30,7 @@ const MultiSelect: Component<{
       validationState={props.error ? "invalid" : "valid"}
       itemComponent={(props) => (
         <Kobalte.Item
-          class="flex items-center justify-start gap-1 rounded px-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
+          class="flex items-center justify-start gap-1 px-4 py-2 ui-highlighted:bg-sky-700 ui-highlighted:text-white"
           item={props.item}
         >
           <Kobalte.ItemLabel class="capitalize">
@@ -49,14 +49,14 @@ const MultiSelect: Component<{
             <div class="flex flex-wrap gap-2">
               <For each={state.selectedOptions()}>
                 {(option) => (
-                  <div class="z-10 flex items-center gap-2 rounded-lg bg-sky-800 px-2 py-1 ring-1 ring-slate-600">
+                  <div class="z-10 flex items-center gap-2 rounded-lg bg-sky-800 px-3 py-2 ring-1 ring-slate-600">
                     <div class="cursor-default">{option}</div>
                     <button
                       aria-label={`Remove ${option} from selection`}
                       class="block rounded-lg hover:bg-gray-500"
                       onClick={() => state.remove(option)}
                     >
-                      <CloseIcon class="size-4" />
+                      <CloseIcon class="size-5" />
                     </button>
                   </div>
                 )}
@@ -73,7 +73,7 @@ const MultiSelect: Component<{
 
       <Kobalte.Portal>
         <Kobalte.Content class="z-50 max-h-96 overflow-auto rounded-lg border border-slate-950 bg-white text-black">
-          <Kobalte.Listbox class="p-2" />
+          <Kobalte.Listbox class="p-0" />
         </Kobalte.Content>
       </Kobalte.Portal>
     </Kobalte>

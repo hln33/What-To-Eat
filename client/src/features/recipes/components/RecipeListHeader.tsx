@@ -40,11 +40,11 @@ const FilterOptionsDropdown: Component<{
               class="h-12 w-40"
             >
               <FilterIcon />
-              Filters
+              <span class="text-lg">Filters</span>
             </Button>
           )}
         />
-        <DropdownContent>
+        <DropdownContent class="p-3">
           <DropdownCheckboxItem
             checked={filterIsApplied("creator")}
             onChange={(checked) => {

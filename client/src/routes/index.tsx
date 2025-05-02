@@ -4,19 +4,27 @@ import PlusIcon from "~icons/lucide/plus";
 
 import { createUserIngredientsQuery } from "@/features/users/queries";
 import UserIngredientsInput from "@/features/ingredients/components/UserIngredientsInput";
-import { createIngredientNamesQuery } from "@/features/ingredients/queries";
 import RecipeList from "@/features/recipes/components/RecipeList";
 import { createAllRecipesQuery } from "@/features/recipes/queries";
 import Skeleton from "@/components/ui/Skeleton";
 
 const Index: Component = () => {
-  const ingredientsQuery = createIngredientNamesQuery();
   const userIngredientsQuery = createUserIngredientsQuery();
   const recipesQuery = createAllRecipesQuery();
 
   return (
-    <div class="space-y-10">
-      <div class="flex justify-between">
+    <>
+      <div class="mb-14 space-y-5 text-balance rounded-3xl bg-blue-400/25 px-8 py-10">
+        <h1 class="text-5xl font-bold">
+          What you can make, with what you have
+        </h1>
+        <p>
+          Put in what ingredients you currently have in your kitchen and we'll
+          find out what you can make with them.
+        </p>
+      </div>
+
+      <div class="mb-5 flex justify-between">
         <h2 class="text-4xl">Recipes</h2>
         <Link
           to="/recipes/new"
@@ -26,43 +34,36 @@ const Index: Component = () => {
           Create Recipe
         </Link>
       </div>
-
-      <section class="space-y-8">
-        <ErrorBoundary fallback={<div>{ingredientsQuery.error?.message}</div>}>
-          <Suspense fallback={<Skeleton height={40} />}>
-            <UserIngredientsInput />
-          </Suspense>
-        </ErrorBoundary>
-
-        <div class="space-y-4">
-          <ErrorBoundary
-            fallback={(e) => <div>Error loading recipes: {e.toString()}</div>}
+      <section class="space-y-4">
+        <ErrorBoundary fallback={<div>Error occurred</div>}>
+          <Suspense
+            fallback={
+              <>
+                <Skeleton height={120} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+                <Skeleton height={200} />
+              </>
+            }
           >
-            <Suspense
-              fallback={
-                <>
-                  <Skeleton height={200} />
-                  <Skeleton height={200} />
-                  <Skeleton height={200} />
-                  <Skeleton height={200} />
-                  <Skeleton height={200} />
-                </>
-              }
+            <UserIngredientsInput />
+            <Show
+              when={recipesQuery.data?.length ?? 0 > 0}
+              fallback={<div>No Recipes to Show</div>}
             >
-              <Show
-                when={recipesQuery.data?.length ?? 0 > 0}
-                fallback={<div>No Recipes to Show</div>}
-              >
+              <div class="space-y-4">
                 <RecipeList
                   recipes={recipesQuery.data ?? []}
                   providedIngredients={new Set(userIngredientsQuery.data ?? [])}
                 />
-              </Show>
-            </Suspense>
-          </ErrorBoundary>
-        </div>
+              </div>
+            </Show>
+          </Suspense>
+        </ErrorBoundary>
       </section>
-    </div>
+    </>
   );
 };
 

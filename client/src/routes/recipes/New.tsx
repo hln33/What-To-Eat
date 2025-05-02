@@ -18,7 +18,12 @@ const NewRecipe = () => {
     });
   };
 
-  return <NewRecipeForm onSubmit={handleNewRecipeSubmit} />;
+  return (
+    <div class="space-y-10">
+      <h1 class="text-left text-4xl">New Recipe</h1>
+      <NewRecipeForm onSubmit={handleNewRecipeSubmit} />
+    </div>
+  );
 };
 
 export const Route = createFileRoute("/recipes/new")({

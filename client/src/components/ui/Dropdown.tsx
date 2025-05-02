@@ -10,15 +10,21 @@ import FilledDotIcon from "~icons/fa6-regular/circle-dot";
 import OutlineDotIcon from "~icons/fa6-regular/circle";
 import CheckedSquareIcon from "~icons/lucide/square-check";
 import EmptySquareIcon from "~icons/lucide/square";
+import { twMerge } from "tailwind-merge";
 
 const Dropdown = Kobalte;
 
 const DropdownTrigger = Kobalte.Trigger;
 
-const DropdownContent: ParentComponent = (props) => {
+const DropdownContent: ParentComponent<{ class?: string }> = (props) => {
   return (
     <Kobalte.Portal>
-      <Kobalte.Content class="z-50 min-w-32 rounded bg-slate-600 px-4 py-2 text-white shadow-lg">
+      <Kobalte.Content
+        class={twMerge(
+          `z-50 min-w-32 rounded bg-slate-600 px-4 py-2 text-white shadow-lg`,
+          props.class,
+        )}
+      >
         {props.children}
         <Kobalte.Arrow
           size={12}
@@ -80,7 +86,7 @@ const DropdownCheckboxItem = (
   return (
     <Kobalte.CheckboxItem
       {...rest}
-      class="group relative flex cursor-pointer items-center rounded py-1 pl-9 focus:bg-slate-400"
+      class="group relative flex cursor-pointer items-center rounded py-1 pl-9 pr-2 focus:bg-slate-400"
     >
       <div class="absolute left-2 size-5">
         <Kobalte.ItemIndicator>
