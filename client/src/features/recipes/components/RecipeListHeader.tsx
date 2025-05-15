@@ -1,7 +1,6 @@
 import { Component, Setter, Show } from "solid-js";
 import { ColumnFiltersState } from "@tanstack/solid-table";
-import FilterIcon from "~icons/lucide/filter";
-import SearchIcon from "~icons/lucide/search";
+import { DropdownMenuTriggerProps } from "@kobalte/core/dropdown-menu";
 
 import { useUserContext } from "@/contexts/UserContext";
 import Input from "@/components/ui/Input";
@@ -11,8 +10,13 @@ import {
   DropdownContent,
   DropdownTrigger,
 } from "@/components/ui/Dropdown";
-import { DropdownMenuTriggerProps } from "@kobalte/core/dropdown-menu";
 import Button from "@/components/ui/Button";
+import {
+  HeartIcon,
+  UserIcon,
+  FilterIcon,
+  SearchIcon,
+} from "@/components/icons/icons";
 
 const FilterOptionsDropdown: Component<{
   columnFilters: ColumnFiltersState;
@@ -44,7 +48,7 @@ const FilterOptionsDropdown: Component<{
             </Button>
           )}
         />
-        <DropdownContent class="p-3">
+        <DropdownContent>
           <DropdownCheckboxItem
             checked={filterIsApplied("creator")}
             onChange={(checked) => {
@@ -55,7 +59,10 @@ const FilterOptionsDropdown: Component<{
               }
             }}
           >
-            My recipes
+            <span class="flex items-center gap-1">
+              <UserIcon class="size-5" />
+              My recipes
+            </span>
           </DropdownCheckboxItem>
           <DropdownCheckboxItem
             checked={filterIsApplied("isFavorited")}
@@ -67,7 +74,10 @@ const FilterOptionsDropdown: Component<{
               }
             }}
           >
-            My favorites
+            <span class="flex items-center gap-1">
+              <HeartIcon class="size-5" />
+              My favorites
+            </span>
           </DropdownCheckboxItem>
         </DropdownContent>
       </Dropdown>

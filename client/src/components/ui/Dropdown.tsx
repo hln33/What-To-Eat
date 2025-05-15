@@ -21,7 +21,7 @@ const DropdownContent: ParentComponent<{ class?: string }> = (props) => {
     <Kobalte.Portal>
       <Kobalte.Content
         class={twMerge(
-          `z-50 min-w-32 rounded bg-slate-600 px-4 py-2 text-white shadow-lg`,
+          `z-50 min-w-32 rounded bg-slate-600 text-white shadow-lg`,
           props.class,
         )}
       >
@@ -86,9 +86,9 @@ const DropdownCheckboxItem = (
   return (
     <Kobalte.CheckboxItem
       {...rest}
-      class="group relative flex cursor-pointer items-center rounded py-1 pl-9 pr-2 focus:bg-slate-400"
+      class="group relative flex cursor-pointer items-center rounded py-3 pl-10 pr-4 focus:bg-slate-400"
     >
-      <div class="absolute left-2 size-5">
+      <div class="absolute left-3 size-5">
         <Kobalte.ItemIndicator>
           <CheckedSquareIcon class="size-full" />
         </Kobalte.ItemIndicator>

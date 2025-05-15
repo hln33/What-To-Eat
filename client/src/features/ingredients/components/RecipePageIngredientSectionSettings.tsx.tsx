@@ -46,7 +46,7 @@ const RecipePageIngredientSectionSettings: Component<{
         )}
       />
       <DropdownContent>
-        <p class="mb-2 w-52 text-pretty">
+        <p class="w-52 text-pretty p-3">
           <span class="block text-lg font-bold">Unit Settings</span>
           <span class="font-light text-slate-100">
             Choose your preferred units of measurement.

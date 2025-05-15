@@ -36,7 +36,6 @@ const RecipeList: Component<{
   providedIngredients: Set<string>;
 }> = (props) => {
   const user = useUserContext();
-  // const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
   const favoriteRecipesQuery = createQuery(() =>
     userQueries.favoriteRecipesList(user.info),
   );

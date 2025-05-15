@@ -30,7 +30,7 @@ describe("New Recipe Form", () => {
     await user.type(secondIngredientInputs.amount, values.amount.toString());
 
     await user.click(secondIngredientInputs.unit);
-    await user.click(screen.getByRole("option", { name: values.unit })); // change this to "lb"
+    await user.click(screen.getByRole("option", { name: values.unit }));
 
     await user.click(secondIngredientInputs.nameTrigger);
     await user.click(screen.getByRole("option", { name: values.name }));

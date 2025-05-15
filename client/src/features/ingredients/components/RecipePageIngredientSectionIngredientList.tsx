@@ -1,4 +1,4 @@
-import { Component, createEffect, Index } from "solid-js";
+import { Component, Index } from "solid-js";
 import { createQuery } from "@tanstack/solid-query";
 
 import { Ingredient, IngredientUnit } from "@/features/ingredients/types";
