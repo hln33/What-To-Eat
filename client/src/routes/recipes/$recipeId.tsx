@@ -32,11 +32,11 @@ import Rating from "@/components/ui/Rating";
 import Image from "@/components/ui/Image";
 import { toast } from "@/components/ui/Toast";
 import Button from "@/components/ui/Button";
+import { LeftArrowIcon } from "@/components/icons/icons";
 
 const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
   const user = useUserContext();
 
-  // const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
   const favoriteRecipesQuery = createQuery(() =>
     userQueries.favoriteRecipesList(user.info),
   );
@@ -53,6 +53,8 @@ const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
   };
   return (
     <Button
+      variant="outline"
+      class="text-slate-200"
       aria-label={`${isRecipeFavorited() ? "Remove from favorites" : "Add to favorites"}`}
       onClick={() => {
         if (user.info.isLoggedIn === false) {
@@ -75,7 +77,10 @@ const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
         }
       }}
     >
-      <HeartIcon class={`${isRecipeFavorited() ? "text-pink-500" : ""}`} />
+      <HeartIcon
+        class={`${isRecipeFavorited() ? "*:fill-pink-500 *:stroke-pink-500" : ""}`}
+      />
+      {isRecipeFavorited() ? "Favorited" : "Favorite"}
     </Button>
   );
 };
@@ -132,8 +137,9 @@ const RecipeView: Component = () => {
       <nav class="mb-5 flex items-center justify-between">
         <Link
           to="/"
-          class="text-lg underline"
+          class="flex items-center gap-2 text-lg underline"
         >
+          <LeftArrowIcon class="size-8 text-slate-300" />
           Go Back
         </Link>
         <Show when={isAbleToEdit()}>
@@ -176,8 +182,6 @@ const RecipeView: Component = () => {
                   </div>
                   <Show when={isAbleToEdit()}>
                     <div class="absolute right-2 top-2 flex gap-2">
-                      <FavoriteRecipeButton recipeId={params.recipeId} />
-
                       <EditRecipeImageAndNameDialog
                         initialName={recipeQuery.data!.name}
                         onSubmit={(values) => {
@@ -191,21 +195,25 @@ const RecipeView: Component = () => {
                     </div>
                   </Show>
                 </div>
-
                 <h2 class="z-20 flex self-end p-4 text-5xl drop-shadow-2xl">
                   {recipeQuery.data?.name}
                 </h2>
               </div>
 
+              <Show when={isAbleToEdit()}>
+                <FavoriteRecipeButton recipeId={params.recipeId} />
+              </Show>
               <div>
                 <div class="text-3xl">By: {recipeQuery.data?.creator}</div>
                 <div class="text-slate-200">
                   Servings: {recipeQuery.data?.servings}
                 </div>
-                <Rating
-                  value={rating}
-                  onChange={(rating) => setRating(rating)}
-                />
+                <Show when={isAbleToEdit()}>
+                  <Rating
+                    value={rating}
+                    onChange={(rating) => setRating(rating)}
+                  />
+                </Show>
               </div>
               <Separator />
             </div>
