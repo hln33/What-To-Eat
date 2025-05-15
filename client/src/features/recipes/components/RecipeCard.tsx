@@ -76,7 +76,7 @@ const RecipeCard: Component<{
         <Switch fallback={<>unknown ingredient status: {ingredientStatus()}</>}>
           <Match when={ingredientStatus() === "Ready"}>
             <span class="flex items-center gap-2 text-green-500">
-              <CheckIcon /> Ready
+              <CheckIcon /> Ready to cook
             </span>
           </Match>
           <Match when={ingredientStatus() === "MissingSome"}>

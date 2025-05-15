@@ -31,7 +31,6 @@ describe("Edit Recipe Dialog", () => {
 
   const testIngredientUnitInput = async (
     user: UserEvent,
-
     ingredient: HTMLElement,
     previousValue: string,
     newValue: string,
@@ -107,7 +106,7 @@ describe("Edit Recipe Dialog", () => {
       name: "Ingredient 3",
     });
     await testIngredientAmountInput(user, thirdIngredient, 0, 10);
-    await testIngredientUnitInput(user, thirdIngredient, "", "lb");
+    await testIngredientUnitInput(user, thirdIngredient, "g", "lb");
     await testIngredientNameInput(user, thirdIngredient, "", "apples");
 
     await user.click(screen.getByRole("button", { name: "Save" }));

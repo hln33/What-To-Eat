@@ -1,20 +1,42 @@
 import { describe, expect, test, vi } from "vitest";
 import { screen, waitFor, within } from "@solidjs/testing-library";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 
 import customRender from "@/testing/customRender";
 import NewRecipeForm from "./NewRecipeForm";
+import { IngredientUnit } from "@/features/ingredients/types";
 
 describe("New Recipe Form", () => {
   const getIngredientInputs = (fieldset: HTMLElement) => {
     return {
       amount: within(fieldset).getByRole("spinbutton", { name: "Amount" }),
-      unit: within(fieldset).getByRole("button", { name: "Unit" }),
+      unit: within(fieldset).getByRole("button", { name: "Unit g" }),
       nameTrigger: within(fieldset).getByRole("button", {
         name: "Name Show suggestions",
       }),
       nameInput: within(fieldset).getByRole("combobox", { name: "Name" }),
     };
+  };
+
+  const editIngredient = async (
+    user: UserEvent,
+    ingredientGroupName: string,
+    values: { amount: number; unit: IngredientUnit; name: string },
+  ) => {
+    const secondIngredientInputs = getIngredientInputs(
+      screen.getByRole("group", { name: ingredientGroupName }),
+    );
+
+    await user.type(secondIngredientInputs.amount, values.amount.toString());
+
+    await user.click(secondIngredientInputs.unit);
+    await user.click(screen.getByRole("option", { name: values.unit })); // change this to "lb"
+
+    await user.click(secondIngredientInputs.nameTrigger);
+    await user.click(screen.getByRole("option", { name: values.name }));
+
+    removeListbox("Unit");
+    removeListbox("Name Suggestions");
   };
 
   /**
@@ -36,32 +58,20 @@ describe("New Recipe Form", () => {
       }),
       "Scrambled Eggs",
     );
-
     await user.type(screen.getByRole("spinbutton", { name: "servings" }), "5");
 
-    const firstIngredientInputs = getIngredientInputs(
-      screen.getByRole("group", { name: "Ingredient 1" }),
-    );
-    await user.type(firstIngredientInputs.amount, "1");
-
-    await user.click(firstIngredientInputs.unit);
-    await user.click(screen.getByRole("option", { name: "kg" }));
-    removeListbox("Unit");
-
-    await user.click(firstIngredientInputs.nameTrigger);
-    await user.click(screen.getByRole("option", { name: "eggs" }));
-    removeListbox("Name Suggestions");
+    await editIngredient(user, "Ingredient 1", {
+      amount: 1,
+      unit: "kg",
+      name: "eggs",
+    });
 
     await user.click(screen.getByRole("button", { name: "Add ingredient" }));
-
-    const secondIngredientInputs = getIngredientInputs(
-      screen.getByRole("group", { name: "Ingredient 2" }),
-    );
-    await user.type(secondIngredientInputs.amount, "200");
-    await user.click(secondIngredientInputs.unit);
-    await user.click(screen.getByRole("option", { name: "g" }));
-    await user.click(secondIngredientInputs.nameTrigger);
-    await user.click(screen.getByRole("option", { name: "cheese" }));
+    await editIngredient(user, "Ingredient 2", {
+      amount: 200,
+      unit: "lb",
+      name: "cheese",
+    });
 
     const addInstructionButton = screen.getByRole("button", {
       name: "Add instruction",
@@ -84,13 +94,23 @@ describe("New Recipe Form", () => {
     );
 
     await user.click(screen.getByRole("button", { name: "Submit" }));
+
+    // test if form inputs are valid
+    [
+      ...screen.getAllByRole("spinbutton"),
+      ...screen.getAllByRole("combobox"),
+    ].forEach((formInput) => expect(formInput).toBeValid());
+    screen
+      .getAllByRole("button")
+      .forEach((button) => expect(button).not.toHaveAttribute("data-invalid"));
+
     await waitFor(() =>
       expect(handleSubmit).toHaveBeenCalledWith({
         name: "Scrambled Eggs",
         servings: 5,
         ingredients: [
           { amount: 1, unit: "kg", name: "eggs" },
-          { amount: 200, unit: "g", name: "cheese" },
+          { amount: 200, unit: "lb", name: "cheese" },
         ],
         instructions: [
           "Heat up pan",
@@ -125,7 +145,7 @@ describe("New Recipe Form", () => {
     expect(firstIngredientInputs.amount).not.toBeValid();
     screen.getByText("Please enter an amount greater than zero");
     expect(firstIngredientInputs.unit);
-    screen.getByText("Please enter a unit");
+    // screen.getByText("Please enter a unit");
     expect(firstIngredientInputs.nameInput).not.toBeValid();
     screen.getByText("Please enter an ingredient");
 

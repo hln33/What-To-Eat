@@ -1,4 +1,5 @@
 import { Component, createSignal, For } from "solid-js";
+import { createQuery } from "@tanstack/solid-query";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -6,9 +7,11 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
 } from "@tanstack/solid-table";
 
-import { createUserFavoriteRecipesQuery } from "@/features/users/queries";
+import { useUserContext } from "@/contexts/UserContext";
+import { userQueries } from "@/features/users/queries";
 import { getRecipeTableData } from "../utils";
 import { FetchedRecipe, RecipeTableData } from "../types";
 import RecipeListFooter from "./RecipeListFooter";
@@ -20,7 +23,11 @@ const columns = [
   columnHelper.accessor("isFavorited", {}),
   columnHelper.accessor("name", {}),
   columnHelper.accessor("ingredients", {}),
-  columnHelper.accessor("ingredientStatus", {}),
+  columnHelper.accessor("ingredientStatus", {
+    sortingFn: (rowA, rowB) =>
+      rowA.original.ingredientStatus.missingIngredients.size -
+      rowB.original.ingredientStatus.missingIngredients.size,
+  }),
   columnHelper.accessor("creator", {}),
 ];
 
@@ -28,7 +35,12 @@ const RecipeList: Component<{
   recipes: FetchedRecipe[];
   providedIngredients: Set<string>;
 }> = (props) => {
-  const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
+  const user = useUserContext();
+  // const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
+  const favoriteRecipesQuery = createQuery(() =>
+    userQueries.favoriteRecipesList(user.info),
+  );
+
   const favoriteRecipeIds = (): number[] =>
     favoriteRecipesQuery.data?.map((entry) => entry.recipeId) ?? [];
 
@@ -50,15 +62,17 @@ const RecipeList: Component<{
       getCoreRowModel: getCoreRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
+      getSortedRowModel: getSortedRowModel(),
       onPaginationChange: setPagination,
       state: {
         pagination: pagination(),
         columnFilters: columnFilters(),
+        sorting: [{ id: "ingredientStatus", desc: false }],
       },
     });
 
   return (
-    <section>
+    <section class="space-y-5">
       <RecipeListHeader
         columnFilters={columnFilters()}
         setColumnFilters={setColumnFilters}
@@ -73,10 +87,7 @@ const RecipeList: Component<{
           )}
         </For>
       </div>
-      <RecipeListFooter
-        class="mt-5"
-        table={table()}
-      />
+      <RecipeListFooter table={table()} />
     </section>
   );
 };

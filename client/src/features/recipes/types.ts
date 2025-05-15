@@ -11,7 +11,7 @@ export type RecipeTableData = FetchedRecipe & {
 };
 
 export type RecipeForm = Omit<Recipe, "ingredients" | "creator" | "id"> & {
-  ingredients: Array<Omit<Ingredient, "unit"> & { unit?: Ingredient["unit"] }>;
+  ingredients: Array<Ingredient>;
 };
 
 export type SubmittedRecipeForm = Omit<Recipe, "creator" | "id"> & {

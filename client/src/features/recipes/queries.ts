@@ -1,6 +1,6 @@
 import {
   createMutation,
-  createQuery,
+  queryOptions,
   useQueryClient,
 } from "@tanstack/solid-query";
 import {
@@ -12,24 +12,16 @@ import {
   updateRecipe,
 } from "./api";
 
-const recipeKeys = {
-  all: ["recipes"] as const,
-  list: () => [...recipeKeys.all, "list"],
-  detail: (id: string) => [...recipeKeys.all, id] as const,
-};
-
-export const createAllRecipesQuery = () => {
-  return createQuery(() => ({
-    queryKey: recipeKeys.all,
+export const recipeQueries = {
+  all: queryOptions({
+    queryKey: ["recipes"],
     queryFn: getAllRecipes,
-  }));
-};
-
-export const createRecipeQuery = (id: string) => {
-  return createQuery(() => ({
-    queryKey: recipeKeys.detail(id),
-    queryFn: () => getRecipe(id),
-  }));
+  }),
+  detail: (id: string) =>
+    queryOptions({
+      queryKey: [...recipeQueries.all.queryKey, id],
+      queryFn: () => getRecipe(id),
+    }),
 };
 
 export const createAddRecipeMutation = () => {
@@ -38,7 +30,7 @@ export const createAddRecipeMutation = () => {
   return createMutation(() => ({
     mutationFn: postNewRecipe,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: recipeKeys.list() }),
+      queryClient.invalidateQueries({ queryKey: recipeQueries.all.queryKey }),
   }));
 };
 
@@ -48,7 +40,9 @@ export const createUpdateRecipeMutation = (id: string) => {
   return createMutation(() => ({
     mutationFn: updateRecipe,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: recipeKeys.detail(id) }),
+      queryClient.invalidateQueries({
+        queryKey: recipeQueries.detail(id).queryKey,
+      }),
   }));
 };
 
@@ -58,7 +52,7 @@ export const createDeleteRecipeMutation = () => {
   return createMutation(() => ({
     mutationFn: deleteRecipe,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: recipeKeys.list() }),
+      queryClient.invalidateQueries({ queryKey: recipeQueries.all.queryKey }),
   }));
 };
 

@@ -9,17 +9,18 @@ import {
 import { useUserContext } from "@/contexts/UserContext";
 import {
   createUserLogoutMutation,
-  createUserSessionQuery,
+  userQueries,
 } from "@/features/users/queries";
 import Skeleton from "@/components/ui/Skeleton";
 import { ToastRegion } from "@/components/ui/Toast";
 import Button from "@/components/ui/Button";
+import { createQuery } from "@tanstack/solid-query";
 
 export const RootComponent: ParentComponent = () => {
   const navigate = useNavigate();
   const user = useUserContext();
 
-  const sessionQuery = createUserSessionQuery();
+  const sessionQuery = createQuery(() => userQueries.session());
   const logoutMutation = createUserLogoutMutation();
 
   return (

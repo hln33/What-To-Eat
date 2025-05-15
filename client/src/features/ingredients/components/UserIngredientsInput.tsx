@@ -1,72 +1,75 @@
-import { Component, Show } from "solid-js";
-import { useQueryClient } from "@tanstack/solid-query";
+import { Component, createSignal } from "solid-js";
+import { createQuery, useQueryClient } from "@tanstack/solid-query";
 
 import {
   createAddUserIngredientsMutation,
-  createUserIngredientsQuery,
-  userKeys,
+  userQueries,
 } from "@/features/users/queries";
 import { useUserContext } from "@/contexts/UserContext";
 import MultiSelect from "@/components/ui/MultiSelect";
-import { createIngredientNamesQuery } from "../queries";
+import { ingredientQueries } from "../queries";
 
-const UserIngredientsInput: Component = () => {
-  const user = useUserContext();
-  const queryClient = useQueryClient();
-
-  const ingredientsQuery = createIngredientNamesQuery();
-  const userIngredientsQuery = createUserIngredientsQuery();
-  const addUserIngredientsMutation = createAddUserIngredientsMutation({
-    invalidate: false,
-  });
-
+const createDebouncedFunction = (callback: () => void) => {
+  const DEBOUNCE_DELAY_MS = 5000;
   let timeoutId: number | undefined;
-  const debounce = (callback: () => void) => {
+  return () => {
     window.clearTimeout(timeoutId);
-
-    const DEBOUNCE_DELAY_MS = 5000;
     timeoutId = window.setTimeout(callback, DEBOUNCE_DELAY_MS);
   };
+};
 
-  const handleIngredientsChange = (ingredients: string[]) => {
-    /**
-     * Debounce the saving of user ingredients to avoid excessive API calls.
-     */
-    debounce(() => {
-      if (user.info.isLoggedIn === false) {
-        console.error(
-          "cannot save ingredients for a user that is not logged in.",
-        );
-        return;
-      }
+const UserIngredientsInput: Component<{ initialUserIngredients: string[] }> = (
+  props,
+) => {
+  const queryClient = useQueryClient();
+  const user = useUserContext();
+
+  const [selectedIngredients, setSelectedIngredients] = createSignal(
+    props.initialUserIngredients,
+  );
+
+  const ingredientsQuery = createQuery(() => ingredientQueries.all);
+  const addUserIngredientsMutation = createAddUserIngredientsMutation();
+
+  const debouncedSaveIngredients = createDebouncedFunction(() => {
+    if (user.info.isLoggedIn === true) {
       addUserIngredientsMutation.mutate({
         userId: user.info.id,
-        ingredientNames: ingredients,
+        ingredientNames: selectedIngredients(),
       });
-    });
+    }
+  });
 
-    /**
-     * Directly set query data to allow UI to instantly reflect newly added ingredients.
-     * The prior mutation is only used to save the user's ingredients in the background.
-     */
-    queryClient.setQueryData(
-      userKeys.ingredientsList(user.info.id ?? ""),
-      ingredients,
-    );
+  const handleIngredientsChange = (ingredients: string[]) => {
+    setSelectedIngredients(ingredients);
+
+    if (user.info.isLoggedIn) {
+      /**
+       * Debounce the saving of user ingredients to avoid excessive API calls.
+       */
+      debouncedSaveIngredients();
+      /**
+       * Directly set query data to allow UI to instantly reflect newly added ingredients.
+       * The prior mutation is only used to save the user's ingredients in the background.
+       */
+      queryClient.setQueryData(
+        userQueries.ingredientsList(user.info).queryKey,
+        ingredients,
+      );
+    } else {
+      console.warn("cannot save ingredients for a user that is not logged in.");
+    }
   };
 
   return (
-    <Show when={userIngredientsQuery.data}>
-      {(userIngredients) => (
-        <MultiSelect
-          label="Ingredients in your kitchen"
-          placeholder="Pick or type ingredients"
-          options={ingredientsQuery.data ?? []}
-          defaultValue={userIngredients()}
-          onChange={handleIngredientsChange}
-        />
-      )}
-    </Show>
+    <MultiSelect
+      label="Your ingredients"
+      placeholder="Pick or type ingredients"
+      options={ingredientsQuery.data ?? []}
+      defaultValue={props.initialUserIngredients}
+      values={selectedIngredients()}
+      onChange={handleIngredientsChange}
+    />
   );
 };
 

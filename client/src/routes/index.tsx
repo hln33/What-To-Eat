@@ -1,16 +1,22 @@
 import { ErrorBoundary, Show, Suspense, type Component } from "solid-js";
 import { createFileRoute, Link } from "@tanstack/solid-router";
+import { createQuery } from "@tanstack/solid-query";
 import PlusIcon from "~icons/lucide/plus";
 
-import { createUserIngredientsQuery } from "@/features/users/queries";
+import { userQueries } from "@/features/users/queries";
 import UserIngredientsInput from "@/features/ingredients/components/UserIngredientsInput";
 import RecipeList from "@/features/recipes/components/RecipeList";
-import { createAllRecipesQuery } from "@/features/recipes/queries";
+import { recipeQueries } from "@/features/recipes/queries";
 import Skeleton from "@/components/ui/Skeleton";
+import { useUserContext } from "@/contexts/UserContext";
 
 const Index: Component = () => {
-  const userIngredientsQuery = createUserIngredientsQuery();
-  const recipesQuery = createAllRecipesQuery();
+  const user = useUserContext();
+
+  const userIngredientsQuery = createQuery(() =>
+    userQueries.ingredientsList(user.info),
+  );
+  const recipesQuery = createQuery(() => recipeQueries.all);
 
   return (
     <>
@@ -19,8 +25,8 @@ const Index: Component = () => {
           What you can make, with what you have
         </h1>
         <p>
-          Put in what ingredients you currently have in your kitchen and we'll
-          find out what you can make with them.
+          Put in ingredients you currently have and we'll find out what you can
+          make with them.
         </p>
       </div>
 
@@ -48,7 +54,11 @@ const Index: Component = () => {
               </>
             }
           >
-            <UserIngredientsInput />
+            <Show when={userIngredientsQuery.data !== undefined}>
+              <UserIngredientsInput
+                initialUserIngredients={userIngredientsQuery.data as string[]}
+              />
+            </Show>
             <Show
               when={recipesQuery.data?.length ?? 0 > 0}
               fallback={<div>No Recipes to Show</div>}

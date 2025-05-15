@@ -1,4 +1,5 @@
 import { Component, For } from "solid-js";
+import { createQuery } from "@tanstack/solid-query";
 import {
   Field,
   FieldArray,
@@ -11,7 +12,7 @@ import {
   setValue,
 } from "@modular-forms/solid";
 
-import { createIngredientNamesQuery } from "@/features/ingredients/queries";
+import { ingredientQueries } from "@/features/ingredients/queries";
 import InputError from "@/components/InputError";
 import Combobox from "@/components/ui/Combobox";
 import Select from "@/components/ui/Select";
@@ -22,7 +23,7 @@ import { AddFieldButton, DeleteFieldButton } from "./RecipeFormHelpers";
 const RecipeInputIngredients: Component<{
   form: FormStore<RecipeForm>;
 }> = (props) => {
-  const ingredientNamesQuery = createIngredientNamesQuery();
+  const ingredientNamesQuery = createQuery(() => ingredientQueries.all);
 
   const selectedIngredientNames = (): (string | undefined)[] =>
     getValues(props.form, "ingredients").map((ingredient) => ingredient?.name);
@@ -137,7 +138,7 @@ const RecipeInputIngredients: Component<{
             ariaLabel="Add ingredient"
             onClick={() =>
               insert(props.form, "ingredients", {
-                value: { amount: 0, unit: undefined, name: "" },
+                value: { amount: 0, unit: "g", name: "" },
               })
             }
             disabled={props.form.submitting}

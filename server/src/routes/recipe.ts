@@ -77,24 +77,18 @@ const recipeRoutes = new Hono()
   .post('/', zValidator('json', recipeSchema), async (c) => {
     const user = await getUserFromSessionCookie(c);
 
-    const {
-      recipeName,
-      uploadedImageName,
-      ingredients,
-      instructions,
-      servings,
-    } = c.req.valid('json');
+    const reqJson = c.req.valid('json');
     verifyNoDuplicateIngredientNames(
-      ingredients.map((ingredient) => ingredient.name)
+      reqJson.ingredients.map((ingredient) => ingredient.name)
     );
 
     const recipe = await createRecipe({
       creatorId: user.id,
-      imageName: uploadedImageName ?? null,
-      name: recipeName,
-      servings,
-      ingredients,
-      instructions,
+      imageName: reqJson.uploadedImageName ?? null,
+      name: reqJson.recipeName,
+      servings: reqJson.servings,
+      ingredients: reqJson.ingredients,
+      instructions: reqJson.instructions,
     });
 
     return c.json({ ...recipe, imageUrl: null }, 201);
@@ -118,18 +112,17 @@ const recipeRoutes = new Hono()
     const recipeId = Number(c.req.param('id'));
     await verifyUserOwnsRecipe(user, recipeId);
 
-    const { recipeName, ingredients, instructions, uploadedImageName } =
-      c.req.valid('json');
+    const reqJson = c.req.valid('json');
     verifyNoDuplicateIngredientNames(
-      ingredients.map((ingredient) => ingredient.name)
+      reqJson.ingredients.map((ingredient) => ingredient.name)
     );
 
     await updateRecipe({
       recipeId,
-      recipeName,
-      newIngredients: ingredients,
-      newInstructions: instructions,
-      newImageName: uploadedImageName,
+      recipeName: reqJson.recipeName,
+      newIngredients: reqJson.ingredients,
+      newInstructions: reqJson.instructions,
+      newImageName: reqJson.uploadedImageName,
     });
 
     return c.json({ message: 'Recipe successfully updated' }, 200);

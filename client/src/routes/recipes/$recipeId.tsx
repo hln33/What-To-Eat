@@ -7,6 +7,7 @@ import {
   type Component,
 } from "solid-js";
 import { createFileRoute, Link } from "@tanstack/solid-router";
+import { createQuery } from "@tanstack/solid-query";
 import { Separator } from "@kobalte/core/separator";
 import StockImageIcon from "~icons/lucide/image";
 import HeartIcon from "~icons/lucide/heart";
@@ -14,13 +15,13 @@ import HeartIcon from "~icons/lucide/heart";
 import { useUserContext } from "@/contexts/UserContext";
 import { SubmittedRecipeForm } from "@/features/recipes/types";
 import {
-  createRecipeQuery,
   createUpdateRecipeMutation,
+  recipeQueries,
 } from "@/features/recipes/queries";
 import {
   createUserFavoriteRecipeMutation,
-  createUserFavoriteRecipesQuery,
   createUserUnfavoriteRecipeMutation,
+  userQueries,
 } from "@/features/users/queries";
 import DeleteRecipeDialog from "@/features/recipes/components/DeleteRecipeDialog";
 import EditInstructionsDialog from "@/features/recipes/components/EditRecipeDialogs/EditRecipeInstructionsDialog";
@@ -35,7 +36,10 @@ import Button from "@/components/ui/Button";
 const FavoriteRecipeButton: Component<{ recipeId: string }> = (props) => {
   const user = useUserContext();
 
-  const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
+  // const favoriteRecipesQuery = createUserFavoriteRecipesQuery();
+  const favoriteRecipesQuery = createQuery(() =>
+    userQueries.favoriteRecipesList(user.info),
+  );
   const favoriteRecipeMutation = createUserFavoriteRecipeMutation();
   const unfavoriteRecipeMutation = createUserUnfavoriteRecipeMutation();
 
@@ -82,7 +86,7 @@ const RecipeView: Component = () => {
   const params = Route.useParams()();
   const user = useUserContext();
 
-  const recipeQuery = createRecipeQuery(params.recipeId);
+  const recipeQuery = createQuery(() => recipeQueries.detail(params.recipeId));
   const updateRecipeMutation = createUpdateRecipeMutation(params.recipeId);
 
   const handleRecipeUpdate = (

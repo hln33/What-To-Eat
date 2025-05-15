@@ -11,6 +11,7 @@ const MultiSelect: Component<{
   values?: string[];
   defaultValue: string[];
   onChange: (values: string[]) => void;
+  onBlur?: () => void;
   placeholder?: string;
   error?: string;
   leftSection?: JSX.Element;
@@ -61,7 +62,10 @@ const MultiSelect: Component<{
                   </div>
                 )}
               </For>
-              <Kobalte.Input class="flex-auto bg-inherit text-black outline-none placeholder:text-slate-400" />
+              <Kobalte.Input
+                class="flex-auto bg-inherit text-black outline-none placeholder:text-slate-400"
+                onBlur={props.onBlur}
+              />
             </div>
             <Kobalte.Trigger class="absolute inset-0 z-0 cursor-text" />
           </div>

@@ -20,7 +20,7 @@ const NewRecipeForm: Component<{
   const [form, { Field, Form }] = createForm<RecipeForm>({
     initialValues: {
       servings: 0,
-      ingredients: [{ amount: 0, unit: undefined, name: "" }],
+      ingredients: [{ amount: 0, unit: "g", name: "" }],
       instructions: [""],
     },
   });
@@ -39,19 +39,20 @@ const NewRecipeForm: Component<{
     });
   };
 
-  const handleSubmit = (values: SubmittedRecipeForm) => {
+  const handleSubmit = (
+    values: Omit<SubmittedRecipeForm, "uploadedImageName">,
+  ) =>
     props.onSubmit({
       ...values,
       uploadedImageName: uploadedImageName(),
     });
-  };
 
   return (
     <ErrorBoundary fallback={<div>An error occurred...</div>}>
       <Suspense fallback={<div>Loading...</div>}>
         <Form
           class="flex flex-col items-center gap-12"
-          onSubmit={(values) => handleSubmit(values as SubmittedRecipeForm)}
+          onSubmit={handleSubmit}
         >
           <div class="w-full space-y-20">
             <div class="space-y-6">

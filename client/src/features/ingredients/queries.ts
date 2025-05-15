@@ -1,11 +1,12 @@
-import { createQuery } from "@tanstack/solid-query";
+import { queryOptions } from "@tanstack/solid-query";
 
 import { getAllIngredientNames } from "./api";
 
-export const createIngredientNamesQuery = () =>
-  createQuery(() => ({
+export const ingredientQueries = {
+  all: queryOptions({
     queryKey: ["ingredients"],
     queryFn: getAllIngredientNames,
     select: (ingredients) =>
       ingredients.map((ingredient) => ingredient.name).toSorted(),
-  }));
+  }),
+};

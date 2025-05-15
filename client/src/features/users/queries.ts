@@ -1,10 +1,10 @@
 import {
   createMutation,
-  createQuery,
+  queryOptions,
   useQueryClient,
 } from "@tanstack/solid-query";
 
-import { useUserContext } from "@/contexts/UserContext";
+import { User, useUserContext } from "@/contexts/UserContext";
 import {
   addRecipeToFavorites,
   addUserIngredients,
@@ -17,18 +17,31 @@ import {
   removeRecipeFromFavorites,
 } from "./api";
 
-export const userKeys = {
-  all: ["users"],
-  session: () => [...userKeys.all, "session"],
-  favoriteRecipeList: (id: string) => [...userKeys.all, id, "favoriteRecipes"],
-  ingredientsList: (id: string) => [...userKeys.all, id, "ingredients"],
+const validateUserIsLoggedIn = (user: User, errorMessage: string): void => {
+  if (!user.isLoggedIn) {
+    throw new Error(errorMessage);
+  }
 };
 
-export const createUserSessionQuery = () => {
-  return createQuery(() => ({
-    queryKey: userKeys.session(),
-    queryFn: getUserSession,
-  }));
+export const userQueries = {
+  all: ["users"],
+  session: () =>
+    queryOptions({
+      queryKey: [...userQueries.all, "session"],
+      queryFn: getUserSession,
+    }),
+  favoriteRecipesList: (user: User) =>
+    queryOptions({
+      queryKey: [...userQueries.all, user.id!, "favoriteRecipes"],
+      queryFn: () => getFavoritedRecipes(user.id!),
+      enabled: user.isLoggedIn,
+    }),
+  ingredientsList: (user: User) =>
+    queryOptions({
+      queryKey: [...userQueries.all, user.id!, "ingredients"],
+      queryFn: () => getUserIngredients(user.id!),
+      enabled: user.isLoggedIn,
+    }),
 };
 
 export const createUserRegisterMutation = () => {
@@ -44,7 +57,9 @@ export const createUserLoginMutaton = () => {
   return createMutation(() => ({
     mutationFn: login,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: userKeys.session() });
+      queryClient.invalidateQueries({
+        queryKey: userQueries.session().queryKey,
+      });
       user.login(data.userId, data.username);
     },
   }));
@@ -57,19 +72,11 @@ export const createUserLogoutMutation = () => {
   return createMutation(() => ({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: userKeys.session() });
+      queryClient.invalidateQueries({
+        queryKey: userQueries.session().queryKey,
+      });
       user.logout();
     },
-  }));
-};
-
-export const createUserFavoriteRecipesQuery = () => {
-  const user = useUserContext();
-
-  return createQuery(() => ({
-    queryKey: userKeys.favoriteRecipeList(user.info.id!),
-    queryFn: () => getFavoritedRecipes(user.info.id!),
-    enabled: user.info.isLoggedIn,
   }));
 };
 
@@ -78,11 +85,20 @@ export const createUserFavoriteRecipeMutation = () => {
   const user = useUserContext();
 
   return createMutation(() => ({
-    mutationFn: addRecipeToFavorites,
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: userKeys.favoriteRecipeList(user.info.id ?? ""),
-      }),
+    mutationFn: (values: { userId: number; recipeId: number }) => {
+      validateUserIsLoggedIn(
+        user.info,
+        "cannot favorite recipe for user that is not logged in.",
+      );
+      return addRecipeToFavorites(values);
+    },
+    onSuccess: () => {
+      if (user.info.isLoggedIn) {
+        queryClient.invalidateQueries({
+          queryKey: userQueries.favoriteRecipesList(user.info).queryKey,
+        });
+      }
+    },
   }));
 };
 
@@ -91,41 +107,39 @@ export const createUserUnfavoriteRecipeMutation = () => {
   const user = useUserContext();
 
   return createMutation(() => ({
-    mutationFn: removeRecipeFromFavorites,
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: userKeys.favoriteRecipeList(user.info.id ?? ""),
-      }),
+    mutationFn: (values: { userId: number; recipeId: number }) => {
+      validateUserIsLoggedIn(
+        user.info,
+        "Cannot unfavorite recipe for user that is not logged in.",
+      );
+      return removeRecipeFromFavorites(values);
+    },
+    onSuccess: () => {
+      if (user.info.isLoggedIn) {
+        queryClient.invalidateQueries({
+          queryKey: userQueries.favoriteRecipesList(user.info).queryKey,
+        });
+      }
+    },
   }));
 };
 
-export const createUserIngredientsQuery = () => {
-  const user = useUserContext();
-  if (user.info.isLoggedIn === false) {
-    console.error("cannot fetch ingredients for user that is not logged in.");
-  }
-
-  return createQuery(() => ({
-    queryKey: userKeys.ingredientsList(user.info.id!),
-    queryFn: () => getUserIngredients(user.info.id!),
-  }));
-};
-
-export const createAddUserIngredientsMutation = (options: {
-  invalidate: boolean;
-}) => {
+export const createAddUserIngredientsMutation = () => {
   const queryClient = useQueryClient();
   const user = useUserContext();
-  if (user.info.isLoggedIn === false) {
-    console.error("cannot add ingredients for user that is not logged in.");
-  }
 
   return createMutation(() => ({
-    mutationFn: addUserIngredients,
+    mutationFn: (values: { userId: string; ingredientNames: string[] }) => {
+      validateUserIsLoggedIn(
+        user.info,
+        "cannot add ingredients for user that is not logged in.",
+      );
+      return addUserIngredients(values);
+    },
     onSuccess: () => {
-      if (options.invalidate) {
+      if (user.info.isLoggedIn) {
         queryClient.invalidateQueries({
-          queryKey: userKeys.ingredientsList(user.info.id!),
+          queryKey: userQueries.ingredientsList(user.info).queryKey,
         });
       }
     },

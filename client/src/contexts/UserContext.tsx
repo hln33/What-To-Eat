@@ -5,9 +5,11 @@ import {
   useContext,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-import { createUserSessionQuery } from "@/features/users/queries";
+import { createQuery } from "@tanstack/solid-query";
 
-type User =
+import { userQueries } from "@/features/users/queries";
+
+export type User =
   | {
       id: string;
       name: string;
@@ -32,7 +34,7 @@ export const UserContextProvider: ParentComponent = (props) => {
     isLoggedIn: false,
   });
 
-  const sessionQuery = createUserSessionQuery();
+  const sessionQuery = createQuery(() => userQueries.session());
   createEffect(() => {
     if (sessionQuery.data === undefined) {
       return;

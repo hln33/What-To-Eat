@@ -1,7 +1,9 @@
-import { Component, Index } from "solid-js";
+import { Component, createEffect, Index } from "solid-js";
+import { createQuery } from "@tanstack/solid-query";
 
 import { Ingredient, IngredientUnit } from "@/features/ingredients/types";
-import { createUserIngredientsQuery } from "@/features/users/queries.js";
+import { userQueries } from "@/features/users/queries.js";
+import { useUserContext } from "@/contexts/UserContext";
 
 const convertWeightUnits = (
   value: number,
@@ -36,7 +38,11 @@ const RecipePageIngredientSectionIngredientList: Component<{
   ingredients: Ingredient[] | undefined;
   weightUnit: IngredientUnit | null;
 }> = (props) => {
-  const userIngredientsQuery = createUserIngredientsQuery();
+  const user = useUserContext();
+
+  const userIngredientsQuery = createQuery(() =>
+    userQueries.ingredientsList(user.info),
+  );
   const userIngredients = () => userIngredientsQuery.data ?? [];
 
   return (
