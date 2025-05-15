@@ -13,7 +13,7 @@ import {
 import { useUserContext } from "@/contexts/UserContext";
 import { userQueries } from "@/features/users/queries";
 import { getRecipeTableData } from "../utils";
-import { FetchedRecipe, RecipeTableData } from "../types";
+import { FetchedRecipe, IngredientStatusText, RecipeTableData } from "../types";
 import RecipeListFooter from "./RecipeListFooter";
 import RecipeCard from "./RecipeCard";
 import RecipeListHeader from "./RecipeListHeader";
@@ -24,9 +24,27 @@ const columns = [
   columnHelper.accessor("name", {}),
   columnHelper.accessor("ingredients", {}),
   columnHelper.accessor("ingredientStatus", {
-    sortingFn: (rowA, rowB) =>
-      rowA.original.ingredientStatus.missingIngredients.size -
-      rowB.original.ingredientStatus.missingIngredients.size,
+    sortingFn: (rowA, rowB) => {
+      const statusPriority: Record<IngredientStatusText, number> = {
+        Ready: 1,
+        MissingSome: 2,
+        MissingAll: 3,
+      };
+
+      const recipeStatusA = rowA.original.ingredientStatus;
+      const recipeStatusB = rowB.original.ingredientStatus;
+      if (recipeStatusA.statusText !== recipeStatusB.statusText) {
+        return (
+          statusPriority[recipeStatusA.statusText] -
+          statusPriority[recipeStatusB.statusText]
+        );
+      } else {
+        return (
+          recipeStatusA.missingIngredients.size -
+          recipeStatusB.missingIngredients.size
+        );
+      }
+    },
   }),
   columnHelper.accessor("creator", {}),
 ];

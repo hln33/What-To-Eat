@@ -31,6 +31,7 @@ const RecipeCard: Component<{
   recipe: FetchedRecipe;
   providedIngredients: Set<string>;
 }> = (props) => {
+  console.log(props.recipe);
   const navigate = useNavigate();
 
   const ingredientStatus = (): "Ready" | "MissingSome" | "MissingAll" =>
